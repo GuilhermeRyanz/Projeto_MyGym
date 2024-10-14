@@ -21,7 +21,7 @@ class FrequenciaSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)
     id_academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all())
     id_aluno = serializers.PrimaryKeyRelatedField(queryset=Aluno.objects.all())
-    data = serializers.DateField(read_only=True)
+    data = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = Frequencia

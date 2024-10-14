@@ -1,4 +1,5 @@
 from django.db import models
+from aluno.models import Aluno
 from core.models import ModelBase
 from django.contrib.auth.models import User
 
@@ -45,11 +46,11 @@ class Frequencia(ModelBase):
     )
 
     id_aluno = models.ForeignKey(
-        User, on_delete=models.CASCADE,
+        Aluno, on_delete=models.CASCADE,
         db_column='id_aluno',
     )
 
-    data = models.DateField(
+    data = models.DateTimeField(
         db_column='data',
         auto_now_add=True,
         null=False,

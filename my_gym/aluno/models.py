@@ -1,8 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
 from core.models import ModelBase
-from academia.models import Academia
-from plano.models import Plano
 from django.core import validators
 
 
@@ -29,12 +27,12 @@ class Aluno(ModelBase):
     )
 
     id_academia = models.ForeignKey(
-        Academia,
+        'academia.Academia',
         db_column='id_academia',
         on_delete=models.CASCADE,
     )
 
-    id_plano = models.ForeignKey(Plano, db_column='id_plano', on_delete=models.CASCADE, related_name='alunos')
+    id_plano = models.ForeignKey('plano.Plano', db_column='id_plano', on_delete=models.CASCADE, related_name='alunos')
 
 
 
