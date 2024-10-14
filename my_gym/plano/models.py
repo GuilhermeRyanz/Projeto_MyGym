@@ -31,7 +31,7 @@ class Plano(ModelBase):
         default='total'
     )
 
-    academia = models.ForeignKey(
+    id_academia = models.ForeignKey(
         Academia,
         on_delete=models.CASCADE,
         db_column='id_academia',
@@ -43,4 +43,4 @@ class Plano(ModelBase):
         verbose_name_plural = "planos"
 
     def __str__(self):
-        return f"{self.nome} - {self.academia.nome}"
+        return f"{self.nome} - {self.id_academia.nome}"
