@@ -1,7 +1,6 @@
 from django.db import models
 from core.models import ModelBase
 from dateutil.relativedelta import relativedelta
-# Create your models here.
 
 class Pagamento(ModelBase):
     id_academia = models.ForeignKey('academia.Academia', db_column='id_academia', on_delete=models.CASCADE)
