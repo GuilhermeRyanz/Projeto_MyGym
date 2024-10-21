@@ -39,8 +39,7 @@ class Plano(ModelBase):
     )
 
     class Meta:
-        verbose_name = "plano"
-        verbose_name_plural = "planos"
+        db_table = 'plano'
 
     def __str__(self):
         return f"{self.nome} - {self.id_academia.nome}"

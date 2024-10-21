@@ -1,7 +1,9 @@
 from django.db import models
 from aluno.models import Aluno
 from core.models import ModelBase
+from usuario.models import Usuario
 from django.contrib.auth.models import User
+
 
 # Create your models here.
 
@@ -29,14 +31,12 @@ class Academia(ModelBase):
         null=True,
     )
 
-    id_usuario = models.ForeignKey(
-        User,
-        db_column='id_usuario',
-        on_delete=models.CASCADE,
-    )
-
     def __str__(self):
         return self.nome
+
+    class Meta:
+        db_table = 'academia'
+
 
 class Frequencia(ModelBase):
 
@@ -56,3 +56,22 @@ class Frequencia(ModelBase):
         null=False,
     )
 
+    class Meta:
+        db_table = 'frequencia'
+
+
+class UsuarioAcademia(ModelBase):
+
+    id_usuario = models.ForeignKey(
+        Usuario,
+        on_delete=models.CASCADE,
+        db_column='id_usuario'
+    )
+    id_academia = models.ForeignKey(
+        Academia,
+        on_delete=models.CASCADE,
+        db_column='id_academia'
+    )
+
+    class Meta:
+        db_table = 'usuario_academia'

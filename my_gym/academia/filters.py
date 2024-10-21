@@ -3,7 +3,7 @@ from django_filters import rest_framework as filters
 from academia import models
 
 class AcademiaFilter(filters.FilterSet):
-    id_usuario = filters.NumberFilter(field_name='id_usuario', lookup_expr='exact' )
+    id_usuario = filters.NumberFilter(field_name='usarioacademia__id_usuario', lookup_expr='exact' )
     class Meta:
         model = models.Academia
         fields = ['id','id_usuario','nome']

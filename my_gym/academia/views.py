@@ -13,11 +13,14 @@ class AcademiaViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.AcademiaSerializer
     permission_classes = [permissions.IsAuthenticated,]
 
-    def perform_create(self, serializer):
-        serializer.save(id_usuario=self.request.user)
+    def create(self, request, *args, **kwargs):
+        instance = super().create(request, *args, **kwargs)
 
-    def get_queryset(self):
-        return models.Academia.objects.filter(id_usuario=self.request.user)
+        models.UsuarioAcademia.objects.create(
+            id_academia_id=instance.data['id'],
+            id_usuario_id=self.request.user.id
+        )
+        return instance
 
 
 class FrequenciaViewSet(viewsets.ModelViewSet):

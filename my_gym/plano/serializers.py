@@ -11,8 +11,8 @@ class PlanoSerializer(serializers.ModelSerializer):
     descricao = serializers.CharField(default="Acesso total áacademia por um mes")
     duracao =serializers.IntegerField(default=1)
     tipo_acesso = serializers.CharField(default="Total")
-    academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all())
+    id_academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all())
 
     class Meta:
         model = Plano
-        fields = ['id', 'nome', 'preco', 'descricao', 'duracao', 'tipo_acesso', 'academia']
+        fields = ['id', 'nome', 'preco', 'descricao', 'duracao', 'tipo_acesso', 'id_academia']

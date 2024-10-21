@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'academia',
     'aluno',
     'plano',
-    'usuario'
+    'usuario',
+    'pagamento'
 ]
 
 MIDDLEWARE = [
@@ -83,7 +84,7 @@ WSGI_APPLICATION = 'my_gym.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE' : 'django.db.backends.postgresql',
-        'NAME': 'my_gym',
+        'NAME': 'my_gym_2',
         'USER': 'my_gym',
         'PASSWORD': '123',
         'HOST' : '127.0.0.1',
@@ -132,3 +133,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+
+}

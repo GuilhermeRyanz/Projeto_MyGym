@@ -18,3 +18,6 @@ class Pagamento(ModelBase):
     def __str__(self):
         return f"Pagamento de {self.id_aluno.nome}, no plano {self.id_plano.nome}"
 
+    class Meta:
+        db_table = 'pagamento'
+

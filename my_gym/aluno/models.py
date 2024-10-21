@@ -1,41 +1,101 @@
+from datetime import datetime
 from django.core.validators import RegexValidator
 from django.db import models
 from core.models import ModelBase
-from django.core import validators
 
-
-# Create your models here.
 
 class Aluno(ModelBase):
+
     nome = models.CharField(
         db_column='nome',
-        max_length=100,
-        null= False,
+        max_length=100
     )
 
     telefone = models.CharField(
         db_column='telefone',
         max_length=100,
-        null= True,
-        validators=[RegexValidator(regex=r'^\+?[0-9]*$', message="Insira um número de telefone válido.")]
+        validators=[RegexValidator(r'^[0-9]*$')]
     )
 
     email = models.EmailField(
-        db_column='e-mail',
-        null= True,
-        validators=[validators.EmailValidator(message="Insira um e-mail válido.")]
+        db_column='email',
+        unique=True
     )
 
-    id_academia = models.ForeignKey(
-        'academia.Academia',
-        db_column='id_academia',
-        on_delete=models.CASCADE,
+    data_nascimento = models.DateField(
+        db_column='data_nascimento',
+        auto_now_add=False,
+        auto_now=False,
+        default=datetime.now
     )
 
-    id_plano = models.ForeignKey('plano.Plano', db_column='id_plano', on_delete=models.CASCADE, related_name='alunos')
+    cpf = models.CharField(
+        db_column='cpf',
+        max_length=15,
+        null=False
+
+    )
+
+    matricula = models.CharField(
+        db_column='matricula',
+        max_length=20,
+        unique=True,
+        blank= True,
+        validators=[RegexValidator(r'^[0-9]*$')]
+    )
 
 
+
+    class Meta:
+        db_table = 'aluno'
+
+    def save(self, *args, **kwargs):
+        # Salva o objeto Aluno antes de tentar gerar a matrícula
+        if not self.id:
+            super().save(*args, **kwargs)
+
+        # Agora, após o Aluno ser salvo, o ID está disponível
+        ano_atual = datetime.now().year
+        self.matricula = f"{ano_atual}-{self.id:03}"
+
+        # Salva novamente o objeto para garantir que a matrícula seja gravada
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nome
 
+
+
+class AlunoAcademia(ModelBase):
+
+    id_aluno = models.ForeignKey(
+        Aluno,
+        on_delete=models.CASCADE,
+        db_column='id_aluno',
+        related_name='alunos_academia'
+    )
+    id_academia = models.ForeignKey(
+        'academia.Academia',
+        on_delete=models.CASCADE,
+        db_column='id_academia',
+        related_name='alunos_academia'
+    )
+
+    class Meta:
+        db_table = 'aluno_academia'
+
+class AlunoPlano(ModelBase):
+
+    id_aluno = models.ForeignKey(
+        Aluno,
+        on_delete=models.CASCADE,
+        db_column='id_aluno',
+        related_name='alunos_plano'
+    )
+    id_plano = models.ForeignKey(
+        'plano.Plano',
+        on_delete=models.CASCADE,
+        related_name='alunos_plano',
+    )
+    class Meta:
+        db_table = 'aluno_plano'
