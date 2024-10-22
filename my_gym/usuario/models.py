@@ -12,7 +12,7 @@ class Usuario(User):
     tipo_usuario = models.CharField(
         max_length=1,
         choices=TipoUsuario.choices,
-        default=TipoUsuario.FUNCIONARIO,
+        default=TipoUsuario.DONO,
         db_column='tipo_usuario'
     )
 
