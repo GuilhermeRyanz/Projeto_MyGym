@@ -40,12 +40,12 @@ class Academia(ModelBase):
 
 class Frequencia(ModelBase):
 
-    id_academia = models.ForeignKey(
+    academia = models.ForeignKey(
         Academia, on_delete=models.CASCADE,
         db_column='id_academia',
     )
 
-    id_aluno = models.ForeignKey(
+    aluno = models.ForeignKey(
         Aluno, on_delete=models.CASCADE,
         db_column='id_aluno',
     )
@@ -62,12 +62,12 @@ class Frequencia(ModelBase):
 
 class UsuarioAcademia(ModelBase):
 
-    id_usuario = models.ForeignKey(
+    usuario = models.ForeignKey(
         Usuario,
         on_delete=models.CASCADE,
         db_column='id_usuario'
     )
-    id_academia = models.ForeignKey(
+    academia = models.ForeignKey(
         Academia,
         on_delete=models.CASCADE,
         db_column='id_academia'

@@ -19,10 +19,10 @@ class AcademiaSerializer(serializers.ModelSerializer):
 
 class FrequenciaSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)
-    id_academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all())
-    id_aluno = serializers.PrimaryKeyRelatedField(queryset=Aluno.objects.all())
+    academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all())
+    aluno = serializers.PrimaryKeyRelatedField(queryset=Aluno.objects.all())
     data = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = Frequencia
-        fields = ['id', 'id_academia', 'id_aluno', 'data']
+        fields = ['id', 'academia', 'aluno', 'data']

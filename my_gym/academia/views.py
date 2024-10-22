@@ -17,8 +17,8 @@ class AcademiaViewSet(viewsets.ModelViewSet):
         instance = super().create(request, *args, **kwargs)
 
         models.UsuarioAcademia.objects.create(
-            id_academia_id=instance.data['id'],
-            id_usuario_id=self.request.user.id
+            academia_id=instance.data['id'],
+            usuario_id=self.request.user.id
         )
         return instance
 

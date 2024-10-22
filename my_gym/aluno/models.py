@@ -8,7 +8,8 @@ class Aluno(ModelBase):
 
     nome = models.CharField(
         db_column='nome',
-        max_length=100
+        max_length=100,
+        null=False,
     )
 
     telefone = models.CharField(
@@ -50,15 +51,12 @@ class Aluno(ModelBase):
         db_table = 'aluno'
 
     def save(self, *args, **kwargs):
-        # Salva o objeto Aluno antes de tentar gerar a matrícula
         if not self.id:
             super().save(*args, **kwargs)
 
-        # Agora, após o Aluno ser salvo, o ID está disponível
         ano_atual = datetime.now().year
         self.matricula = f"{ano_atual}-{self.id:03}"
 
-        # Salva novamente o objeto para garantir que a matrícula seja gravada
         return super().save(*args, **kwargs)
 
     def __str__(self):

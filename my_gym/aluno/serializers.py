@@ -1,9 +1,7 @@
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from academia.models import Academia
 from aluno.models import Aluno
-from plano.models import Plano
 from datetime import datetime
 
 
@@ -24,12 +22,3 @@ class AlunoSerializer(serializers.ModelSerializer):
             raise ValidationError("Este email já está cadastrado.")
         return value
 
-    def create(self, validated_data):
-        # Obtenha o ano atual
-        ano_atual = datetime.now().year
-
-        # Crie a matrícula personalizada
-        aluno = Aluno(**validated_data)
-        aluno.matricula = f"MAT-{ano_atual}-{aluno.id}"
-        aluno.save()
-        return aluno
