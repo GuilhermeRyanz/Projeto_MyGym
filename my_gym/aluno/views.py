@@ -13,19 +13,19 @@ class AlunoViewSet(viewsets.ModelViewSet):
     filterset_class = AlunoFilter
 
     def create(self, request, *args, **kwargs):
-        nome = request.data.get('nome')
-        telefone = request.data.get('telefone')
-        email = request.data.get('email')
-        id_academia = request.data.get('id_academia')
-        id_plano = request.data.get('id_plano')
+        instance = super().create(request, *args, **kwargs)
 
-        aluno = Aluno(nome=nome, telefone=telefone, email=email)
-        aluno.save()
+        AlunoAcademia.objects.create(
+            aluno_id=instance.data['id'],
+            academia_id=request.data['id_academia'])
 
-        AlunoAcademia.objects.create(id_aluno=aluno, id_academia_id=id_academia)
-        AlunoPlano.objects.create(id_aluno=aluno, id_plano_id=id_plano)
+        AlunoPlano.objects.create(
+            aluno_id=instance.data['id'],
+            plano_id=request.data['id_plano']
+        )
 
-        serializer = self.get_serializer(aluno)
-        headers = self.get_success_headers(serializer.data)
+        return instance
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    def update(self, request, *args, **kwargs):
+        return super().update(
+            request, *args, **kwargs)

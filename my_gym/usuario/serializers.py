@@ -7,10 +7,9 @@ from usuario.models import Usuario
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Usuario
-        fields = ['id', 'username', 'email', 'password','tipo_usuario']
+        fields = ['id', 'username', 'email', 'password', 'tipo_usuario']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -22,6 +21,12 @@ class UsuarioSerializer(serializers.ModelSerializer):
         usuario.set_password(validated_data['password'])
         usuario.save()
         return usuario
+
+    def validate_email(self, value):
+        if Usuario.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Esse e-mail já está cadastrado.")
+
+        return value
 
 class FuncionarioSerializer(serializers.ModelSerializer):
     academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(), write_only=True)

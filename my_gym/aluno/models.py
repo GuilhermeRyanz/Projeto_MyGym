@@ -33,7 +33,7 @@ class Aluno(ModelBase):
     cpf = models.CharField(
         db_column='cpf',
         max_length=15,
-        null=False
+        null=False,
 
     )
 
@@ -51,13 +51,11 @@ class Aluno(ModelBase):
         db_table = 'aluno'
 
     def save(self, *args, **kwargs):
-        if not self.id:
-            super().save(*args, **kwargs)
-
-        ano_atual = datetime.now().year
-        self.matricula = f"{ano_atual}-{self.id:03}"
-
-        return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
+        if not self.matricula:
+            ano_atual = datetime.now().year
+            self.matricula = f"{ano_atual}-{self.id:03}"
+            super().save(update_fields=['matricula'])
 
     def __str__(self):
         return self.nome
@@ -66,13 +64,13 @@ class Aluno(ModelBase):
 
 class AlunoAcademia(ModelBase):
 
-    id_aluno = models.ForeignKey(
+    aluno = models.ForeignKey(
         Aluno,
         on_delete=models.CASCADE,
         db_column='id_aluno',
         related_name='alunos_academia'
     )
-    id_academia = models.ForeignKey(
+    academia = models.ForeignKey(
         'academia.Academia',
         on_delete=models.CASCADE,
         db_column='id_academia',
@@ -84,13 +82,13 @@ class AlunoAcademia(ModelBase):
 
 class AlunoPlano(ModelBase):
 
-    id_aluno = models.ForeignKey(
+    aluno = models.ForeignKey(
         Aluno,
         on_delete=models.CASCADE,
         db_column='id_aluno',
         related_name='alunos_plano'
     )
-    id_plano = models.ForeignKey(
+    plano = models.ForeignKey(
         'plano.Plano',
         on_delete=models.CASCADE,
         related_name='alunos_plano',

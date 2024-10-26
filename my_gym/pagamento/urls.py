@@ -1,8 +1,8 @@
 from rest_framework import routers
-from plano import views
+from pagamento import views
 
 router = routers.DefaultRouter()
 
-router.register('plano', views.PlanoViewSet)
+router.register('pagamentos', views.PagamentoViewSet)
 
 urlpatterns = router.urls
