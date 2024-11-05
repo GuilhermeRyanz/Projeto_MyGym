@@ -9,6 +9,7 @@ class Usuario(User):
         GERENTE = 'G', 'Gerente'
         FUNCIONARIO = 'F', 'Funcionário'
 
+
     tipo_usuario = models.CharField(
         max_length=1,
         choices=TipoUsuario.choices,
@@ -16,8 +17,10 @@ class Usuario(User):
         db_column='tipo_usuario'
     )
 
+
     def __str__(self):
-        return f"{self.username} ({self.get_tipo_usuario_display()})"
+        return self.username
 
     class Meta:
         db_table = 'usuario'
+

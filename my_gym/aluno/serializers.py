@@ -10,13 +10,12 @@ class AlunoSerializer(serializers.ModelSerializer):
     matricula = serializers.CharField(read_only=True)
     nome = serializers.CharField(max_length=100)
     email = serializers.EmailField(allow_blank=True)
-    cpf = serializers.CharField(max_length=15)
     telefone = serializers.CharField(max_length=100, allow_blank=True)
 
 
     class Meta:
         model = Aluno
-        fields = ['id', 'nome', 'email', 'telefone',"cpf", 'matricula',]
+        fields = ['id', 'nome', 'email', 'telefone', 'matricula',]
 
     def validate_email(self, value):
         if Aluno.objects.filter(email=value).exists():

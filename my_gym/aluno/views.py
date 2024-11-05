@@ -1,7 +1,6 @@
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
-
 from aluno.filters import AlunoFilter
 from aluno.models import Aluno, AlunoAcademia, AlunoPlano
 from aluno.serializers import AlunoSerializer
@@ -29,3 +28,4 @@ class AlunoViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         return super().update(
             request, *args, **kwargs)
+

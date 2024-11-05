@@ -30,12 +30,6 @@ class Aluno(ModelBase):
         default=datetime.now
     )
 
-    cpf = models.CharField(
-        db_column='cpf',
-        max_length=15,
-        null=False,
-
-    )
 
     matricula = models.CharField(
         db_column='matricula',
