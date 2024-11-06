@@ -1,48 +1,37 @@
-from django.contrib.auth import authenticate
-from django.db.models import Q
-from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions
+from rest_framework.response import Response
 from rest_framework.views import APIView
-from academia.models import UsuarioAcademia
+from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
+
+from core.permissions import AcademiaPermissionMixin
 from usuario import serializers
 from usuario.models import Usuario
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
+from academia.models import UsuarioAcademia
 
 
-class UsuarioViewSet(viewsets.ModelViewSet):
+class UsuarioViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = serializers.UsuarioSerializer
     permission_classes = [permissions.AllowAny]
 
-class FuncionarioViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.FuncionarioSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return Usuario.objects.filter(Q(tipo_usuario='A') | Q(tipo_usuario='G'))
-
     def perform_create(self, serializer):
         tipo_usuario = self.request.data.get('tipo_usuario')
-        academia_id = self.request.data.get('academia')
+        if tipo_usuario:
+            usuario = serializer.save(tipo_usuario=tipo_usuario)
 
-        if tipo_usuario not in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
-            raise serializers.ValidationError("Tipo de usuário inválido para funcionário.")
-
-        funcionario = serializer.save(tipo_usuario=tipo_usuario)
-
-        if academia_id and tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
-
-            if not UsuarioAcademia.objects.filter(usuario=funcionario, academia_id=academia_id).exists():
-                UsuarioAcademia.objects.create(
-                    usuario=funcionario,
-                    academia_id=academia_id,
-                    tipo_usuario=tipo_usuario
-                )
+            # Criar associação com a academia apenas para ATENDENTE ou GERENTE
+            if tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
+                academia_id = self.request.data.get('academia')
+                if academia_id:
+                    # Usar get_or_create para evitar duplicação de registros na tabela UsuarioAcademia
+                    UsuarioAcademia.objects.get_or_create(usuario=usuario, academia_id=academia_id, tipo_usuario=tipo_usuario)
+            return usuario
 
 
-
-class ObtainAuthToken(APIView):
+class AuthTokenView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
@@ -52,14 +41,14 @@ class ObtainAuthToken(APIView):
         usuario = get_object_or_404(Usuario, username=username)
 
         if usuario.check_password(password):
-            token, created = Token.objects.get_or_create(user=usuario)
-            tipo_usuario = usuario.tipo_usuario
+            refresh = RefreshToken.for_user(usuario)
+            access_token = refresh.access_token
 
+            tipo_usuario = usuario.tipo_usuario
             if tipo_usuario == Usuario.TipoUsuario.DONO:
                 return Response({
-                    'token': token.key,
+                    'access_token': str(access_token),
                     'redirect_url': '/home/dono/',
-                    'academias': None,
                     'user_id': usuario.id,
                     'username': usuario.username,
                     'tipo_usuario': usuario.tipo_usuario
@@ -69,7 +58,7 @@ class ObtainAuthToken(APIView):
                 if usuario_academia:
                     academia_id = usuario_academia.academia.id
                     return Response({
-                        'token': token.key,
+                        'access_token': str(access_token),
                         'redirect_url': f'/home/{tipo_usuario.lower()}/',
                         'academia_id': academia_id
                     })

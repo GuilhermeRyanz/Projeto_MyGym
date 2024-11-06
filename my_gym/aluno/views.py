@@ -7,7 +7,7 @@ from aluno.serializers import AlunoSerializer
 from core.permissions import AcademiaPermissionMixin
 
 
-class AlunoViewSet(viewsets.ModelViewSet, AcademiaPermissionMixin):
+class AlunoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer
     filterset_class = AlunoFilter

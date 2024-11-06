@@ -5,7 +5,7 @@ from pagamento.models import Pagamento
 from django.utils import timezone
 
 
-class AcademiaSerializer(serializers.ModelSerializer):
+class AcademiaSerializer(serializers.ModelSerializer,):
 
     id = serializers.CharField(read_only=True)
     nome = serializers.CharField(max_length=100, required=True)

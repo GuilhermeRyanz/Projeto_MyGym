@@ -7,7 +7,7 @@ from plano import models, serializers, filters
 
 # Create your views here.
 
-class PlanoViewSet(viewsets.ModelViewSet, AcademiaPermissionMixin):
+class PlanoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
     queryset = models.Plano.objects.all()
     serializer_class = serializers.PlanoSerializer
     filter_backends = [DjangoFilterBackend,]
