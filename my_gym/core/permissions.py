@@ -3,8 +3,8 @@ from academia.models import UsuarioAcademia
 
 class AcademiaPermissionMixin:
     def check_permission(self, academia_id):
-        # Verifica se o usuário está associado à academia
-        if not UsuarioAcademia.objects.filter(usuario=self.request.user, academia__id=academia_id).exists():
+
+        if not UsuarioAcademia.objects.filter(usuario=self.request.user.usuario, academia__id=academia_id).exists():
             raise PermissionDenied("Você não está associado a essa academia.")
 
     def perform_create(self, serializer):

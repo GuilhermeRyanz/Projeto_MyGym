@@ -1,16 +1,10 @@
 from django.shortcuts import render
 from django_filters.rest_framework.backends import DjangoFilterBackend
-from rest_framework import viewsets, permissions
-
-from academia import models, serializers, filters
-from core.permissions import AcademiaPermissionMixin
-
 
 # Create your views here.
 
 from rest_framework import viewsets, permissions
 from academia import models, serializers, filters
-from django.shortcuts import get_object_or_404
 from core.permissions import AcademiaPermissionMixin
 
 
@@ -44,18 +38,6 @@ class FrequenciaViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend,]
     filterset_class = filters.FrequenciaFilter
     permission_classes = [permissions.IsAuthenticated,]
-
-
-
-    def perform_create(self, serializer):
-        academia_id = self.request.data.get('academia')  # Ajuste: verificar o campo correto
-        self.check_permission(academia_id)  # Verificação da permissão
-        serializer.save()
-
-    def perform_update(self, serializer):
-        academia_id = self.request.data.get('academia')  # Ajuste: verificar o campo correto
-        self.check_permission(academia_id)  # Verificação da permissão
-        serializer.save()
 
 
 

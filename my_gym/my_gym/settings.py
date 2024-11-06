@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -152,5 +152,11 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),  # O tempo de expiração do token de acesso
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # O tempo de expiração do token de atualização
+    'ROTATE_REFRESH_TOKENS': True,  # Se true, um novo refresh token é emitido ao usar o refresh token
+    'BLACKLIST_AFTER_ROTATION': True,  # Se true, o refresh token anterior é revogado quando um novo é emitido
+    'ALGORITHM': 'HS256',  # Algoritmo de assinatura do token
+    'SIGNING_KEY': SECRET_KEY,  # A chave usada para assinar os tokens, geralmente é a chave do Django
+    'AUTH_HEADER_TYPES': ('Bearer',),  # O prefixo do header Authorization
 }
