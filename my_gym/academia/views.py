@@ -3,10 +3,12 @@ from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import viewsets, permissions
 
 from academia import models, serializers, filters
+from core.permissions import AcademiaPermissionMixin
+
 
 # Create your views here.
 
-class AcademiaViewSet(viewsets.ModelViewSet):
+class AcademiaViewSet(viewsets.ModelViewSet, AcademiaPermissionMixin):
     queryset = models.Academia.objects.all()
     filter_backends = [DjangoFilterBackend,]
     filterset_class = filters.AcademiaFilter
@@ -18,12 +20,13 @@ class AcademiaViewSet(viewsets.ModelViewSet):
 
         models.UsuarioAcademia.objects.create(
             academia_id=instance.data['id'],
-            usuario_id=self.request.user.id
+            usuario_id=self.request.user.id,
+            tipo_usuario=self.request.user.usuario.tipo_usuario
         )
         return instance
 
 
-class FrequenciaViewSet(viewsets.ModelViewSet):
+class FrequenciaViewSet(viewsets.ModelViewSet, AcademiaPermissionMixin):
     queryset = models.Frequencia.objects.all()
     serializer_class = serializers.FrequenciaSerializer
     filter_backends = [DjangoFilterBackend,]

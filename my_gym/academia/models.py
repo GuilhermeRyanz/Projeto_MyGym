@@ -73,5 +73,11 @@ class UsuarioAcademia(ModelBase):
         db_column='id_academia'
     )
 
+    tipo_usuario = models.CharField(
+        max_length=1,
+        choices=Usuario.TipoUsuario.choices,
+        db_column='tipo_usuario'
+    )
+
     class Meta:
         db_table = 'usuario_academia'

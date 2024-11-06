@@ -4,9 +4,10 @@ from rest_framework.response import Response
 from aluno.filters import AlunoFilter
 from aluno.models import Aluno, AlunoAcademia, AlunoPlano
 from aluno.serializers import AlunoSerializer
+from core.permissions import AcademiaPermissionMixin
 
 
-class AlunoViewSet(viewsets.ModelViewSet):
+class AlunoViewSet(viewsets.ModelViewSet, AcademiaPermissionMixin):
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer
     filterset_class = AlunoFilter

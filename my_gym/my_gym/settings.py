@@ -143,16 +143,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'core.auth.BearerTokenAuthentication',  # Se for uma classe personalizada
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Usando SimpleJWT para autenticação com JWT
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ),
-
+    ],
 }
 
-# SIMPLE_JWT = {
-#     'AUTH_HEADER_TYPES': ('Bearer',),
-# }
-
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
