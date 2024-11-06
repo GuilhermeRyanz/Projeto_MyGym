@@ -56,11 +56,16 @@ class ObtainAuthToken(APIView):
             tipo_usuario = usuario.tipo_usuario
 
             if tipo_usuario == Usuario.TipoUsuario.DONO:
-                    return Response({'token': token.key, 'redirect_url': '/home/dono/', 'academias': None, 'user_id': usuario.id, 'username': usuario.username, 'tipo_usuario':usuario.tipo_usuario})
-
+                return Response({
+                    'token': token.key,
+                    'redirect_url': '/home/dono/',
+                    'academias': None,
+                    'user_id': usuario.id,
+                    'username': usuario.username,
+                    'tipo_usuario': usuario.tipo_usuario
+                })
             elif tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
                 usuario_academia = UsuarioAcademia.objects.filter(usuario=usuario).first()
-
                 if usuario_academia:
                     academia_id = usuario_academia.academia.id
                     return Response({
@@ -70,7 +75,6 @@ class ObtainAuthToken(APIView):
                     })
                 else:
                     return Response({'error': 'Nenhuma academia associada ao usuário.'}, status=400)
-
             else:
                 return Response({'error': 'Tipo de usuário não reconhecido.'}, status=400)
 

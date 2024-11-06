@@ -1,0 +1,14 @@
+<div class="container">
+
+  <form [formGroup]="formGroup" class="box">
+
+    <label for="username">email</label>
+    <input id="username" type="text" formControlName="username">
+
+    <label for="password">Senha</label>
+    <input id="password" type="password" formControlName="password">
+
+    <button [disabled]="!formGroup.valid" (click)="authentic(formGroup.value)">Entrar</button>
+  </form>
+
+</div>

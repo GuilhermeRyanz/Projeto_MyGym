@@ -24,25 +24,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
         return usuario
 
 
-# class FuncionarioSerializer(serializers.ModelSerializer):
-#     academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(), write_only=True)
-#
-#     class Meta:
-#         model = Usuario
-#         fields = ['id', 'username', 'password', 'tipo_usuario', 'academia']
-#         extra_kwargs = {
-#             'password': {'write_only': True}
-#         }
-#
-#     def create(self, validated_data):
-#         academia = validated_data.pop('academia')
-#         user = Usuario(**validated_data)
-#         user.set_password(validated_data['password'])
-#         user.tipo_usuario = 'F'
-#         user.save()
-#         UsuarioAcademia.objects.create(usuario=user, academia=academia)
-#
-#         return user
 
 class FuncionarioSerializer(serializers.ModelSerializer):
     academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(), write_only=True)
@@ -54,7 +35,12 @@ class FuncionarioSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         academia = validated_data.pop('academia')
-        user = Usuario.objects.create(**validated_data)
-        UsuarioAcademia.objects.create(usuario=user, academia=academia)
-        return user
+        usuario = Usuario.objects.create(**validated_data)
+        tipo_usuario = validated_data.pop('tipo_usuario')
+        UsuarioAcademia.objects.create(usuario=usuario, academia=academia, tipo_usuario=tipo_usuario)
+        usuario.set_password(validated_data['password'])
+        usuario.save()
+        return usuario
+
+
 
