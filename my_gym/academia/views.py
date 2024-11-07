@@ -25,7 +25,7 @@ class AcademiaViewSet( viewsets.ModelViewSet):
 
         models.UsuarioAcademia.objects.create(
             academia=academia,
-            usuario=self.request.user,
+            usuario=self.request.user.usuario,
             tipo_usuario=self.request.user.usuario.tipo_usuario
         )
 

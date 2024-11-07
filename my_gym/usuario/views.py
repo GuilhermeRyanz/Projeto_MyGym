@@ -49,7 +49,7 @@ class AuthTokenView(APIView):
         if tipo_usuario == Usuario.TipoUsuario.DONO:
             return Response({
                 'access_token': access_token,
-                'redirect_url': '/home/dono/',
+                'redirect_url': '/home/adm/',
                 'user_id': usuario.id,
                 'username': usuario.username,
                 'tipo_usuario': usuario.tipo_usuario
@@ -57,11 +57,11 @@ class AuthTokenView(APIView):
         elif tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
             usuario_academia = UsuarioAcademia.objects.filter(usuario=usuario).first()
             if usuario_academia:
-                academia_id = usuario_academia.academia.id
+                academia = usuario_academia.academia.id
                 return Response({
                     'access_token': access_token,
                     'redirect_url': f'/home/{tipo_usuario.lower()}/',
-                    'academia_id': academia_id
+                    'academia': academia
                 })
             else:
                 return Response({'error': 'Nenhuma academia associada ao usuário.'}, status=400)

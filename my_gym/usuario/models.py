@@ -14,6 +14,13 @@ class Usuario(User):
         ATENDENTE = 'A', 'Atendente'
 
 
+    nome = models.CharField(
+        max_length=100,
+        null=False,
+        db_column='nome'
+    )
+
+
     tipo_usuario = models.CharField(
         max_length=1,
         choices=TipoUsuario.choices,

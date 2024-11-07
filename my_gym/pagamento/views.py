@@ -7,3 +7,4 @@ from pagamento import models, serializers
 class PagamentoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
     queryset = models.Pagamento.objects.all()
     serializer_class = serializers.PagamentoSerializer
+    permission_classes = [permissions.IsAuthenticated,]
