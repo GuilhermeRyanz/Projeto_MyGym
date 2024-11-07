@@ -17,9 +17,11 @@ class PagamentoSerializer(serializers.ModelSerializer):
 
     aluno_nome = serializers.CharField(source='aluno_plano.aluno.nome', read_only=True)
 
+    academia_nome = serializers.CharField(source='aluno_plano.plano.academia', read_only=True)
+
     class Meta:
         model = Pagamento
-        fields = ['id' , 'data_pagamento', 'data_vencimento', 'aluno_plano','aluno_nome']
+        fields = ['id' , 'data_pagamento', 'data_vencimento', 'aluno_plano','aluno_nome', 'academia_nome']
 
 
     def validate(self, data):

@@ -2,7 +2,6 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from aluno.models import Aluno
-from datetime import datetime
 
 
 class AlunoSerializer(serializers.ModelSerializer):
@@ -15,7 +14,7 @@ class AlunoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Aluno
-        fields = ['id', 'nome', 'email', 'telefone', 'matricula',]
+        fields = ['id', 'nome', 'email', 'telefone', 'matricula',"data_nascimento"]
 
     def validate_email(self, value):
         if Aluno.objects.filter(email=value).exists():

@@ -12,3 +12,6 @@ class PlanoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
     serializer_class = serializers.PlanoSerializer
     filter_backends = [DjangoFilterBackend,]
     filterset_class = filters.PlanoFilter
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)

@@ -15,21 +15,17 @@ class UsuarioSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         academia = validated_data.pop('academia', None)
 
-        # Criação do usuário com os dados fornecidos
         usuario = Usuario(
             username=validated_data['username'],
             tipo_usuario=validated_data['tipo_usuario']
         )
 
-        # Criptografando a senha antes de salvar
         usuario.set_password(validated_data['password'])
         usuario.save()
 
-        # Se o usuário for um "Atendente" ou "Gerente", associar a uma academia
         if usuario.tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
             if academia is None:
                 raise serializers.ValidationError("O campo 'academia' é obrigatório para usuários desse tipo.")
-            # Criando a associação entre o usuário e a academia
             UsuarioAcademia.objects.create(usuario=usuario, academia=academia, tipo_usuario=usuario.tipo_usuario)
 
         return usuario

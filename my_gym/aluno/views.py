@@ -13,18 +13,26 @@ class AlunoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
     filterset_class = AlunoFilter
 
     def create(self, request, *args, **kwargs):
-        instance = super().create(request, *args, **kwargs)
+        response = super().create(request, *args, **kwargs)
+
+        aluno_id = response.data['id']
+        aluno = Aluno.objects.get(id=aluno_id)
+
+
+        academia_id = request.data.get('academia')
+        plano_id = request.data.get('plano')
 
         AlunoAcademia.objects.create(
-            aluno_id=instance.data['id'],
-            academia_id=request.data['id_academia'])
-
-        AlunoPlano.objects.create(
-            aluno_id=instance.data['id'],
-            plano_id=request.data['id_plano']
+            aluno=aluno,
+            academia_id=academia_id
         )
 
-        return instance
+        AlunoPlano.objects.create(
+            aluno=aluno,
+            plano_id=plano_id
+        )
+
+        return response
 
     def update(self, request, *args, **kwargs):
         return super().update(

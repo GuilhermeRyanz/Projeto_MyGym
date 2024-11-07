@@ -37,9 +37,9 @@ class FrequenciaSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         aluno = data['aluno']
-        academia = data['academia']
+        # academia = data['academia']
 
-        pagamento = Pagamento.objects.filter(aluno=aluno, academia=academia).order_by('-data_vencimento').first()
+        pagamento = Pagamento.objects.filter(aluno_plano__aluno_id=aluno).order_by('-data_vencimento').first()
 
         if pagamento:
             if pagamento.data_vencimento < timezone.now().date():

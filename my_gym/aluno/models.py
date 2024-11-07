@@ -61,13 +61,13 @@ class AlunoAcademia(ModelBase):
     aluno = models.ForeignKey(
         Aluno,
         on_delete=models.CASCADE,
-        db_column='id_aluno',
+        db_column='aluno',
         related_name='alunos_academia'
     )
     academia = models.ForeignKey(
         'academia.Academia',
         on_delete=models.CASCADE,
-        db_column='id_academia',
+        db_column='academia',
         related_name='alunos_academia'
     )
 
@@ -79,11 +79,12 @@ class AlunoPlano(ModelBase):
     aluno = models.ForeignKey(
         Aluno,
         on_delete=models.CASCADE,
-        db_column='id_aluno',
+        db_column='aluno',
         related_name='alunos_plano'
     )
     plano = models.ForeignKey(
         'plano.Plano',
+        db_column='plano',
         on_delete=models.CASCADE,
         related_name='alunos_plano',
     )
