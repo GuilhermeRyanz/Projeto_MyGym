@@ -1,14 +1,14 @@
 <div class="container">
 
-  <form [formGroup]="formGroup" class="box">
+  <form [formGroup]="formGroup" class="box" (ngSubmit)="authentic(formGroup.value)">
 
-    <label for="username">email</label>
-    <input id="username" type="text" formControlName="username">
+    <label for="username">Email</label>
+    <input id="username" type="text" formControlName="username" />
 
     <label for="password">Senha</label>
-    <input id="password" type="password" formControlName="password">
+    <input id="password" type="password" formControlName="password" />
 
-    <button [disabled]="!formGroup.valid" (click)="authentic(formGroup.value)">Entrar</button>
+    <button [disabled]="!formGroup.valid" type="submit">Entrar</button>
   </form>
 
 </div>
