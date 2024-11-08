@@ -33,7 +33,8 @@ import {Credentials} from "../../interfaces/credentials";
     public authentic(credentials: Credentials): void {
       this.authService.login(credentials).subscribe(
         (response: any) => {
-          this.router.navigate(['/']).then();
+          console.log(response)
+          this.router.navigate(['/home']).then();
         },
         (error) => {
           console.error('Erro de autenticação', error);
