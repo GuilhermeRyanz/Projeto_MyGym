@@ -49,9 +49,8 @@ class AuthTokenView(APIView):
         if tipo_usuario == Usuario.TipoUsuario.DONO:
             return Response({
                 'access_token': access_token,
-                'redirect_url': '/home/adm/',
-                'user_id': usuario.id,
-                'username': usuario.username,
+                'email': usuario.username,
+                'name': usuario.nome,
                 'tipo_usuario': usuario.tipo_usuario
             })
         elif tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
@@ -60,7 +59,8 @@ class AuthTokenView(APIView):
                 academia = usuario_academia.academia.id
                 return Response({
                     'access_token': access_token,
-                    'redirect_url': f'/home/{tipo_usuario.lower()}/',
+                    'email': usuario.username,
+                    'name': usuario.nome,
                     'academia': academia
                 })
             else:

@@ -18,20 +18,22 @@ export class AuthService {
 
     return this.http.post(this.apiUrl, payload, { headers }).pipe(
       tap((response: any) => {
-        this.setToken(response.token);
+        this.setToken(response.access_token);
 
-        // Armazenar dados adicionais no localStorage
         localStorage.setItem('tipo_usuario', response.tipo_usuario);
+
+        localStorage.setItem('email', response.email);
+
+        localStorage.setItem('nome_usuario', response.name);
 
         if (response.academia_id) {
           localStorage.setItem('academia', response.academia);
         }
 
-        // Redirecionamento baseado no tipo de usuário
         const tipoUsuario = response.tipo_usuario;
 
         if (tipoUsuario === 'D') {
-          localStorage.setItem('user_id', response.user_id); // Armazenar ID do usuário
+          // localStorage.setItem('user_id', response.user_id); // Armazenar ID do usuário
           this.router.navigate(['/home/adm/']);
         } else if (tipoUsuario === 'A') {
           this.router.navigate([`/home/atendente/${response.academia}`, tipoUsuario.toLowerCase()]);
@@ -51,6 +53,8 @@ export class AuthService {
     localStorage.removeItem('tipo_usuario');
     localStorage.removeItem('academia');
     localStorage.removeItem('user_id');
+    localStorage.removeItem('nome_usuario');
+    localStorage.removeItem('email');
     this.router.navigate(['/auth/login']).then();
   }
 }

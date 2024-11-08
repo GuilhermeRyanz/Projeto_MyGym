@@ -1,1 +1,10 @@
-<router-outlet></router-outlet>
+<mat-toolbar color="primary" class="header">
+  <div class="user-info">
+    <span>User: {{ user }}</span>
+    <span>Email: {{ email }}</span>
+  </div>
+  <span class="spacer"></span>
+  <button mat-raised-button color="warn" (click)="logout()">Sair</button>
+</mat-toolbar>
+
+<router-outlet/>
