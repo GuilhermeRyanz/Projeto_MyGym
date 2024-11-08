@@ -1,0 +1,12 @@
+<div class="gym-container">
+  @for (gym of gyms; track gym.id){
+    <mat-card (click)="selectGym(gym.id)" class="gym-card">
+      <mat-card-header>
+        <mat-card-title>{{gym.nome}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{gym.endereco}}</p>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

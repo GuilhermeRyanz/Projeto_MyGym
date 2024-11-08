@@ -34,7 +34,7 @@ export class AuthService {
 
         if (tipoUsuario === 'D') {
           // localStorage.setItem('user_id', response.user_id); // Armazenar ID do usuário
-          this.router.navigate(['/home/adm/']);
+          this.router.navigate(['/home/gym/list']);
         } else if (tipoUsuario === 'A') {
           this.router.navigate([`/home/atendente/${response.academia}`, tipoUsuario.toLowerCase()]);
         } else if (tipoUsuario === 'G') {
