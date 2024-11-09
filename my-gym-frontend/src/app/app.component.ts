@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
 import {AuthService} from "./auth/services/auth.service";
 import {MatButton} from "@angular/material/button";
@@ -12,29 +12,33 @@ import {MatToolbar} from "@angular/material/toolbar";
   styleUrl: './app.component.css'
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit{
+
+
   title = 'my-gym-frontend';
   user: string | null = '';
   email: string | null = '';
   isLoggedIn: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {
-    this.checkLoginStatus();
+  showBanner: boolean = false;
+
+  userInfor(){
+    this.user = localStorage.getItem('nome_usuario');
+    this.email = localStorage.getItem('email');
   }
 
-  private checkLoginStatus() {
-    if (typeof localStorage !== 'undefined') {
-      const accessToken = localStorage.getItem('accessToken');
-      this.isLoggedIn = !!accessToken;
 
-      if (this.isLoggedIn) {
-        this.user = localStorage.getItem('name');
-        this.email = localStorage.getItem('email');
-      }
-    } else {
-      this.isLoggedIn = false;
-    }
+
+  constructor(private authService: AuthService, private router: Router) {}
+
+
+  ngOnInit(){
+    this.authService.showBannerEmmiter.subscribe(
+      show => this.showBanner = show
+    );
+    this.userInfor()
   }
+
 
   logout() {
     this.authService.logout();

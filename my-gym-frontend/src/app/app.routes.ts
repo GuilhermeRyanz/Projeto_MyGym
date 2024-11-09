@@ -1,4 +1,5 @@
 import {Routes} from '@angular/router';
+import {AuthGuardService} from "./guard/auth-guard.service";
 export const routes: Routes = [
   {
     path: 'auth',
@@ -8,6 +9,7 @@ export const routes: Routes = [
   {
     path: 'adm',
     loadChildren: () => import('./modules/gym-list/gym-list.module').then(m => m.GymListModule),
+    canActivate: [AuthGuardService]
   }
 
 ];
