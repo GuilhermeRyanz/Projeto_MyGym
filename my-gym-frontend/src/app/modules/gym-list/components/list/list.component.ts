@@ -24,7 +24,7 @@ export class ListComponent implements OnInit {
   private pathUrlClient: string = URLS.GYM;
   public gyms: Gym[] | undefined;
 
-  constructor(private httpMethods: HttpMethodsService, private router: Router, authService: AuthService) {
+  constructor(private httpMethods: HttpMethodsService, private router: Router) {
   }
 
   ngOnInit() {
