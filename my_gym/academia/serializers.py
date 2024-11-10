@@ -19,9 +19,13 @@ class AcademiaSerializer(serializers.ModelSerializer,):
         fields = ['id', 'nome', 'endereco', 'telefone', 'email',]
 
     def validate_email(self, value):
-        if Academia.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Já existe uma academia com esse email cadastrado")
-        return  value
+        if self.instance:
+            if Academia.objects.filter(email=value).exclude(id=self.instance.id).exists():
+                raise serializers.ValidationError("Já existe uma academia com esse email cadastrado")
+        else:
+            if Academia.objects.filter(email=value).exists():
+                raise serializers.ValidationError("Já existe uma academia com esse email cadastrado")
+        return value
 
 
 

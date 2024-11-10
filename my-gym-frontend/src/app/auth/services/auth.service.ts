@@ -1,17 +1,22 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Credentials } from '../interfaces/credentials';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import {TokenService} from "../../shared/services/httpMethods/token-service.service";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  // URL da API para login
+  private authUser: boolean = false;
+
+  showBannerEmmiter = new EventEmitter<boolean>();
+  userUpdateEmitter = new EventEmitter<void>(); // Novo Emissor
+
   private apiUrl = 'http://127.0.0.1:8000/api/token/';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private tokenService: TokenService) {}
 
   login(payload: Credentials) {
     const headers = { 'Content-Type': 'application/json' };
@@ -19,22 +24,21 @@ export class AuthService {
     return this.http.post(this.apiUrl, payload, { headers }).pipe(
       tap((response: any) => {
         this.setToken(response.access_token);
-
         localStorage.setItem('tipo_usuario', response.tipo_usuario);
-
         localStorage.setItem('email', response.email);
-
         localStorage.setItem('nome_usuario', response.name);
 
         if (response.academia_id) {
           localStorage.setItem('academia', response.academia);
         }
 
-        const tipoUsuario = response.tipo_usuario;
+        this.authUser = true;
+        this.showBannerEmmiter.emit(true);
+        this.userUpdateEmitter.emit();
 
+        const tipoUsuario = response.tipo_usuario;
         if (tipoUsuario === 'D') {
-          // localStorage.setItem('user_id', response.user_id); // Armazenar ID do usuário
-          this.router.navigate(['/home/adm/']);
+          this.router.navigate(['/adm/gym/list']);
         } else if (tipoUsuario === 'A') {
           this.router.navigate([`/home/atendente/${response.academia}`, tipoUsuario.toLowerCase()]);
         } else if (tipoUsuario === 'G') {
@@ -45,7 +49,7 @@ export class AuthService {
   }
 
   private setToken(accessToken: string) {
-    localStorage.setItem('accessToken', accessToken);
+    this.tokenService.setToken(accessToken);
   }
 
   public logout() {
@@ -56,5 +60,9 @@ export class AuthService {
     localStorage.removeItem('nome_usuario');
     localStorage.removeItem('email');
     this.router.navigate(['/auth/login']).then();
+  }
+
+  userIsAuth(): boolean {
+    return !!localStorage.getItem('accessToken');
   }
 }

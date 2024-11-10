@@ -1,14 +1,19 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
-import {Router} from "@angular/router";
 import {Credentials} from "../../interfaces/credentials";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
 
   ],
   templateUrl: './login.component.html',
@@ -19,10 +24,10 @@ import {Credentials} from "../../interfaces/credentials";
     formGroup: FormGroup;
 
 
+
     constructor(
       private formBuilder: FormBuilder,
       private authService: AuthService,
-      private router: Router
     ) {
       this.formGroup = this.formBuilder.group({
         username: ['', Validators.required],
@@ -30,15 +35,18 @@ import {Credentials} from "../../interfaces/credentials";
       });
     }
 
+
     public authentic(credentials: Credentials): void {
       this.authService.login(credentials).subscribe(
         (response: any) => {
-          this.router.navigate(['/home']).then();
+          console.log(response)
         },
-        (error) => {
-          console.error('Erro de autenticação', error);
-          alert('Credenciais inválidas! Tente novamente.');
+        (error: any) => {
+          console.log(error);
+          alert(error.message);
         }
-      );
+      )
     }
+
+
   }

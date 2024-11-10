@@ -5,6 +5,6 @@ export const URLS = {
   PLAN: 'api/plano/planos',
   STUDENT: 'api/alunos/alunos/',
   PAYMENT: 'api/pagamento/pagamentos/',
-  FREQUENCY: 'api/pagamento/request',
+  FREQUENCY: 'api/academia/frequencia',
 
 }
