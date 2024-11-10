@@ -2,11 +2,24 @@
   @for (gym of gyms; track gym.id){
     <mat-card (click)="selectGym(gym.id)" class="gym-card">
       <mat-card-header>
-        <mat-card-title>{{gym.nome}}</mat-card-title>
+        <mat-card-title>NOME: {{ gym.nome }}</mat-card-title>
+        <mat-card-subtitle>TELEFONE: {{ gym.telefone }}</mat-card-subtitle>
+        <mat-card-subtitle>ENDEREÇO: {{ gym.endereco }}</mat-card-subtitle>
+        <button (click)="edit(gym)">Editar</button>
       </mat-card-header>
       <mat-card-content>
-        <p>{{gym.endereco}}</p>
+        <p>{{ gym.endereco }}</p>
       </mat-card-content>
     </mat-card>
   }
+
+  <mat-card (click)="create()" class="gym-card add-gym-card">
+    <mat-card-header>
+      <mat-card-title>+</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Adicionar Nova Academia</p>
+    </mat-card-content>
+  </mat-card>
+
 </div>

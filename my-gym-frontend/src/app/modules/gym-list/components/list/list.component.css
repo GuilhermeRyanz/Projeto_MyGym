@@ -1,18 +1,43 @@
-.gym-container{
+/* Container principal para os cartões das academias */
+.gym-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 6rem;
+  gap: 2rem;
   justify-content: center;
+  padding: 2rem;
+}
 
-  .academia-car{
-    width:200px;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
+/* Estilo para cada cartão de academia */
+.gym-card {
+  width: 220px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-  .gym-container:hover{
-    transform: scale(1.05);
-  }
+/* Animação para o efeito de hover nos cartões */
+.gym-card:hover {
+  transform: scale(1.05);
+}
 
+/* Cartão de adicionar nova academia */
+.add-gym-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e0f7fa;
+  color: #00796b;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
 
+/* Texto dentro do cartão */
+.gym-card mat-card-title, .gym-card mat-card-subtitle, .gym-card mat-card-content p {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.add-gym-card:hover {
+  background-color: #b2dfdb;
 }

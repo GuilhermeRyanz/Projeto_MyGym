@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 
-from core.permissions import AcademiaPermissionMixin
+from core.permissions import AcademiaPermissionMixin, UsuarioPermission
 from usuario import serializers
 from usuario.models import Usuario
 from academia.models import UsuarioAcademia
@@ -14,7 +14,8 @@ from core.auth import get_tokens_for_user
 class UsuarioViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = serializers.UsuarioSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [UsuarioPermission]
+
 
     def perform_create(self, serializer):
         tipo_usuario = self.request.data.get('tipo_usuario')
