@@ -6,6 +6,7 @@ import { tap } from 'rxjs/operators';
 import {TokenService} from "./token-service.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -16,12 +17,14 @@ export class HttpMethodsService {
   constructor(private http: HttpClient,
               private tokenService: TokenService,
               private snackBar: MatSnackBar) {
+
     this.tokenService.token$.subscribe((token) => {
       this.headers = new HttpHeaders({
         'Authorization': token ? `Bearer ${token}` : '',
       });
     });
   }
+
   private handleError(error: any): Observable<never> {
     let errorMessage = 'Ocorreu um erro inesperado.';
 
@@ -48,12 +51,15 @@ export class HttpMethodsService {
     return throwError(errorMessage);
   }
 
+
   post(path: string, body: any): Observable<HttpResponse<any>> {
     return this.http
       .post(this.baseUrl + path, body, { headers: this.headers })
       .pipe(
         tap((response: any) => response),
         catchError((error) => this.handleError(error))  // Usando o handleError
+
+
       );
   }
 
@@ -63,6 +69,7 @@ export class HttpMethodsService {
       .pipe(
         tap((response: any) => response),
         catchError((error) => this.handleError(error))  // Usando o handleError
+
       );
   }
 
@@ -72,6 +79,7 @@ export class HttpMethodsService {
       .pipe(
         tap((response: any) => response),
         catchError((error) => this.handleError(error))  // Usando o handleError
+
       );
   }
 
@@ -84,4 +92,5 @@ export class HttpMethodsService {
       );
   }
 }
+
 

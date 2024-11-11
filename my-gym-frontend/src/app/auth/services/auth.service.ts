@@ -14,6 +14,7 @@ export class AuthService {
   showBannerEmmiter = new EventEmitter<boolean>();
   userUpdateEmitter = new EventEmitter<void>();
 
+
   private apiUrl = 'http://127.0.0.1:8000/api/token/';
 
   constructor(private http: HttpClient, private router: Router, private tokenService: TokenService) {}
@@ -41,6 +42,7 @@ export class AuthService {
           this.router.navigate(['/adm/gym/list/']);
         } else if (tipoUsuario === 'A' || tipoUsuario === 'G') {
           this.router.navigate([`/my_gym/home/`]);
+
         }
       })
     );
@@ -66,5 +68,5 @@ export class AuthService {
 
   userIsAuthGy(): boolean {
     return !!localStorage.getItem('academia');
-  }
+  }=======
 }

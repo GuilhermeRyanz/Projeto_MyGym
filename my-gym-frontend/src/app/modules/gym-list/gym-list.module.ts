@@ -6,12 +6,14 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 
 
 
+
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     MatDialogModule
+
   ]
 })
 export class GymListModule { }

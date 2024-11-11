@@ -16,6 +16,7 @@ import {MatButton} from "@angular/material/button";
     MatCardModule,
     MatButton,
 
+
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
@@ -47,11 +48,17 @@ export class ListComponent implements OnInit {
   public selectGym(gymId: number){
     localStorage.setItem('academia', String(gymId));
     this.router.navigate([`my_gym/home/`]).then();
+
+
   }
 
   public edit(gym: Gym){
     this.router.navigate([`adm/form/${gym.id}`]).then();
   }
+
+
+
+
 
 
 }

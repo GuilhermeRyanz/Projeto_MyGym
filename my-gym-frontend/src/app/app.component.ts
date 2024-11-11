@@ -5,6 +5,8 @@ import { MatAnchor, MatButton } from "@angular/material/button";
 import { MatToolbar } from "@angular/material/toolbar";
 import { MatSidenavContainer, MatSidenavModule } from "@angular/material/sidenav";
 import { MatIcon } from "@angular/material/icon";
+=======
+
 
 @Component({
   selector: 'app-root',
@@ -24,6 +26,8 @@ export class AppComponent implements OnInit {
   showNav: boolean = false;
   opened = false;
 
+
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
@@ -35,6 +39,8 @@ export class AppComponent implements OnInit {
 
     if (this.authService.userIsAuthGy()) {
       this.showNav = true;
+
+
     }
 
     this.authService.showBannerEmmiter.subscribe(
@@ -53,6 +59,8 @@ export class AppComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.showNav = !event.url.includes('adm/gym/list');
       }
+
+
     });
   }
 
@@ -60,6 +68,8 @@ export class AppComponent implements OnInit {
     this.user = localStorage.getItem('nome_usuario');
     this.email = localStorage.getItem('email');
     this.tipo_usuario = localStorage.getItem('tipo_usuario');
+
+
   }
 
   logout() {
