@@ -10,6 +10,12 @@ export const routes: Routes = [
     path: 'adm',
     loadChildren: () => import('./modules/gym-list/gym-list.module').then(m => m.GymListModule),
     canActivate: [AuthGuardService]
+  },
+
+  {
+    path: 'my_gym',
+    loadChildren: () => import('./modules/home-gym/home-gym.module').then(m => m.HomeGymModule),
+    canActivate: [AuthGuardService]
   }
 
 ];

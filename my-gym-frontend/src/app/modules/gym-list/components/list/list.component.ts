@@ -4,7 +4,7 @@ import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
-import {AuthService} from "../../../../auth/services/auth.service";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-list',
@@ -14,6 +14,7 @@ import {AuthService} from "../../../../auth/services/auth.service";
     MatCardHeader,
     MatCardContent,
     MatCardModule,
+    MatButton,
 
   ],
   templateUrl: './list.component.html',
@@ -26,6 +27,7 @@ export class ListComponent implements OnInit {
 
   constructor(private httpMethods: HttpMethodsService, private router: Router) {
   }
+
 
   ngOnInit() {
     this.seach();
@@ -43,14 +45,13 @@ export class ListComponent implements OnInit {
   }
 
   public selectGym(gymId: number){
-    this.router.navigate([`/home/gym/${gymId}`]).then();
+    localStorage.setItem('academia', String(gymId));
+    this.router.navigate([`my_gym/home/`]).then();
   }
 
   public edit(gym: Gym){
     this.router.navigate([`adm/form/${gym.id}`]).then();
   }
-
-
 
 
 }

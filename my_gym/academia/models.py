@@ -29,6 +29,7 @@ class Academia(ModelBase):
     email = models.EmailField(
         db_column='email',
         null=True,
+        unique=True,
     )
 
     def __str__(self):

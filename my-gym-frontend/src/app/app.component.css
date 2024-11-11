@@ -17,3 +17,22 @@
 .spacer {
   flex: 1;
 }
+
+mat-sidenav-container{
+  height: calc(285vh - 115vh);
+}
+
+mat-sidenav {
+  width: 200px;
+    background: #fff8f8;
+}
+
+.side-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.side-nav a {
+  margin: 8px 0;
+  font-size: 18px;
+}

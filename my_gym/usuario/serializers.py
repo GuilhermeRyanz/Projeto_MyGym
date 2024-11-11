@@ -3,10 +3,11 @@ from academia.models import Academia, UsuarioAcademia
 from core.permissions import UsuarioPermission
 from usuario.models import Usuario
 
-
-
 class UsuarioSerializer(serializers.ModelSerializer):
-    academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(), write_only=True, required=False)
+    academia = serializers.PrimaryKeyRelatedField(
+        queryset=Academia.objects.all(),
+        write_only=True,
+        required=False)
     nome = serializers.CharField(max_length=100)
 
 
