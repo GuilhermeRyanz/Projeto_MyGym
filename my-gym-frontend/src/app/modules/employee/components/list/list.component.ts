@@ -7,6 +7,7 @@ import {MatListModule} from "@angular/material/list";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatLine} from "@angular/material/core";
+import {MatCard, MatCardContent} from "@angular/material/card";
 
 @Component({
   selector: 'app-list',
@@ -15,7 +16,9 @@ import {MatLine} from "@angular/material/core";
     MatListModule,
     MatIconModule,
     MatButtonModule,
-    MatLine
+    MatLine,
+    MatCard,
+    MatCardContent
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
