@@ -1,0 +1,32 @@
+<div class="container">
+  <form [formGroup]="formGroup" (ngSubmit)="saveOrUpdate(formGroup.value)" class="mat-elevation-z2 form">
+    <mat-form-field appearance="fill" class="email">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="nome" placeholder="Digite o nome da academia" />
+    </mat-form-field>
+
+
+    <mat-form-field appearance="fill">
+      <mat-label>Endereco</mat-label>
+      <input matInput type="text" formControlName="endereco" placeholder="Digite o endereco da academia" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Telefone</mat-label>
+      <input matInput type="tel" formControlName="telefone" placeholder="Digite o telefone da academia" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="Digite o email da academia" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit" class="save">Salvar</button>
+
+    @if(action!=="create"){<button mat-icon-button (click)="toggleLock()" color="warn" type="button">
+      <mat-icon>{{ isUnlocked ? 'lock_open' : 'lock' }}</mat-icon>
+    </button>}
+    @if(action!=="create"){<button (click)="delete(formGroup.value.id)" [disabled]="!isUnlocked" mat-raised-button color="warn" type="button" class="delete">Deletar</button>}
+
+  </form>
+</div>

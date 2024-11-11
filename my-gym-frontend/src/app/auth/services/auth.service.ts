@@ -12,7 +12,8 @@ export class AuthService {
   private authUser: boolean = false;
 
   showBannerEmmiter = new EventEmitter<boolean>();
-  userUpdateEmitter = new EventEmitter<void>(); // Novo Emissor
+  userUpdateEmitter = new EventEmitter<void>();
+
 
   private apiUrl = 'http://127.0.0.1:8000/api/token/';
 
@@ -28,7 +29,7 @@ export class AuthService {
         localStorage.setItem('email', response.email);
         localStorage.setItem('nome_usuario', response.name);
 
-        if (response.academia_id) {
+        if (response.academia) {
           localStorage.setItem('academia', response.academia);
         }
 
@@ -38,11 +39,10 @@ export class AuthService {
 
         const tipoUsuario = response.tipo_usuario;
         if (tipoUsuario === 'D') {
-          this.router.navigate(['/adm/gym/list']);
-        } else if (tipoUsuario === 'A') {
-          this.router.navigate([`/home/atendente/${response.academia}`, tipoUsuario.toLowerCase()]);
-        } else if (tipoUsuario === 'G') {
-          this.router.navigate([`/home/gerente/${response.academia}`, tipoUsuario.toLowerCase()]);
+          this.router.navigate(['/adm/gym/list/']);
+        } else if (tipoUsuario === 'A' || tipoUsuario === 'G') {
+          this.router.navigate([`/my_gym/home/`]);
+
         }
       })
     );
@@ -65,4 +65,8 @@ export class AuthService {
   userIsAuth(): boolean {
     return !!localStorage.getItem('accessToken');
   }
+
+  userIsAuthGy(): boolean {
+    return !!localStorage.getItem('academia');
+  }=======
 }

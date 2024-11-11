@@ -1,5 +1,9 @@
-@if(showBanner){
+@if (showBanner) {
   <mat-toolbar color="primary" class="header">
+    <button mat-button (click)="opened=!opened">
+      <mat-icon>menu</mat-icon>
+    </button>
+
     <div class="user-info">
       <span>User: {{ user }}</span>
       <span>Email: {{ email }}</span>
@@ -7,6 +11,30 @@
     <span class="spacer"></span>
     <button mat-raised-button color="warn" (click)="logout()">Sair</button>
   </mat-toolbar>
+}
+  <mat-sidenav-container>
+    @if(showNav){<mat-sidenav [(opened)]="opened" mode="push">
+      <nav class="side-nav">
+          <a mat-button routerLink="my_gym/home">Home</a>
+        @if(tipo_usuario === "D" || tipo_usuario === "G") {
+          <ng-container>
+            <a mat-button routerLink="/gym/alunos">Funcionarios</a>
+            <a mat-button routerLink="/gym/dashboards">DashBoards</a>
+          </ng-container>
+        }
+          <ng-container>
+            <a mat-button routerLink="/gym/alunos">Alunos</a>
+            <a mat-button routerLink="/gym/planos">Planos</a>
+            <a mat-button routerLink="/check-in">Check-in de Aluno</a>
+            <a mat-button routerLink="/pagamento">Pagamento</a>
+          </ng-container>
+      </nav>
+    </mat-sidenav>}
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+=======
 
 }
 

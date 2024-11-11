@@ -3,16 +3,19 @@ from academia.models import Academia, UsuarioAcademia
 from core.permissions import UsuarioPermission
 from usuario.models import Usuario
 
-
-
 class UsuarioSerializer(serializers.ModelSerializer):
-    academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(), write_only=True, required=False)
+    academia = serializers.PrimaryKeyRelatedField(
+        queryset=Academia.objects.all(),
+        write_only=True,
+        required=False)
     nome = serializers.CharField(max_length=100)
 
 
     class Meta:
         model = Usuario
-        fields = ['nome', 'id', 'username', 'password', 'tipo_usuario', 'academia']
+        fields = ['id','nome', 'username', 'password', 'tipo_usuario', 'academia']
+
+
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_academia(self, value):

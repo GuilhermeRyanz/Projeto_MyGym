@@ -1,30 +1,21 @@
 import {Component, OnInit} from '@angular/core';
-import {Gym} from "../../interfaces/gym";
 import {URLS} from "../../../../app.urls";
+import {Gym} from "../../../gym-list/interfaces/gym";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
-import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
-import {MatButton} from "@angular/material/button";
+import {Employee} from "../../interfaces/employee";
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    MatCardContent,
-    MatCardModule,
-    MatButton,
-
-
-  ],
+  imports: [],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit{
 
-  private pathUrlClient: string = URLS.GYM;
-  public gyms: Gym[] | undefined;
+  private pathUrlClient: string = URLS.USERS;
+  public gyms: Employee[] | undefined;
 
   constructor(private httpMethods: HttpMethodsService, private router: Router) {
   }
@@ -42,22 +33,17 @@ export class ListComponent implements OnInit {
   }
 
   public create(): void {
-    this.router.navigate(['adm/form/create']).then();
+    this.router.navigate(['/form/create']).then();
   }
 
   public selectGym(gymId: number){
     localStorage.setItem('academia', String(gymId));
     this.router.navigate([`my_gym/home/`]).then();
-
-
   }
 
   public edit(gym: Gym){
     this.router.navigate([`adm/form/${gym.id}`]).then();
   }
-
-
-
 
 
 

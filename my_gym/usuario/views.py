@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied
+from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,12 +10,16 @@ from usuario import serializers
 from usuario.models import Usuario
 from academia.models import UsuarioAcademia
 from core.auth import get_tokens_for_user
+from usuario import filters
 
 
-class UsuarioViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
+class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = serializers.UsuarioSerializer
     permission_classes = [UsuarioPermission]
+    filter_backends = [DjangoFilterBackend, ]
+    filterset_class = filters.UsuarioFilter
+
 
 
     def perform_create(self, serializer):
@@ -62,7 +67,8 @@ class AuthTokenView(APIView):
                     'access_token': access_token,
                     'email': usuario.username,
                     'name': usuario.nome,
-                    'academia': academia
+                    'academia': academia,
+                    'tipo_usuario': usuario.tipo_usuario,
                 })
             else:
                 return Response({'error': 'Nenhuma academia associada ao usuário.'}, status=400)

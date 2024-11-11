@@ -33,6 +33,7 @@ class UsuarioPermission(BasePermission):
             return True
         return request.user.is_authenticated
 
+
     def has_object_permission(self, request, view, obj):
         if view.action in ['update', 'partial_update',] and obj == request.user.usuario:
             return True
