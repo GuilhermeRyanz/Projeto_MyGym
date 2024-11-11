@@ -1,0 +1,15 @@
+.employee-list {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+mat-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  margin-left: 8px;
+}

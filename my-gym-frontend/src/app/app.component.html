@@ -18,15 +18,15 @@
           <a mat-button routerLink="my_gym/home">Home</a>
         @if(tipo_usuario === "D" || tipo_usuario === "G") {
           <ng-container>
-            <a mat-button routerLink="/gym/alunos">Funcionarios</a>
-            <a mat-button routerLink="/gym/dashboards">DashBoards</a>
+            <a mat-button routerLink="employee/list">Funcionarios</a>
+            <a mat-button routerLink="gym/dashboards">DashBoards</a>
           </ng-container>
         }
           <ng-container>
-            <a mat-button routerLink="/gym/alunos">Alunos</a>
-            <a mat-button routerLink="/gym/planos">Planos</a>
-            <a mat-button routerLink="/check-in">Check-in de Aluno</a>
-            <a mat-button routerLink="/pagamento">Pagamento</a>
+            <a mat-button routerLink="gym/alunos">Alunos</a>
+            <a mat-button routerLink="gym/planos">Planos</a>
+            <a mat-button routerLink="check-in">Check-in de Aluno</a>
+            <a mat-button routerLink="pagamento">Pagamento</a>
           </ng-container>
       </nav>
     </mat-sidenav>}
@@ -34,9 +34,5 @@
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
-=======
 
-}
-
-<router-outlet/>
 

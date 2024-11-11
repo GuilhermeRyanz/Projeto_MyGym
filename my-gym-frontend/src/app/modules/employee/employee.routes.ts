@@ -5,7 +5,7 @@ import {FormComponent} from "./components/form/form.component";
 
 export const routes: Routes = [
   {
-    path: "employee/list",
+    path: "list",
     component: ListComponent
   },
 

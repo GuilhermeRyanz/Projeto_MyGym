@@ -1,1 +1,24 @@
-<p>list works!</p>
+
+<div class="employer-list">
+  <h3 mat-subheader>Funcionarios</h3>
+  <mat-list>
+    @for(employee of employers; track employee.id){
+      <mat-list-item>
+        <div mat-line>ID: {{ employee.id}}</div>
+        <div mat-line>Nome: {{ employee.nome}}</div>
+        <div mat-line>Email: {{ employee.username}}</div>
+        <div mat-line>Cargo: {{ employee.tipo_usuario}}</div>
+
+        <button mat-icon-button color="primary" (click)="edit(employee)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="delete(employee.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    }
+  </mat-list>
+  <button mat-button color="warn" (click)="create()">Novo funcionario</button>
+
+</div>
+v

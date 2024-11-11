@@ -68,5 +68,5 @@ export class AuthService {
 
   userIsAuthGy(): boolean {
     return !!localStorage.getItem('academia');
-  }=======
+  }
 }
