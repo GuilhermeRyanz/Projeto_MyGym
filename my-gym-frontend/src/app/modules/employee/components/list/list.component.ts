@@ -65,7 +65,7 @@ export class ListComponent implements OnInit {
   }
 
   public delete(id: number): void {
-    this.httpMethods.delete(this.pathUrlClient, id).subscribe((response: any) => {
+    this.httpMethods.delete(this.pathUrlClient, id).subscribe(() => {
       this.seach();
     })
 

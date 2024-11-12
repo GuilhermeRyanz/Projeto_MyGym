@@ -3,13 +3,12 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {Form, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {URLS} from "../../../../app.urls";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Employee} from "../../interfaces/employee";
-import {response} from "express";
 
 @Component({
   selector: 'app-form',
@@ -26,7 +25,7 @@ import {response} from "express";
   templateUrl: './form.component.html',
   styleUrl: './form.component.css'
 })
-export class FormComponent implements OnInit{
+export class FormComponent implements OnInit {
 
   public action: String = "";
   private pathUrlEmployee: string = URLS.USERS;
@@ -36,7 +35,7 @@ export class FormComponent implements OnInit{
 
   getGym(): void {
     this.gymId = localStorage.getItem("academia");
-    if (this.gymId){
+    if (this.gymId) {
       this.formGroup.patchValue({academia: this.gymId});
     }
   }
@@ -46,7 +45,6 @@ export class FormComponent implements OnInit{
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private dialog: MatDialog
   ) {
 
     this.formGroup = this.formBuilder.group({
