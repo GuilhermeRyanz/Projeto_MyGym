@@ -28,6 +28,7 @@ export class ListComponent implements OnInit {
   private pathUrlClient: string = URLS.USERS;
   public employers: Employee[] | undefined;
   public gym_id: string | null = "";
+  protected typeUser: string | null = "";
 
   private getIdGym(): void {
     this.gym_id = localStorage.getItem("academia");
@@ -39,8 +40,13 @@ export class ListComponent implements OnInit {
 
 
   ngOnInit() {
-    this.seach();
     this.getIdGym()
+    this.seach();
+    this.getTypeUser()
+  }
+
+  getTypeUser(){
+    this.typeUser = localStorage.getItem("usuario_tipo");
   }
 
   public seach(): void {

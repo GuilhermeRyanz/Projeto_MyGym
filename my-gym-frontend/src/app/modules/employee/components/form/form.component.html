@@ -1,1 +1,27 @@
 
+<div class="container">
+  <form [formGroup]="formGroup" (ngSubmit)="saveOrUpdate(formGroup.value)" class="mat-elevation-z2 form">
+    <mat-form-field appearance="fill" class="nome">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="nome" placeholder="Digite o nome do funcionario" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="username" placeholder="Digite o email do funcinario" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Senha</mat-label>
+      <input matInput type="password" formControlName="password" placeholder="Digite uma senha" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Cargo</mat-label>
+      <input matInput type="enum" formControlName="tipo_usuario" placeholder="Tipo de cargo" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit" class="save">Salvar</button>
+
+  </form>
+</div>

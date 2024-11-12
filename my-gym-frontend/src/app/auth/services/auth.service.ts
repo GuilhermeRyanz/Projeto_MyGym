@@ -3,13 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Credentials } from '../interfaces/credentials';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import {TokenService} from "../../shared/services/httpMethods/token-service.service";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private authUser: boolean = false;
 
   showBannerEmmiter = new EventEmitter<boolean>();
   userUpdateEmitter = new EventEmitter<void>();
@@ -17,7 +15,7 @@ export class AuthService {
 
   private apiUrl = 'http://127.0.0.1:8000/api/token/';
 
-  constructor(private http: HttpClient, private router: Router, private tokenService: TokenService) {}
+  constructor(private http: HttpClient, private router: Router,) {}
 
   login(payload: Credentials) {
     const headers = { 'Content-Type': 'application/json' };
@@ -33,7 +31,6 @@ export class AuthService {
           localStorage.setItem('academia', response.academia);
         }
 
-        this.authUser = true;
         this.showBannerEmmiter.emit(true);
         this.userUpdateEmitter.emit();
 
@@ -48,12 +45,17 @@ export class AuthService {
     );
   }
 
+
   private setToken(accessToken: string) {
-    this.tokenService.setToken(accessToken);
+    localStorage.setItem('access_token', accessToken);
+  }
+
+  public getToken(): string|null {
+    return localStorage.getItem("access_token");
   }
 
   public logout() {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('access_token');
     localStorage.removeItem('tipo_usuario');
     localStorage.removeItem('academia');
     localStorage.removeItem('user_id');
@@ -63,7 +65,7 @@ export class AuthService {
   }
 
   userIsAuth(): boolean {
-    return !!localStorage.getItem('accessToken');
+    return !!localStorage.getItem('access_token');
   }
 
   userIsAuthGy(): boolean {

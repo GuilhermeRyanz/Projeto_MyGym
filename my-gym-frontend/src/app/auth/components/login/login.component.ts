@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {Credentials} from "../../interfaces/credentials";
@@ -20,12 +20,15 @@ import {MatButtonModule} from "@angular/material/button";
   styleUrl: './login.component.css'
 })
 
-  export class LoginComponent {
+  export class LoginComponent implements OnInit{
     formGroup: FormGroup;
 
+    ngOnInit() {
+      localStorage.clear()
+    }
 
 
-    constructor(
+  constructor(
       private formBuilder: FormBuilder,
       private authService: AuthService,
     ) {

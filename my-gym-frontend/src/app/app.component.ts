@@ -21,7 +21,6 @@ export class AppComponent implements OnInit {
   user: string | null = '';
   email: string | null = '';
   tipo_usuario: string | null = '';
-  isLoggedIn: boolean = false;
   showBanner: boolean = false;
   showNav: boolean = false;
   opened = false;
@@ -32,14 +31,12 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.userIsAuth()) {
-      this.isLoggedIn = true;
       this.showBanner = true;
       this.userInfor();
     }
 
     if (this.authService.userIsAuthGy()) {
       this.showNav = true;
-
 
     }
 
@@ -49,7 +46,6 @@ export class AppComponent implements OnInit {
 
     this.authService.userUpdateEmitter.subscribe(() => {
       this.userInfor();
-      this.isLoggedIn = true;
       if (this.authService.userIsAuthGy()) {
         this.showBanner = true;
       }
@@ -58,6 +54,9 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.showNav = !event.url.includes('adm/gym/list');
+      }
+      if (event instanceof NavigationEnd){
+        this.showBanner = !event.url.includes('auth/login')
       }
 
 
@@ -75,7 +74,6 @@ export class AppComponent implements OnInit {
   logout() {
     this.authService.showBannerEmmiter.emit(false);
     this.authService.logout();
-    this.isLoggedIn = false;
     this.router.navigate(['/auth/login']);
   }
 }
