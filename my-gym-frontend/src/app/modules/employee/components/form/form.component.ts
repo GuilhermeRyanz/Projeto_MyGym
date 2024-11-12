@@ -6,7 +6,6 @@ import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {URLS} from "../../../../app.urls";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Employee} from "../../interfaces/employee";
 
