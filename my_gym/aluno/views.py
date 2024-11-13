@@ -2,9 +2,11 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
 from aluno.filters import AlunoFilter
-from aluno.models import Aluno, AlunoAcademia, AlunoPlano
-from aluno.serializers import AlunoSerializer
+from aluno.models import Aluno, AlunoPlano
+from aluno.serializers import AlunoSerializer, AlunoPlanoSerializer
 from core.permissions import AcademiaPermissionMixin
+from plano.models import Plano
+from rest_framework.decorators import action
 
 
 class AlunoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
@@ -18,14 +20,7 @@ class AlunoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
         aluno_id = response.data['id']
         aluno = Aluno.objects.get(id=aluno_id)
 
-
-        academia_id = request.data.get('academia')
         plano_id = request.data.get('plano')
-
-        AlunoAcademia.objects.create(
-            aluno=aluno,
-            academia_id=academia_id
-        )
 
         AlunoPlano.objects.create(
             aluno=aluno,
@@ -38,3 +33,30 @@ class AlunoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
         return super().update(
             request, *args, **kwargs)
 
+
+class AlunoPlanoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
+    queryset = AlunoPlano.objects.all()
+    serializer_class = AlunoPlanoSerializer
+
+    @action(detail=True, methods=['post'])
+    def alterar_plano(self,request, pk=None):
+        aluno = self.get_object()
+
+        novo_plano = request.data.get('novo_plano')
+        try:
+            novo_plano = Plano.objects.get(id=novo_plano,active=True)
+        except Plano.DoesNotExist:
+            return Response({'error:' 'Plano não encontrado'},status=status.HTTP_404_NOT_FOUND)
+
+        aluno_plano_antigo = AlunoPlano.objects.filter(aluno=aluno, plano__active=True).first()
+        if aluno_plano_antigo:
+            aluno_plano_antigo.active = False
+            aluno_plano_antigo.save()
+
+        nova_associacao = AlunoPlano.objects.create(
+            aluno=aluno,
+            plano=novo_plano,
+            active=True
+        )
+
+        return Response({'status': 'Aluno transferido para novo plano!', 'nova_associacao': AlunoPlanoSerializer(nova_associacao).data}, status=status.HTTP_200_OK)

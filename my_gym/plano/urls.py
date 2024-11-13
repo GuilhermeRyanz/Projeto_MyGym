@@ -3,6 +3,6 @@ from plano import views
 
 router = routers.DefaultRouter()
 
-router.register('plano', views.PlanoViewSet)
+router.register('planos', views.PlanoViewSet)
 
 urlpatterns = router.urls
