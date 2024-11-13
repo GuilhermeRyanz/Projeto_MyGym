@@ -55,25 +55,6 @@ class Aluno(ModelBase):
         return self.nome
 
 
-
-class AlunoAcademia(ModelBase):
-
-    aluno = models.ForeignKey(
-        Aluno,
-        on_delete=models.CASCADE,
-        db_column='aluno',
-        related_name='alunos_academia'
-    )
-    academia = models.ForeignKey(
-        'academia.Academia',
-        on_delete=models.CASCADE,
-        db_column='academia',
-        related_name='alunos_academia'
-    )
-
-    class Meta:
-        db_table = 'aluno_academia'
-
 class AlunoPlano(ModelBase):
 
     aluno = models.ForeignKey(

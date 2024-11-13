@@ -26,7 +26,7 @@ import {MatCard, MatCardContent, MatCardSubtitle} from "@angular/material/card";
 })
 export class ListComponent implements OnInit {
 
-  private pathUrlClient: string = URLS.USERS;
+  private pathUrlEmployee: string = URLS.USERS;
   public employers: Employee[] | undefined;
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
@@ -51,7 +51,7 @@ export class ListComponent implements OnInit {
   }
 
   public seach(): void {
-    this.httpMethods.get(this.pathUrlClient + `?academia=${(this.gym_id)}`).subscribe((response: any) => {
+    this.httpMethods.get(this.pathUrlEmployee + `?academia=${(this.gym_id)}`).subscribe((response: any) => {
       this.employers = response;
       console.log(response);
     });
@@ -66,11 +66,8 @@ export class ListComponent implements OnInit {
   }
 
   public delete(id: number): void {
-    this.httpMethods.delete(this.pathUrlClient, id).subscribe(() => {
+    this.httpMethods.delete(this.pathUrlEmployee, id).subscribe(() => {
       this.seach();
     })
-
   }
-
-
 }

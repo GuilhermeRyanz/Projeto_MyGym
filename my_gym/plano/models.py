@@ -25,11 +25,11 @@ class Plano(ModelBase):
         db_column='duracao'
     )
 
-    tipo_acesso = models.CharField(
-        max_length=50,
-        db_column='tipo_Acesso',
-        default='total'
-    )
+    # tipo_acesso = models.CharField(
+    #     max_length=50,
+    #     db_column='tipo_Acesso',
+    #     default='total'
+    # )
 
     academia = models.ForeignKey(
         Academia,
