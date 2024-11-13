@@ -1,7 +1,23 @@
-.delete{
-  width: 3rem;
+mat-car{
+  margin-bottom: 12px;
+  padding: 8px 16px;
 }
-.edit{
-  width: 3rem;
 
+p{
+  padding-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
 }
+
+mat-list-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+span{
+  padding: 13px;
+}
+
+
