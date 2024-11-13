@@ -15,7 +15,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
         model = Usuario
         fields = ['id','nome', 'username', 'password', 'tipo_usuario', 'academia']
 
-
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_academia(self, value):
@@ -42,7 +41,20 @@ class UsuarioSerializer(serializers.ModelSerializer):
         if usuario.tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
             UsuarioAcademia.objects.create(usuario=usuario, academia=academia, tipo_usuario=usuario.tipo_usuario)
 
+
         return usuario
 
+    def update(self, instance, validated_data):
 
+        instance.username = validated_data.get('username', instance.username)
+
+        if 'password' in validated_data:
+            instance.set_password(validated_data['password'])
+
+        if 'tipo_usuario' in validated_data:
+            instance.tipo_usuario = validated_data.get('tipo_usuario', instance.tipo_usuario)
+
+        instance.save()
+
+        return instance
 
