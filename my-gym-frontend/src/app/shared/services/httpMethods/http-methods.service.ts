@@ -31,7 +31,7 @@ export class HttpMethodsService {
     if (error && error.error) {
       for (let field in error.error) {
         if (error.error.hasOwnProperty(field) && error.error[field].length > 0) {
-          errorMessage = error.error[field][0];
+          errorMessage = `error "${field}": ${error.error[field][0]}`;
           break;
         }
       }
@@ -77,6 +77,14 @@ export class HttpMethodsService {
       catchError((error) => this.handleError(error))
     );
   }
+
+  disable(path: string, body: any): Observable<HttpResponse<any>> {
+    return this.http.post(this.baseUrl + path + body.id + '/desativar/', body, {headers: this.getHearders()}).pipe(
+      tap((response: any) => response),
+      catchError((error) => this.handleError(error))
+    );
+  }
+
 }
 
 

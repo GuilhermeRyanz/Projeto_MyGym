@@ -22,6 +22,12 @@ export const routes: Routes = [
     path: "employee",
     loadChildren: () => import('./modules/employee/employee.module').then(m => m.EmployeeModule),
     canActivate: [AuthGuardService]
+  },
+
+  {
+    path: "plan",
+    loadChildren: () => import('./modules/plan/plan.module').then(m => m.EmployeeModule),
+    canActivate: [AuthGuardService]
   }
 
 ];
