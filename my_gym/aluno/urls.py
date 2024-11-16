@@ -5,4 +5,6 @@ router = routers.DefaultRouter()
 
 router.register('alunos', views.AlunoViewSet)
 
+router.register('alunoPlano', views.AlunoPlanoViewSet)
+
 urlpatterns = router.urls

@@ -28,6 +28,12 @@ export const routes: Routes = [
     path: "plan",
     loadChildren: () => import('./modules/plan/plan.module').then(m => m.EmployeeModule),
     canActivate: [AuthGuardService]
+  },
+
+  {
+    path: "member",
+    loadChildren: () => import('./modules/member/member.module').then(m => m.MemberModule),
+    canActivate: [AuthGuardService]
   }
 
 ];

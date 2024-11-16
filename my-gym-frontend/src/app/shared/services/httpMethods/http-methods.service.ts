@@ -78,8 +78,8 @@ export class HttpMethodsService {
     );
   }
 
-  disable(path: string, body: any): Observable<HttpResponse<any>> {
-    return this.http.post(this.baseUrl + path + body.id + '/desativar/', body, {headers: this.getHearders()}).pipe(
+  disable(path: string, body: any, path_1: any): Observable<HttpResponse<any>> {
+    return this.http.post(this.baseUrl + path + body.id + `/${path_1}/`, body, {headers: this.getHearders()}).pipe(
       tap((response: any) => response),
       catchError((error) => this.handleError(error))
     );

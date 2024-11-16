@@ -3,8 +3,9 @@ export const URLS = {
   GYM: 'api/academia/academias/',
   USERS: 'api/usuario/usuarios/',
   PLAN: 'api/plano/planos/',
-  STUDENT: 'api/alunos/alunos/',
+  MEMBER: 'api/aluno/alunos/',
   PAYMENT: 'api/pagamento/pagamentos/',
   FREQUENCY: 'api/academia/frequencia',
+  MEMBERPLAN: 'api/aluno/alunoPlano/'
 
 }

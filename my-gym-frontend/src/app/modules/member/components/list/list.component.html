@@ -1,0 +1,27 @@
+<div class="employer-list">
+  <h3 mat-subheader>Alunos</h3>
+  <mat-list>
+    @for (member of members; track member.id) {
+      <mat-card>
+        <mat-list-item>
+          <p matListItemLine>
+            <span> <strong>ID:</strong> {{member.id}}</span>
+            <span> <strong>Nome:</strong> {{member.nome}}</span>
+            <span> <strong>Email:</strong> {{member.email}}</span>
+            <span> <strong>Plano:</strong> </span> {{member.plano?.nome}}
+
+            <button (click)="edit(member)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button (click)="disable(member)" >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </p>
+        </mat-list-item>
+      </mat-card>
+
+    }
+  </mat-list>
+  <button mat-button color="warn" (click)="create()">Novo aluno</button>
+</div>
+
