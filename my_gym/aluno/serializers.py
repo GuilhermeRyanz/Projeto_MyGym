@@ -17,7 +17,7 @@ class AlunoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Aluno
-        fields = ['id', 'nome', 'email', 'telefone', 'matricula',"data_nascimento", "plano"]
+        fields = ['active','id', 'nome', 'email', 'telefone', 'matricula',"data_nascimento", "plano"]
 
 
     def get_plano(self, obj):
