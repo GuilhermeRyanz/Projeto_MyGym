@@ -1,0 +1,30 @@
+<div class="Plan-list">
+  <h3 mat-subheader>Planos</h3>
+  <mat-list>
+    @for (plan of plans; track plan.id) {
+      <mat-card>
+        <mat-card-content>
+          <mat-card-title>
+            ID: {{plan.id}} <br>
+            Nome: {{ plan.nome }}
+          </mat-card-title>
+          <div>
+            Preco: R${{plan.preco}} <br> Duracao em messes: {{plan.duracao}}
+          </div>
+          <p>
+            Descricao: {{plan.descricao}}
+          </p>
+
+          <button [disabled]="typeUser == 'D'" mat-icon-button color="primary" (click)="edit(plan)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button [disabled]="typeUser == 'A'" mat-icon-button color="warn" (click)="disable(plan)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
+    }
+  </mat-list>
+  <button mat-button color="warn" (click)="create()">Novo Plano</button>
+</div>
+

@@ -50,7 +50,7 @@ export class ListComponent implements OnInit {
   }
 
   public seach():void{
-    this.httpMethods.get(this.pathUrlMember + `?active=True&academia=${this.gym_id}`).subscribe((response: any) => {
+    this.httpMethods.get(this.pathUrlMember + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
       this.members = response;
       console.log(response)
     });
