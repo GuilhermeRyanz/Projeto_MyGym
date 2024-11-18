@@ -7,7 +7,7 @@ export interface Member {
   email: string
   telefone: string
   matricula: string
-  date_nacimento: string
+  data_nacimento: string
   plano?: Plan
 
 }

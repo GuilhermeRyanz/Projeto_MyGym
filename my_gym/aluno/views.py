@@ -35,49 +35,72 @@ class AlunoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
-
-class AlunoPlanoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
+class AlunoPlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = AlunoPlano.objects.all()
     serializer_class = AlunoPlanoSerializer
 
     @action(detail=True, methods=['post'])
-    def alterar_plano(self,request, pk=None):
-        aluno_plano = self.get_object()
+    def alterar_plano(self, request, pk=None):
 
-        aluno = aluno_plano.aluno
+        aluno = Aluno.objects.get(id=pk)
+        plano_id = request.data.get('novo_plano')
 
-        novo_plano = request.data.get('novo_plano')
         try:
-            novo_plano = Plano.objects.get(id=novo_plano,active=True)
+            novo_plano = Plano.objects.get(id=plano_id, active=True)
         except Plano.DoesNotExist:
-            return Response({'error': 'Plano não encontrado'},status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Plano não encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
-        aluno_plano_antigo = AlunoPlano.objects.filter(aluno=aluno, plano__active=True).first()
-        if aluno_plano_antigo:
-            aluno_plano_antigo.active = False
-            aluno_plano_antigo.save()
+        aluno_plano_ativo = AlunoPlano.objects.filter(aluno=aluno, active=True).first()
+        if aluno_plano_ativo:
+            aluno_plano_ativo.active = False
+            aluno_plano_ativo.save()
+
+        aluno_plano_existente = AlunoPlano.objects.filter(aluno=aluno, plano=novo_plano).first()
+        if aluno_plano_existente:
+            aluno_plano_existente.active = True
+            aluno_plano_existente.save()
+            return Response(
+                {'status': 'Aluno recadastrado no plano', 'plano': AlunoPlanoSerializer(aluno_plano_existente).data},
+                status=status.HTTP_200_OK)
 
         nova_associacao = AlunoPlano.objects.create(
             aluno=aluno,
-            plano=novo_plano,
-            active=True
+            plano=novo_plano
         )
 
-        return Response({'status': 'Aluno transferido para novo plano!', 'nova_associacao': AlunoPlanoSerializer(nova_associacao).data}, status=status.HTTP_200_OK)
+        return Response({'status': 'Aluno cadastrado em plano', 'plano': AlunoPlanoSerializer(nova_associacao).data},
+                        status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def desativar_aluno(self, request, pk=None):
-        aluno_plano = self.get_object()
+        try:
+            aluno = Aluno.objects.get(id=pk)
 
-        if aluno_plano.active:
-            aluno_plano.active = False
-            aluno_plano.save()
+            try:
+                aluno_plano = AlunoPlano.objects.get(aluno=aluno, active=True)
+
+                aluno_plano.active = False
+                aluno_plano.save()
+
+                return Response(
+                    {
+                        'status': 'Aluno desativado com sucesso!',
+                        'aluno_plano': AlunoPlanoSerializer(aluno_plano).data
+                    },
+                    status=status.HTTP_200_OK
+                )
+
+            except AlunoPlano.DoesNotExist:
+                return Response(
+                    {'erro': "Aluno não possui um plano ativo para ser desativado."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+        except Aluno.DoesNotExist:
             return Response(
-                {'status': 'Aluno desativado com sucesso', 'aluno_plano': AlunoPlanoSerializer(aluno_plano).data},
-                status=status.HTTP_200_OK
+                {'erro': "Aluno não encontrado."},
+                status=status.HTTP_404_NOT_FOUND
             )
-        else:
-            return Response(
-                {'status': 'O plano do aluno já está desativado.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+
+        except Exception as e:
+            return Response({'erro': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

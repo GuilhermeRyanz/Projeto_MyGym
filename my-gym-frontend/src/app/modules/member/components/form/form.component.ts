@@ -6,10 +6,9 @@ import {MatInput} from "@angular/material/input";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {Employee} from "../../../employee/interfaces/employee";
 import {Plan} from "../../../plan/interfaces/plan";
-import {response} from "express";
 import {MatOption, MatSelect} from "@angular/material/select";
+import {Member} from "../../interfaces/member";
 
 @Component({
   selector: 'app-form',
@@ -25,16 +24,18 @@ import {MatOption, MatSelect} from "@angular/material/select";
     MatOption
   ],
   templateUrl: './form.component.html',
-  styleUrl: './form.component.css'
+  styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnInit {
 
-  public action: String = "";
+  private originalPlanId: number = 0;
+  public action: string = "";
   protected plans: Plan[] = [];
   private pathUrlMember: string = URLS.MEMBER;
-  private pathUrlPlan: string = URLS.PLAN
+  private pathUrlPlan: string = URLS.PLAN;
+  private pathUrlMemberPlan: string = URLS.MEMBERPLAN;
   formGroup: FormGroup;
-  private created: boolean = true
+  private created: boolean = true;
   private gymId: string | null = "";
 
   getGym(): void {
@@ -50,26 +51,22 @@ export class FormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-
     this.formGroup = this.formBuilder.group({
       id: [],
       nome: ['', Validators.required],
       telefone: ['', [Validators.required, Validators.pattern('[0-9]{10,11}')]],
       email: ['', [Validators.required, Validators.email]],
       data_nascimento: ['', Validators.required],
-      academia: this.gymId,
+      academia: [null],
       matricula: [],
       plano: ['', Validators.required]
     });
-
   }
 
-  ngOnInit(){
-
-    this.getGym()
-
-    this.httpMethods.get(this.pathUrlPlan + `?academia=${this.gymId}`).subscribe((response: any) => {
-      this.plans = response
+  ngOnInit() {
+    this.getGym();
+    this.httpMethods.get(this.pathUrlPlan + `?academia=${this.gymId}&active=true`).subscribe((response: any) => {
+      this.plans = response;
     });
 
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -83,28 +80,45 @@ export class FormComponent implements OnInit {
             nome: response.nome,
             email: response.email,
             telefone: response.telefone,
-            data_nascimento: response.date_nascimento,
+            data_nascimento: response.data_nascimento,
             matricula: response.matricula,
-            plano: response.plano.id
-
+            academia: this.gymId,
+            plano: response.plano.id,
           });
-        })
+          this.originalPlanId = response.plano.id;
+          console.log("PlanoOriginal:", this.originalPlanId);
+        });
       }
     });
   }
 
-  public saveOrUpdate(employee: Employee) {
+  public saveOrUpdate(member: Member) {
     if (this.created) {
-      this.httpMethods.post(this.pathUrlMember, employee).subscribe(() => {
+      this.httpMethods.post(this.pathUrlMember, member).subscribe(() => {
         this.router.navigate(['/member/list']).then();
-      })
+      });
     } else {
-      this.httpMethods.patch(this.pathUrlMember, employee).subscribe(() => {
+      if (member.plano && member.plano.id !== this.originalPlanId) {this.httpMethods.post(`${this.pathUrlMemberPlan}${member.id}/alterar_plano/`, {
+          novo_plano: member.plano,
+        }).subscribe(
+          () => console.log('Plano atualizado com sucesso!'),
+          (error) => console.error('Erro ao atualizar o plano:', error)
+        );
+      }
+
+      const memberData = {
+        id: member.id,
+        nome: member.nome,
+        telefone: member.telefone,
+        email: member.email,
+        data_nascimento: member.data_nacimento,
+        matricula: member.matricula,
+        academia: this.gymId
+      };
+
+      this.httpMethods.patch(`${this.pathUrlMember}`, memberData).subscribe(() => {
         this.router.navigate(['/member/list']).then();
-      })
+      });
     }
   }
-
-
-
 }

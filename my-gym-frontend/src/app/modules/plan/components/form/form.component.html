@@ -2,22 +2,22 @@
   <form [formGroup]="formGroup" (ngSubmit)="saveOrUpdate(formGroup.value)" class="mat-elevation-z2 form">
     <mat-form-field appearance="fill" class="nome">
       <mat-label>Nome</mat-label>
-      <input matInput formControlName="nome" placeholder="Digite o nome do funcionario" />
+      <input matInput formControlName="nome" placeholder="Digite o nome do plano" />
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Preco</mat-label>
-      <input matInput type="float" formControlName="preco" placeholder="Digite o email do funcinario" />
+      <input matInput type="float" formControlName="preco" placeholder="Digite o preco" />
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Descricao</mat-label>
-      <input matInput type="text" formControlName="descricao" placeholder="Digite uma senha" />
+      <input matInput type="text" formControlName="descricao" placeholder="Digite uma descricao" />
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Duracao</mat-label>
-      <input matInput type="number" formControlName="duracao" placeholder="Tipo de cargo" />
+      <input matInput type="number" formControlName="duracao" placeholder="Duracao em meses" />
     </mat-form-field>
 
     <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit" class="save">Salvar</button>
