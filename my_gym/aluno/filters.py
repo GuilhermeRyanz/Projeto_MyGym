@@ -1,5 +1,6 @@
 from django_filters import rest_framework as filters
-from aluno.models import Aluno
+from aluno.models import Aluno, AlunoPlano
+
 
 class AlunoFilter(filters.FilterSet):
     nome_aluno = filters.CharFilter(field_name='alunos_plano__aluno__nome', lookup_expr='icontains' )
@@ -9,6 +10,5 @@ class AlunoFilter(filters.FilterSet):
     active = filters.BooleanFilter(field_name='alunos_plano__active', lookup_expr='exact')
 
     class Meta:
-        Model = Aluno
-        fields = ['id','matricula','nome']
-
+        model = Aluno
+        fields = ['id','matricula','nome','active']
