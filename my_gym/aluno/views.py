@@ -1,3 +1,4 @@
+from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -12,6 +13,7 @@ from rest_framework.decorators import action
 class AlunoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer
+    filter_backends = [DjangoFilterBackend, ]
     filterset_class = AlunoFilter
 
     def create(self, request, *args, **kwargs):
