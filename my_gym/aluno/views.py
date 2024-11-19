@@ -2,7 +2,7 @@ from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
-from aluno.filters import AlunoFilter
+from aluno.filters import AlunoFilter, AlunoPlanoFilter
 from aluno.models import Aluno, AlunoPlano
 from aluno.serializers import AlunoSerializer, AlunoPlanoSerializer
 from core.permissions import AcademiaPermissionMixin
@@ -13,8 +13,6 @@ from rest_framework.decorators import action
 class AlunoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer
-    filter_backends = [DjangoFilterBackend, ]
-    filterset_class = AlunoFilter
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
@@ -40,6 +38,8 @@ class AlunoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
 class AlunoPlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = AlunoPlano.objects.all()
     serializer_class = AlunoPlanoSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = AlunoPlanoFilter
 
     @action(detail=True, methods=['post'])
     def alterar_plano(self, request, pk=None):
