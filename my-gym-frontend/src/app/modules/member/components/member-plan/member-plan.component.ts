@@ -5,11 +5,10 @@ import {Plan} from "../../../plan/interfaces/plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
 import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
-import {MatList} from "@angular/material/list";
+import {MatList, MatListSubheaderCssMatStyler} from "@angular/material/list";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton} from "@angular/material/button";
 import {MatRadioButton} from "@angular/material/radio";
-import mainServer from "../../../../../main.server";
 
 @Component({
   selector: 'app-member-plan',
@@ -21,7 +20,8 @@ import mainServer from "../../../../../main.server";
     MatList,
     MatIcon,
     MatButton,
-    MatRadioButton
+    MatRadioButton,
+    MatListSubheaderCssMatStyler
   ],
   templateUrl: './member-plan.component.html',
   styleUrl: './member-plan.component.css'

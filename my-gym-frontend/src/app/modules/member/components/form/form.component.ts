@@ -14,7 +14,6 @@ import {Member} from "../../interfaces/member";
 import {switchMap, tap} from "rxjs/operators";
 import {catchError, of} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {privateDecrypt} from "node:crypto";
 
 @Component({
   selector: 'app-form',
@@ -38,12 +37,10 @@ import {privateDecrypt} from "node:crypto";
 export class FormComponent implements OnInit {
 
   public obj?: Member = undefined;
-  private originalPlanId: number = 0;
   public action: string = "";
   protected plans: Plan[] = [];
   private pathUrlMember: string = URLS.MEMBER;
   private pathUrlPlan: string = URLS.PLAN;
-  private pathUrlMemberPlan: string = URLS.MEMBERPLAN;
   formGroup: FormGroup;
   private created: boolean = true;
   private gymId: string | null = "";
