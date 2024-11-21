@@ -8,6 +8,7 @@ class AlunoFilter(filters.FilterSet):
     # academia = filters.NumberFilter(field_name='alunos_plano__plano__academia__id', lookup_expr='exact')
     # active_plano = filters.BooleanFilter(widget=BooleanWidget(), field_name='alunos_plano__active', lookup_expr='exact')
     ativo = filters.NumberFilter(method='ativos_e_inativos')
+    email = filters.CharFilter(field_name='email', lookup_expr='exact')
 
     def ativos_e_inativos(self, queryset, name, value):
         return self.queryset.annotate(
@@ -18,7 +19,7 @@ class AlunoFilter(filters.FilterSet):
 
     class Meta:
         model = Aluno
-        fields = ['id', 'matricula', 'nome']
+        fields = ['id', 'matricula', 'nome', 'email']
 
 
 class AlunoPlanoFilter(filters.FilterSet):
