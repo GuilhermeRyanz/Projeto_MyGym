@@ -4,7 +4,6 @@ from rest_framework import serializers
 
 from aluno.models import AlunoPlano
 from pagamento.models import Pagamento
-from plano.models import Plano
 
 
 class PagamentoSerializer(serializers.ModelSerializer):

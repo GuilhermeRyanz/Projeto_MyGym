@@ -1,85 +1,53 @@
-from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from aluno.filters import AlunoFilter, AlunoPlanoFilter
-from aluno.models import Aluno, AlunoPlano
+
+from aluno import params_serializer, models
+from aluno.filters import AlunoPlanoFilter, AlunoFilter
 from aluno.serializers import AlunoSerializer, AlunoPlanoSerializer
 from core.permissions import AcademiaPermissionMixin
-from plano.models import Plano
-from rest_framework.decorators import action
 
 
 class AlunoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
-    queryset = Aluno.objects.all()
+    queryset = models.Aluno.objects.all()
     serializer_class = AlunoSerializer
-
-    def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-
-        aluno_id = response.data['id']
-        aluno = Aluno.objects.get(id=aluno_id)
-
-        plano_id = request.data.get('plano')
-        if plano_id and Plano.objects.filter(id=plano_id).exists():
-            AlunoPlano.objects.create(
-                aluno=aluno,
-                plano_id=plano_id
-            )
-        else:
-            return Response({'error': 'Plano inválido ou não encontrado'}, status=status.HTTP_400_BAD_REQUEST)
-
-        return response
-
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
+    filterset_class = AlunoFilter
 
 
-class AlunoPlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
-    queryset = AlunoPlano.objects.all()
+class AlunoPlanoViewSet(viewsets.ModelViewSet):
+    queryset = models.AlunoPlano.objects.all()
     serializer_class = AlunoPlanoSerializer
-    filter_backends = (DjangoFilterBackend,)
     filterset_class = AlunoPlanoFilter
 
-    @action(detail=True, methods=['post'])
-    def alterar_plano(self, request, pk=None):
+    @action(detail=False, methods=['POST'])
+    def alterar_plano(self, request, *args, **kwargs):
+        ps = params_serializer.AlterarPlanoParamSerializer(data=request.data)
+        ps.is_valid(raise_exception=True)
+        plano, aluno = ps.validated_data.values()
 
-        aluno = Aluno.objects.get(id=pk)
-        plano_id = request.data.get('novo_plano')
-
-        try:
-            novo_plano = Plano.objects.get(id=plano_id, active=True)
-        except Plano.DoesNotExist:
-            return Response({'error': 'Plano não encontrado'}, status=status.HTTP_404_NOT_FOUND)
-
-        aluno_plano_ativo = AlunoPlano.objects.filter(aluno=aluno, active=True).first()
-        if aluno_plano_ativo:
-            aluno_plano_ativo.active = False
-            aluno_plano_ativo.save()
-
-        aluno_plano_existente = AlunoPlano.objects.filter(aluno=aluno, plano=novo_plano).first()
-        if aluno_plano_existente:
-            aluno_plano_existente.active = True
-            aluno_plano_existente.save()
-            return Response(
-                {'status': 'Aluno recadastrado no plano', 'plano': AlunoPlanoSerializer(aluno_plano_existente).data},
-                status=status.HTTP_200_OK)
-
-        nova_associacao = AlunoPlano.objects.create(
+        models.AlunoPlano.objects.filter(
             aluno=aluno,
-            plano=novo_plano
-        )
+            plano__academia=plano.academia,
+            active=True
+        ).update(active=False)
 
-        return Response({'status': 'Aluno cadastrado em plano', 'plano': AlunoPlanoSerializer(nova_associacao).data},
-                        status=status.HTTP_200_OK)
+        models.AlunoPlano.objects.update_or_create(
+            aluno=aluno,
+            plano=plano,
+            defaults={
+                'active': True
+            }
+        )
+        return Response(data={'status': 'Aluno cadastrado em plano'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def desativar_aluno(self, request, pk=None):
         try:
-            aluno = Aluno.objects.get(id=pk)
+            aluno = models.Aluno.objects.get(id=pk)
 
             try:
-                aluno_plano = AlunoPlano.objects.get(aluno=aluno, active=True)
+                aluno_plano = models.AlunoPlano.objects.get(aluno=aluno, active=True)
 
                 aluno_plano.active = False
                 aluno_plano.save()
@@ -92,13 +60,13 @@ class AlunoPlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
                     status=status.HTTP_200_OK
                 )
 
-            except AlunoPlano.DoesNotExist:
+            except models.AlunoPlano.DoesNotExist:
                 return Response(
                     {'erro': "Aluno não possui um plano ativo para ser desativado."},
                     status=status.HTTP_404_NOT_FOUND
                 )
 
-        except Aluno.DoesNotExist:
+        except models.Aluno.DoesNotExist:
             return Response(
                 {'erro': "Aluno não encontrado."},
                 status=status.HTTP_404_NOT_FOUND

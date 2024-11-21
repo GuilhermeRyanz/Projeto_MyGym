@@ -8,6 +8,8 @@ import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-m
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {Plan} from "../../../plan/interfaces/plan";
 import {MatOption, MatSelect} from "@angular/material/select";
+import {MatTab, MatTabGroup} from "@angular/material/tabs";
+import {MemberPlanComponent} from "../member-plan/member-plan.component";
 import {Member} from "../../interfaces/member";
 
 @Component({
@@ -21,13 +23,17 @@ import {Member} from "../../interfaces/member";
     MatLabel,
     ReactiveFormsModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatTabGroup,
+    MatTab,
+    MemberPlanComponent
   ],
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnInit {
 
+  public obj?: Member = undefined;
   private originalPlanId: number = 0;
   public action: string = "";
   protected plans: Plan[] = [];
@@ -59,7 +65,6 @@ export class FormComponent implements OnInit {
       data_nascimento: ['', Validators.required],
       academia: [null],
       matricula: [],
-      plano: ['', Validators.required]
     });
   }
 
@@ -74,7 +79,9 @@ export class FormComponent implements OnInit {
       this.created = !(this.action && this.action !== 'create');
 
       if (!this.created) {
-        this.httpMethods.get(this.pathUrlMember + this.action + '/').subscribe((response: any) => {
+        this.httpMethods.get(this.pathUrlMember + `${this.action}/`).subscribe((response: any) => {
+          this.obj = response
+          console.log(response[0])
           this.formGroup.setValue({
             id: response.id,
             nome: response.nome,
@@ -83,10 +90,7 @@ export class FormComponent implements OnInit {
             data_nascimento: response.data_nascimento,
             matricula: response.matricula,
             academia: this.gymId,
-            plano: response.plano.id,
           });
-          this.originalPlanId = response.plano.id;
-          console.log("PlanoOriginal:", this.originalPlanId);
         });
       }
     });
@@ -94,30 +98,14 @@ export class FormComponent implements OnInit {
 
   public saveOrUpdate(member: Member) {
     if (this.created) {
-      this.httpMethods.post(this.pathUrlMember, member).subscribe(() => {
-        this.router.navigate(['/member/list']).then();
+      this.httpMethods.post(this.pathUrlMember, member).subscribe({
+        next: () => {
+          this.obj = member;
+        }
       });
     } else {
-      if (member.plano && member.plano.id !== this.originalPlanId) {this.httpMethods.post(`${this.pathUrlMemberPlan}${member.id}/alterar_plano/`, {
-          novo_plano: member.plano,
-        }).subscribe(
-          () => console.log('Plano atualizado com sucesso!'),
-          (error) => console.error('Erro ao atualizar o plano:', error)
-        );
-      }
-
-      const memberData = {
-        id: member.id,
-        nome: member.nome,
-        telefone: member.telefone,
-        email: member.email,
-        data_nascimento: member.data_nacimento,
-        matricula: member.matricula,
-        academia: this.gymId
-      };
-
-      this.httpMethods.patch(`${this.pathUrlMember}`, memberData).subscribe(() => {
-        this.router.navigate(['/member/list']).then();
+      this.httpMethods.patch(`${this.pathUrlMember}`, member).subscribe(() => {
+        this.obj = member;
       });
     }
   }

@@ -7,6 +7,7 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatCard} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
 import {MatList, MatListItem, MatListItemLine, MatListSubheaderCssMatStyler} from "@angular/material/list";
+import {MemberPlan} from "../../interfaces/member-plan";
 
 @Component({
   selector: 'app-list',
@@ -28,7 +29,7 @@ export class ListComponent implements OnInit {
 
   private pathUrlMember: string = URLS.MEMBER;
   private pathUrlMemberPlan: string = URLS.MEMBERPLAN
-  public members: Member[] | undefined;
+  public members: MemberPlan [] | undefined;
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
 
@@ -50,7 +51,7 @@ export class ListComponent implements OnInit {
   }
 
   public seach():void{
-    this.httpMethods.get(this.pathUrlMember + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
+    this.httpMethods.get(this.pathUrlMemberPlan + `?expand=aluno&expand=plano&active=true&academia=${this.gym_id}`).subscribe((response: any) => {
       this.members = response;
       console.log(response)
     });

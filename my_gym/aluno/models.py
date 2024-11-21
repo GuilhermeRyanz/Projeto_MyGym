@@ -39,8 +39,6 @@ class Aluno(ModelBase):
         validators=[RegexValidator(r'^[0-9]*$')]
     )
 
-
-
     class Meta:
         db_table = 'aluno'
 
@@ -71,3 +69,4 @@ class AlunoPlano(ModelBase):
     )
     class Meta:
         db_table = 'aluno_plano'
+        unique_together = ('aluno', 'plano')
