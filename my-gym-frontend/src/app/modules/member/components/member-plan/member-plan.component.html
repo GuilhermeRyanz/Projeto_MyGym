@@ -1,0 +1,24 @@
+<div class="Plan-list">
+  <h3 mat-subheader>Planos</h3>
+  <mat-list>
+    @for (plan of plans; track plan.id) {
+      <mat-card>
+        <mat-card-content>
+          <mat-card-title>
+            ID: {{plan.id}} <br>
+            Nome: {{ plan.nome }}
+          </mat-card-title>
+          <div>
+            Preco: R${{plan.preco}} <br> Duracao em messes: {{plan.duracao}}
+          </div>
+          <p>
+            Descricao: {{plan.descricao}}
+          </p>
+          <mat-radio-button (click)="editPlan()">
+          </mat-radio-button>
+        </mat-card-content>
+      </mat-card>
+    }
+  </mat-list>
+</div>
+

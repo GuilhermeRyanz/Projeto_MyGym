@@ -1,0 +1,68 @@
+import {Component, Input, OnInit,} from '@angular/core';
+import {Member} from "../../interfaces/member";
+import {URLS} from "../../../../app.urls";
+import {Plan} from "../../../plan/interfaces/plan";
+import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
+import {Router} from "@angular/router";
+import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
+import {MatList} from "@angular/material/list";
+import {MatIcon} from "@angular/material/icon";
+import {MatButton} from "@angular/material/button";
+import {MatRadioButton} from "@angular/material/radio";
+import mainServer from "../../../../../main.server";
+
+@Component({
+  selector: 'app-member-plan',
+  standalone: true,
+  imports: [
+    MatCardContent,
+    MatCardTitle,
+    MatCard,
+    MatList,
+    MatIcon,
+    MatButton,
+    MatRadioButton
+  ],
+  templateUrl: './member-plan.component.html',
+  styleUrl: './member-plan.component.css'
+})
+export class MemberPlanComponent implements OnInit {
+
+  @Input('member') member?: Member;
+
+  private pathUrlPlan: string = URLS.PLAN;
+  protected plans: Plan[] | undefined;
+  public gym_id: string | null = "";
+  protected typeUser: string | null = "";
+
+  private getIdGym(): void {
+    this.gym_id = localStorage.getItem("academia")
+  }
+
+  constructor(private httpMethods: HttpMethodsService, private router: Router) {
+  }
+
+  ngOnInit() {
+    this.getIdGym()
+    this.seach()
+    this.getTypeUser()
+  }
+
+  getTypeUser() {
+    this.typeUser = localStorage.getItem("usuario_tipo")
+  }
+
+  public seach(): void {
+    this.httpMethods.get(this.pathUrlPlan + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
+      this.plans = response
+      console.log(response);
+    });
+  }
+
+  public editPlan(plan: Plan): void {
+  }
+
+
+
+}
+
