@@ -44,8 +44,6 @@ export class HttpMethodsService {
       verticalPosition: 'top',
     });
 
-    console.error('Erro HTTP:', error);
-
     return throwError(errorMessage);
   }
 

@@ -11,6 +11,10 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {MemberPlanComponent} from "../member-plan/member-plan.component";
 import {Member} from "../../interfaces/member";
+import {switchMap, tap} from "rxjs/operators";
+import {catchError, of} from "rxjs";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {privateDecrypt} from "node:crypto";
 
 @Component({
   selector: 'app-form',
@@ -56,6 +60,7 @@ export class FormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) {
     this.formGroup = this.formBuilder.group({
       id: [],
@@ -81,7 +86,6 @@ export class FormComponent implements OnInit {
       if (!this.created) {
         this.httpMethods.get(this.pathUrlMember + `${this.action}/`).subscribe((response: any) => {
           this.obj = response
-          console.log(response[0])
           this.formGroup.setValue({
             id: response.id,
             nome: response.nome,
@@ -98,15 +102,43 @@ export class FormComponent implements OnInit {
 
   public saveOrUpdate(member: Member) {
     if (this.created) {
-      this.httpMethods.post(this.pathUrlMember, member).subscribe({
-        next: () => {
-          this.obj = member;
-        }
-      });
+      this.httpMethods.get(this.pathUrlMember + `?email=${member.email}`).pipe(
+        switchMap((response: any) => {
+          if (response) {
+            this.router.navigate([`/member/form/${response[0].id}`]);
+            let UserExist = 'O usuaio com esse email já existe altere apenas seu plano';
+            this.snackBar.open( UserExist, 'Fechar', {
+              duration: 5000,
+              verticalPosition: 'top',
+            });
+
+            return of(null);
+          } else {
+            return this.httpMethods.post(this.pathUrlMember, member).pipe(
+              tap(() => {
+                this.obj = member;
+              })
+            );
+          }
+        }),
+        catchError(error => {
+          if (error.status === 404) {
+            return this.httpMethods.post(this.pathUrlMember, member).pipe(
+              tap(() => {
+                this.obj = member;
+              })
+            );
+          } else {
+            console.error('Erro ao verificar aluno:', error);
+            return of(null);
+          }
+        })
+      ).subscribe();
     } else {
       this.httpMethods.patch(`${this.pathUrlMember}`, member).subscribe(() => {
         this.obj = member;
       });
     }
   }
+
 }
