@@ -1,0 +1,18 @@
+.plan-card {
+  margin-bottom: 16px;
+}
+
+.plan-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.plan-info {
+  flex: 1;
+}
+
+.plan-description {
+  flex: 1;
+  margin-left: 16px;
+}

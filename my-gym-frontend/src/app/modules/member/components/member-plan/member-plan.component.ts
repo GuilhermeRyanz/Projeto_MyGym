@@ -4,10 +4,17 @@ import {URLS} from "../../../../app.urls";
 import {Plan} from "../../../plan/interfaces/plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
-import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle
+} from "@angular/material/card";
 import {MatList, MatListSubheaderCssMatStyler} from "@angular/material/list";
 import {MatIcon} from "@angular/material/icon";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatRadioButton} from "@angular/material/radio";
 
 @Component({
@@ -21,7 +28,11 @@ import {MatRadioButton} from "@angular/material/radio";
     MatIcon,
     MatButton,
     MatRadioButton,
-    MatListSubheaderCssMatStyler
+    MatListSubheaderCssMatStyler,
+    MatCardActions,
+    MatCardHeader,
+    MatCardSubtitle,
+    MatIconButton
   ],
   templateUrl: './member-plan.component.html',
   styleUrl: './member-plan.component.css'
@@ -31,6 +42,7 @@ export class MemberPlanComponent implements OnInit {
   @Input('member') member?: Member;
 
   private pathUrlPlan: string = URLS.PLAN;
+  private pathUrlPlanMember: string = URLS.MEMBERPLAN
   protected plans: Plan[] | undefined;
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
@@ -60,9 +72,21 @@ export class MemberPlanComponent implements OnInit {
   }
 
   public editPlan(plan: Plan): void {
+
+    const new_body = {
+      aluno: this.member?.id,
+      plano: plan.id,
+      academia: plan.academia
+
+    }
+
+    console.log(`aluno` ,this.member?.id)
+
+    this.httpMethods.post(this.pathUrlPlanMember + 'alterar_plano/', new_body).subscribe((response: any) => {})
   }
-
-
+  public return(){
+    this.router.navigate(['/member/list/'])
+  }
 
 }
 

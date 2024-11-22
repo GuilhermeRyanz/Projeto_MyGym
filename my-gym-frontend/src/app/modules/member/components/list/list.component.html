@@ -1,27 +1,47 @@
+<!--<div class="employer-list">-->
+<!--  <h3 mat-subheader>Alunos</h3>-->
+<!--    @for (member of members; track member.aluno.id) {-->
+<!--      <mat-card>-->
+<!--          <p matListItemLine>-->
+<!--            <span> <strong>ID:</strong> {{member.aluno.id}}</span>-->
+<!--            <span> <strong>Nome:</strong> {{member.aluno.nome}}</span>-->
+<!--            <span> <strong>Email:</strong> {{member.aluno.email}}</span>-->
+<!--            <span> <strong>Plano:</strong> {{member.plano?.nome}}</span>-->
+
+<!--            <button (click)="edit(member.aluno)" mat-icon-button color="primary">-->
+<!--              <mat-icon>edit</mat-icon>-->
+<!--            </button>-->
+<!--            <button (click)="disable(member.aluno)" mat-icon-button color="primary">-->
+<!--              <mat-icon>delete</mat-icon>-->
+<!--            </button>-->
+<!--          </p>-->
+<!--      </mat-card>-->
+
+<!--    }-->
+<!--  <button mat-button color="warn" (click)="create()">Novo aluno</button>-->
+<!--</div>-->
+
 <div class="employer-list">
   <h3 mat-subheader>Alunos</h3>
-  <mat-list>
-    @for (member of members; track member.aluno.id) {
-      <mat-card>
-        <mat-list-item>
-          <p matListItemLine>
-            <span> <strong>ID:</strong> {{member.aluno.id}}</span>
-            <span> <strong>Nome:</strong> {{member.aluno.nome}}</span>
-            <span> <strong>Email:</strong> {{member.aluno.email}}</span>
-            <span> <strong>Plano:</strong> </span> {{member.plano?.nome}}
-
-            <button (click)="edit(member.aluno)" mat-icon-button color="primary">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button (click)="disable(member.aluno)" mat-icon-button color="primary">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </p>
-        </mat-list-item>
-      </mat-card>
-
-    }
-  </mat-list>
+  @for (member of members; track member.aluno.id) {
+    <mat-card class="member-cad" appearance="outlined">
+      <mat-card-content>
+        <div class="member-info">
+          <div> <strong>Matricula:</strong> {{member.aluno.matricula}}</div>
+          <div> <strong>Nome:</strong> {{member.aluno.nome}}</div>
+          <div> <strong>Email:</strong> {{member.aluno.email}}</div>
+          <div> <strong>Plano:</strong>  {{member.plano?.nome}}</div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button (click)="edit(member.aluno)" mat-icon-button color="primary">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button (click)="disable(member.aluno)" mat-icon-button color="primary">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
   <button mat-button color="warn" (click)="create()">Novo aluno</button>
 </div>
-

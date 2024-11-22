@@ -4,7 +4,7 @@ import {Member} from "../../interfaces/member";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatCard} from "@angular/material/card";
+import {MatCard, MatCardActions, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
 import {MatList, MatListItem, MatListItemLine, MatListSubheaderCssMatStyler} from "@angular/material/list";
 import {MemberPlan} from "../../interfaces/member-plan";
@@ -20,7 +20,9 @@ import {MemberPlan} from "../../interfaces/member-plan";
     MatList,
     MatListItem,
     MatListItemLine,
-    MatListSubheaderCssMatStyler
+    MatListSubheaderCssMatStyler,
+    MatCardContent,
+    MatCardActions
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'

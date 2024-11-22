@@ -5,6 +5,7 @@ export interface Plan {
   preco: number
   descricao: string
   duracao: string
+  academia: number
 
 
 }
