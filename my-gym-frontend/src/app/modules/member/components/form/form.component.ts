@@ -11,7 +11,7 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {MemberPlanComponent} from "../member-plan/member-plan.component";
 import {Member} from "../../interfaces/member";
-import {of} from "rxjs";
+import {map, of} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 
@@ -44,6 +44,8 @@ export class FormComponent implements OnInit {
   formGroup: FormGroup;
   private created: boolean = true;
   private gymId: string | null = "";
+  selectedIndex: number = 0;
+
 
   getGym(): void {
     this.gymId = localStorage.getItem("academia");
@@ -97,64 +99,27 @@ export class FormComponent implements OnInit {
     });
   }
 
-  // public saveOrUpdate(member: Member) {
-  //   if (this.created) {
-  //     this.httpMethods.get(this.pathUrlMember + `?email=${member.email}`).pipe(
-  //       switchMap((response: any) => {
-  //         if (response && response.length > 0) {
-  //           this.router.navigate([`/member/form/${response[0].id}`]);
-  //
-  //           const userExistMessage = 'O usuário com esse e-mail já existe. Altere apenas seu plano.';
-  //           this.snackBar.open(userExistMessage, 'Fechar', {
-  //             duration: 5000,
-  //             verticalPosition: 'top',
-  //           });
-  //           return of(null);
-  //         } else {
-  //           return this.httpMethods.post(this.pathUrlMember, member).pipe(
-  //             map((resp: any) => resp.body as Member)
-  //           );
-  //         }
-  //       }),
-  //       catchError(error => {
-  //         if (error.status === 404) {
-  //           return this.httpMethods.post(this.pathUrlMember, member).pipe(
-  //             tap(() => {
-  //               this.obj = member;
-  //             })
-  //           );
-  //         } else {
-  //           console.error('Erro ao verificar aluno:', error);
-  //           return of(null);
-  //         }
-  //       })
-  //     );
-  //   } else {
-  //     this.httpMethods.patch(`${this.pathUrlMember}`, member).subscribe(() => {
-  //       this.obj = member;
-  //     });
-  //   }
-  // }
-
   public saveOrUpdate(member: Member) {
     if (this.created) {
-      this.httpMethods.get(this.pathUrlMember + `?email=${member.email}`).
-        subscribe((response: any) => {
-          if (response && response.length > 0) {
-            this.router.navigate([`/member/form/${response[0].id}`]);
-            const userExistMessage = 'O usuário com esse e-mail já existe. Altere apenas seu plano.';
-            this.snackBar.open(userExistMessage, 'Fechar', {
-              duration: 5000,
-              verticalPosition: 'top',
-            });
-            return of(null);
-          } else {
-            return this.httpMethods.post(this.pathUrlMember, member).pipe(
-            ).subscribe((response: any) => {
-              this.obj = response.id
-            });
-          }
-        })
+      this.httpMethods.get(this.pathUrlMember + `?email=${member.email}`).subscribe((response: any) => {
+        if (response && response.length > 0) {
+          this.router.navigate([`/member/form/${response[0].id}`]);
+          const userExistMessage = 'O usuário com esse e-mail já existe. Altere apenas seu plano.';
+          this.snackBar.open(userExistMessage, 'Fechar', {
+            duration: 5000,
+            verticalPosition: 'top',
+          });
+          this.selectedIndex = 1;
+          return of(null);
+        } else {
+          return this.httpMethods.post(this.pathUrlMember, member).pipe(
+            map((resp: any) => resp as Member)
+          ).subscribe((resp: Member) => {
+            this.obj = resp
+            this.selectedIndex = 1;
+          });
+        }
+      })
     } else {
       this.httpMethods.patch(`${this.pathUrlMember}`, member).subscribe(() => {
         this.obj = member;

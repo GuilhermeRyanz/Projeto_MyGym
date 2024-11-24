@@ -1,3 +1,5 @@
+from os import error
+
 from django.core.exceptions import PermissionDenied
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import viewsets, permissions
@@ -27,12 +29,13 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         if tipo_usuario:
             usuario = serializer.save(tipo_usuario=tipo_usuario)
 
-
             if tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
                 academia_id = self.request.data.get('academia')
                 if academia_id:
-
                     UsuarioAcademia.objects.get_or_create(usuario=usuario, academia_id=academia_id, tipo_usuario=tipo_usuario)
+                else:
+                    raise PermissionDenied ("Academia Necessaria para cadastrar funcionarios")
+
             return usuario
 
 

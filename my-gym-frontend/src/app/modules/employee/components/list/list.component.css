@@ -1,23 +1,19 @@
-mat-car{
-  margin-bottom: 12px;
-  padding: 8px 16px;
-}
-
-p{
-  padding-top: 20px;
+.employer-card{
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 16px;
 }
 
-mat-list-item{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
+mat-card-content {
+  .employee-info {
+    display: flex;
+    gap: 20px;
+
+  }
 }
 
-span{
-  padding: 13px;
-}
+
+
+
 
 

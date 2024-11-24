@@ -17,7 +17,14 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Cargo</mat-label>
-      <input matInput type="enum" formControlName="tipo_usuario" placeholder="Tipo de cargo" />
+      <mat-select formControlName="tipo_usuario" ARIA-PLACEHOLDER="Cargo">
+        @for(cargo of cargos; track cargo){
+          <mat-option [value]="cargo.value">
+            {{cargo.viewValue}}
+          </mat-option>
+        }
+      </mat-select>
+
     </mat-form-field>
 
     <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit" class="save">Salvar</button>

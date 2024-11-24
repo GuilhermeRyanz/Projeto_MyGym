@@ -8,6 +8,7 @@ import {URLS} from "../../../../app.urls";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Employee} from "../../interfaces/employee";
+import {MatOption, MatSelect} from "@angular/material/select";
 
 @Component({
   selector: 'app-form',
@@ -19,7 +20,9 @@ import {Employee} from "../../interfaces/employee";
     MatIconButton,
     MatInput,
     MatLabel,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSelect,
+    MatOption
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css'
@@ -28,7 +31,7 @@ export class FormComponent implements OnInit {
 
   public action: String = "";
   private pathUrlEmployee: string = URLS.USERS;
-  formGroup: FormGroup;
+  protected formGroup: FormGroup;
   private created: boolean = true
   private gymId: string | null = "";
 
@@ -61,6 +64,12 @@ export class FormComponent implements OnInit {
     this.getGym()
     this.retriveCallBack();
   }
+
+  cargos = [
+    {value: "G", viewValue: "Gerente" },
+    {value: "A", viewValue: "Atendente"},
+    ]
+
 
   public retriveCallBack() {
     this.route.paramMap.subscribe((params: ParamMap) => {

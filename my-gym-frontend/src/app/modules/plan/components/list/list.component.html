@@ -1,31 +1,3 @@
-<!--<div class="Plan-list">-->
-<!--  <h3 mat-subheader>Planos</h3>-->
-<!--    @for (plan of plans; track plan.id) {-->
-<!--      <mat-card>-->
-<!--        <mat-card-content>-->
-<!--          <mat-card-title>-->
-<!--            ID: {{plan.id}} <br>-->
-<!--            Nome: {{ plan.nome }}-->
-<!--          </mat-card-title>-->
-<!--          <div>-->
-<!--            Preco: R${{plan.preco}} <br> Duracao em messes: {{plan.duracao}}-->
-<!--          </div>-->
-<!--          <p>-->
-<!--            Descricao: {{plan.descricao}}-->
-<!--          </p>-->
-
-<!--          <button [disabled]="typeUser == 'D'" mat-icon-button color="primary" (click)="edit(plan)">-->
-<!--            <mat-icon>edit</mat-icon>-->
-<!--          </button>-->
-<!--          <button [disabled]="typeUser == 'A'" mat-icon-button color="warn" (click)="disable(plan)">-->
-<!--            <mat-icon>delete</mat-icon>-->
-<!--          </button>-->
-<!--        </mat-card-content>-->
-<!--      </mat-card>-->
-<!--    }-->
-<!--  <button mat-button color="warn" (click)="create()">Novo Plano</button>-->
-<!--</div>-->
-
 <div class="Plan-list">
   <h3 mat-subheader>Planos</h3>
   @for (plan of plans; track plan.id) {
@@ -37,11 +9,11 @@
       <mat-card-content>
         <div class="plan-details">
           <div class="plan-info">
-            <div>Preço: R${{ plan.preco }}</div>
-            <div>Duração: {{ plan.duracao }} meses</div>
+            <div> <strong> Preço:</strong> R${{plan.preco}} </div>
+            <div> <strong>Duração:</strong> {{plan.duracao}} meses</div>
           </div>
           <div class="plan-description">
-            Descrição: {{ plan.descricao }}
+            <strong> Descrição: </strong>{{ plan.descricao }}
           </div>
         </div>
       </mat-card-content>

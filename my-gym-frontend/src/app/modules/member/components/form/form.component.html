@@ -1,5 +1,5 @@
-<mat-tab-group>
-  <mat-tab label="Dados Aluno">
+<mat-tab-group [(selectedIndex)]="selectedIndex">
+  <mat-tab label="Dados do Aluno">
     <div class="container">
       <form [formGroup]="formGroup" (ngSubmit)="saveOrUpdate(formGroup.value)" class="mat-elevation-z2 form">
         <mat-form-field appearance="fill" class="nome">
@@ -24,12 +24,11 @@
 
         <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit" class="save">Salvar
         </button>
-
       </form>
 
     </div>
   </mat-tab>
-  <mat-tab label="Selecao de Plano" [disabled]="!obj">
+  <mat-tab label="Seleção de Plano" [disabled]="!obj">
     <app-member-plan [member]="obj"></app-member-plan>
   </mat-tab>
 </mat-tab-group>

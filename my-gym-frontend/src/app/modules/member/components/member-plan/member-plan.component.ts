@@ -82,7 +82,9 @@ export class MemberPlanComponent implements OnInit {
 
     console.log(`aluno` ,this.member?.id)
 
-    this.httpMethods.post(this.pathUrlPlanMember + 'alterar_plano/', new_body).subscribe((response: any) => {})
+    this.httpMethods.post(this.pathUrlPlanMember + 'alterar_plano/', new_body).subscribe((response: any) => {
+      console.log(response);
+    })
   }
   public return(){
     this.router.navigate(['/member/list/'])

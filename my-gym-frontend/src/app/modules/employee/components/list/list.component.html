@@ -1,27 +1,25 @@
 <div class="employer-list">
   <h3 mat-subheader>Funcionarios</h3>
-  <mat-list>
-    @for (employee of employers; track employee.id) {
-      <mat-card>
-        <mat-list-item>
-          <p matListItemLine>
-            <span> <strong>ID:</strong> {{employee.id}}</span>
-            <span> <strong>Nome:</strong> {{employee.nome}}</span>
-            <span> <strong>Email:</strong> {{employee.username}}</span>
-            <span> <strong>Cargo:</strong> {{employee.tipo_usuario}}</span>
-
-            <button [disabled]="typeUser == 'D' && employee.tipo_usuario === 'D'" mat-icon-button color="primary" (click)="edit(employee)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button   [disabled]="employee.tipo_usuario === 'D'" mat-icon-button color="warn" (click)="delete(employee.id)" >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </p>
-        </mat-list-item>
-      </mat-card>
-
-    }
-  </mat-list>
+  @for (employee of employers; track employee.id) {
+    <mat-card class="employer-card" appearance="outlined">
+      <mat-card-content>
+        <div class="employee-info">
+          <div><strong>ID:</strong> {{ employee.id }}</div>
+          <div><strong>Nome:</strong> {{ employee.nome }}</div>
+          <div><strong>Email:</strong> {{ employee.username }}</div>
+          <div><strong>Cargo:</strong> {{ employee.tipo_usuario }}</div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button [disabled]="employee.tipo_usuario == 'D'" mat-icon-button color="primary"
+                (click)="edit(employee)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button [disabled]="employee.tipo_usuario === 'D'" mat-icon-button color="warn" (click)="delete(employee.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  }
   <button mat-button color="warn" (click)="create()">Novo funcionario</button>
 </div>
-

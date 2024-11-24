@@ -25,6 +25,18 @@ class AlunoFilter(filters.FilterSet):
 class AlunoPlanoFilter(filters.FilterSet):
     academia = filters.NumberFilter(field_name='plano__academia__id', lookup_expr='exact')
     aluno = filters.NumberFilter(field_name='aluno__id', lookup_expr='exact')
+    nome = filters.CharFilter(field_name='aluno__nome', lookup_expr='icontains')
+    matricula = filters.CharFilter(field_name='aluno__matricula', lookup_expr='icontains')
+
+    search = filters.CharFilter(method='filter_busca', label='search')
+
+    def filter_busca(self, queryset, name, value):
+        if value:
+            return queryset.filter(
+                Q(aluno__nome__icontains=value) | Q(aluno__matricula__icontains=value)
+            )
+        return queryset
+
 
     class Meta:
         model = AlunoPlano
