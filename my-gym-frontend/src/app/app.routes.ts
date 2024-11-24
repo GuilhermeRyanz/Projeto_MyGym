@@ -35,9 +35,16 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/member/member.module').then(m => m.MemberModule),
     canActivate: [AuthGuardService]
   },
+
   {
     path: "payment",
     loadChildren: () => import('./modules/payment/payment.module').then(m => m.PaymentModule),
+    canActivate: [AuthGuardService]
+  },
+
+  {
+    path: "check-in",
+    loadChildren: () => import('./modules/check-in/check-in.module').then(m => m.CheckInModule),
     canActivate: [AuthGuardService]
   }
 

@@ -1,23 +1,26 @@
 <div class="gym-container">
-  @for (gym of gyms; track gym.id){
-    <mat-card (click)="selectGym(gym.id)" class="gym-card">
+  <div class="gym-cards">
+    @for (gym of gyms; track gym.id) {
+      <mat-card (click)="selectGym(gym.id)" class="gym-card">
+        <mat-card-header>
+          <mat-card-title> {{ gym.nome }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-card-subtitle>Tel: {{ gym.telefone }}</mat-card-subtitle>
+          <mat-card-subtitle>Endereço: {{ gym.endereco }}</mat-card-subtitle>
+        </mat-card-content>
+        <button mat-button (click)="edit(gym)">Editar</button>
+
+      </mat-card>
+    }
+
+    <mat-card (click)="create()" class="gym-card add-gym-card">
       <mat-card-header>
-        <mat-card-subtitle> {{ gym.nome }}</mat-card-subtitle>
-        <mat-card-subtitle>Tel: {{ gym.telefone }}</mat-card-subtitle>
-        <mat-card-subtitle>Endereco: {{ gym.endereco }}</mat-card-subtitle>
-        <button mat-button (click)="edit(gym)" >Editar</button>
+        <mat-card-title>+</mat-card-title>
       </mat-card-header>
-
+      <mat-card-content>
+        <p>Adicionar Nova Academia</p>
+      </mat-card-content>
     </mat-card>
-  }
-
-  <mat-card (click)="create()" class="gym-card add-gym-card">
-    <mat-card-header>
-      <mat-card-title>+</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p>Adicionar Nova Academia</p>
-    </mat-card-content>
-  </mat-card>
-
+  </div>
 </div>
