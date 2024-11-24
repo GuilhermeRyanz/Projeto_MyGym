@@ -36,7 +36,6 @@ import {FormsModule} from "@angular/forms";
 })
 export class ListComponent implements OnInit {
 
-  private pathUrlMember: string = URLS.MEMBER;
   private pathUrlMemberPlan: string = URLS.MEMBERPLAN
   public members: MemberPlan [] | undefined;
   public gym_id: string | null = "";
