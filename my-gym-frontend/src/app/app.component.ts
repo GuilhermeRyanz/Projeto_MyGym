@@ -1,14 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import {Router, NavigationEnd, RouterOutlet, RouterLink} from '@angular/router';
-import { AuthService } from "./auth/services/auth.service";
-import { MatAnchor, MatButton } from "@angular/material/button";
-import { MatToolbar } from "@angular/material/toolbar";
-import { MatSidenavContainer, MatSidenavModule } from "@angular/material/sidenav";
-import { MatIcon } from "@angular/material/icon";
+import {Component, OnInit} from '@angular/core';
+import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
+import {AuthService} from "./auth/services/auth.service";
+import {MatAnchor, MatButton} from "@angular/material/button";
+import {MatToolbar} from "@angular/material/toolbar";
+import {MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
+import {MatIcon} from "@angular/material/icon";
 import {Gym} from "./modules/gym-list/interfaces/gym";
-import {HttpMethodsService} from "./shared/services/httpMethods/http-methods.service";
-import {URLS} from "./app.urls";
-
 
 
 @Component({
@@ -28,7 +25,6 @@ export class AppComponent implements OnInit {
   public showNav: boolean = false;
   public opened = false;
   public gym : Gym | undefined;
-  private pathUrlGym: string = URLS.GYM
 
 
   constructor(private authService: AuthService, private router: Router,) {}
