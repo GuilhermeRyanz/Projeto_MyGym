@@ -5,6 +5,9 @@ import { MatAnchor, MatButton } from "@angular/material/button";
 import { MatToolbar } from "@angular/material/toolbar";
 import { MatSidenavContainer, MatSidenavModule } from "@angular/material/sidenav";
 import { MatIcon } from "@angular/material/icon";
+import {Gym} from "./modules/gym-list/interfaces/gym";
+import {HttpMethodsService} from "./shared/services/httpMethods/http-methods.service";
+import {URLS} from "./app.urls";
 
 
 
@@ -17,17 +20,18 @@ import { MatIcon } from "@angular/material/icon";
 })
 
 export class AppComponent implements OnInit {
-  title = 'my-gym-frontend';
-  user: string | null = '';
-  email: string | null = '';
-  tipo_usuario: string | null = '';
-  showBanner: boolean = false;
-  showNav: boolean = false;
-  opened = false;
+  public title = 'my-gym-frontend';
+  public user: string | null = '';
+  public email: string | null = '';
+  public tipo_usuario: string | null = '';
+  public showBanner: boolean = false;
+  public showNav: boolean = false;
+  public opened = false;
+  public gym : Gym | undefined;
+  private pathUrlGym: string = URLS.GYM
 
 
-
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router,) {}
 
   ngOnInit() {
     if (this.authService.userIsAuth()) {
@@ -67,7 +71,6 @@ export class AppComponent implements OnInit {
     this.user = localStorage.getItem('nome_usuario');
     this.email = localStorage.getItem('email');
     this.tipo_usuario = localStorage.getItem('tipo_usuario');
-
 
   }
 

@@ -15,8 +15,10 @@ export class HomeComponent {
   navigationOptions = [
     { title: 'Cadastro de Alunos', description: 'Adicione novos alunos à academia.', route: 'member/form/create' },
     { title: 'Gerenciamento de Planos', description: 'Crie e edite planos de adesão.', route: 'plan/list' },
-    { title: 'Pagamentos', description: 'Registre e gerencie os pagamentos dos alunos.', route: 'payment/paymentRegistration' },
-    { title: 'Funcionários', description: 'Cadastre e gerencie os funcionários.', route: 'employee/list' }
+    { title: 'Pagamentos', description: 'Registre os pagamentos dos alunos.', route: 'payment/paymentRegistration' },
+    { title: 'Funcionários', description: 'Cadastre e gerencie os funcionários.', route: 'employee/list' },
+    { title: 'Check-in', description: 'Realize o check-in de um aluno', route: 'check-in/register' },
+    { title: 'Academias', description: 'Selecione outra academia', route: 'adm/gym/list' },
   ];
 
   constructor(private router: Router) {}

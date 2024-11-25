@@ -46,6 +46,14 @@ export const routes: Routes = [
     path: "check-in",
     loadChildren: () => import('./modules/check-in/check-in.module').then(m => m.CheckInModule),
     canActivate: [AuthGuardService]
+  },
+
+  {
+    path: "",
+    redirectTo: "my_gym/home",
+    pathMatch: "full",
   }
+
+
 
 ];
