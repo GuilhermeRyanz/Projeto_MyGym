@@ -5,6 +5,7 @@ import {Credentials} from "../../interfaces/credentials";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ import {MatButtonModule} from "@angular/material/button";
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    RouterLink,
 
   ],
   templateUrl: './login.component.html',
@@ -41,12 +43,7 @@ import {MatButtonModule} from "@angular/material/button";
 
     public authentic(credentials: Credentials): void {
       this.authService.login(credentials).subscribe(
-        (response: any) => {
-          console.log(response)
-        },
         (error: any) => {
-          console.log(error);
-          alert(error.message);
         }
       )
     }

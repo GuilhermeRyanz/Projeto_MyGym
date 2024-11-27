@@ -8,6 +8,8 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatLine} from "@angular/material/core";
 import {MatCard, MatCardActions, MatCardContent, MatCardSubtitle} from "@angular/material/card";
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
 
 @Component({
   selector: 'app-list',
@@ -32,12 +34,17 @@ export class ListComponent implements OnInit {
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
 
+
   private getIdGym(): void {
     this.gym_id = localStorage.getItem("academia");
 
   }
 
-  constructor(private httpMethods: HttpMethodsService, private router: Router) {
+  constructor(
+    private httpMethods: HttpMethodsService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {
   }
 
 
@@ -67,8 +74,16 @@ export class ListComponent implements OnInit {
   }
 
   public delete(id: number): void {
-    this.httpMethods.delete(this.pathUrlEmployee, id).subscribe(() => {
-      this.seach();
+    const dialogRef = this.dialog.open(ConfirmDialogComponentComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.httpMethods.delete(this.pathUrlEmployee, id).subscribe(() => {
+          this.seach();
+        })
+      }
     })
+
+
   }
 }

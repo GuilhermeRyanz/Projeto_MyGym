@@ -3,6 +3,7 @@ from os import error
 from django.core.exceptions import PermissionDenied
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import viewsets, permissions
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
@@ -18,10 +19,13 @@ from usuario import filters
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = serializers.UsuarioSerializer
-    permission_classes = [UsuarioPermission]
     filter_backends = [DjangoFilterBackend, ]
     filterset_class = filters.UsuarioFilter
 
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]  # Permite criar usuários sem autenticação
+        return [permissions.IsAuthenticated()]  # Exige autenticação para outras ações
 
 
     def perform_create(self, serializer):

@@ -52,8 +52,6 @@ export const routes: Routes = [
     path: "",
     redirectTo: "my_gym/home",
     pathMatch: "full",
-  }
-
-
+  },
 
 ];
