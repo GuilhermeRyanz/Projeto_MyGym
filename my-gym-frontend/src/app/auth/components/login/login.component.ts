@@ -44,6 +44,7 @@ import {RouterLink} from "@angular/router";
     public authentic(credentials: Credentials): void {
       this.authService.login(credentials).subscribe(
         (error: any) => {
+          console.log(error);
         }
       )
     }
