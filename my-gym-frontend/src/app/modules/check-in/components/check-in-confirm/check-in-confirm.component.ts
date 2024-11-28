@@ -6,7 +6,7 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-check-in-confirm',

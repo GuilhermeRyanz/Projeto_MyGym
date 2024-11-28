@@ -10,7 +10,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MemberPlan} from "../../../member/interfaces/member-plan";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
-import {Router} from "@angular/router";
 import {CheckInConfirmComponent} from "../check-in-confirm/check-in-confirm.component";
 
 @Component({

@@ -8,7 +8,7 @@ import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from "@angular/m
 import {URLS} from "../../../../app.urls";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-payment-confirm',
