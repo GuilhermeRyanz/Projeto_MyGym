@@ -1,0 +1,17 @@
+.member-cad {
+  margin-bottom: 16px;
+}
+
+.search{
+  width: 100%;
+}
+
+.member-info {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+h3 {
+  color: #3f51b5;
+  justify-content: center;
+}

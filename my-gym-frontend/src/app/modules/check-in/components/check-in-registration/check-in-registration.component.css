@@ -1,0 +1,14 @@
+.member-cad {
+  margin-bottom: 16px;
+}
+
+.search{
+  width: 100%;
+}
+
+.member-info {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+

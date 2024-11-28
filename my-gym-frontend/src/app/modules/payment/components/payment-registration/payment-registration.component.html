@@ -1,0 +1,29 @@
+<h3 mat-subheader>Pagamento</h3>
+<mat-tab-group [(selectedIndex)]="selectedIndex">
+  <mat-tab label="Seleção Aluno">
+  <div class="employer-list">
+    <mat-form-field appearance="outline" class="search">
+      <mat-label>Busca Aluno</mat-label>
+      <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm" (input)="searchMember()"/>
+    </mat-form-field>
+    @for (member of membersPlan; track member.aluno.id) {
+      <mat-card class="member-cad" appearance="outlined">
+        <mat-card-content>
+          <div class="member-info">
+            <div><strong>Matricula:</strong> {{ member.aluno.matricula }}</div>
+            <div><strong>Nome:</strong> {{ member.aluno.nome }}</div>
+            <div><strong>Plano:</strong>  {{ member.plano.nome }}</div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <mat-radio-button (click)="makePayment(member)"></mat-radio-button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+  </mat-tab>
+  <mat-tab label="Confirmação" [disabled]="!obj">
+  <app-payment-confirm [member]="obj" ></app-payment-confirm>
+  </mat-tab>
+</mat-tab-group>
+
