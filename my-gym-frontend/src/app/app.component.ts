@@ -42,7 +42,6 @@ export class AppComponent implements DoCheck{
 
     if (this.authService.userIsAuthGy()) {
       this.showNav = true;
-
     }
 
     this.authService.showBannerEmmiter.subscribe(

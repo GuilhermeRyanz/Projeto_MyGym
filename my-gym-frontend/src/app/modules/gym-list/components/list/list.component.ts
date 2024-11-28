@@ -53,13 +53,9 @@ export class ListComponent implements OnInit {
 
   }
 
-  public edit(gym: Gym){
+  public edit(gym: Gym) {
     this.router.navigate([`adm/form/${gym.id}`]).then();
   }
-
-
-
-
 
 
 }
