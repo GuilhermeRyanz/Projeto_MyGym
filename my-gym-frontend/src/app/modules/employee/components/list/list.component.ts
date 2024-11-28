@@ -10,6 +10,7 @@ import {MatLine} from "@angular/material/core";
 import {MatCard, MatCardActions, MatCardContent, MatCardSubtitle} from "@angular/material/card";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-list',
@@ -43,7 +44,8 @@ export class ListComponent implements OnInit {
   constructor(
     private httpMethods: HttpMethodsService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
   }
 
@@ -78,8 +80,14 @@ export class ListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        let sucessMensage =  "Funcionario apagado"
         this.httpMethods.delete(this.pathUrlEmployee, id).subscribe(() => {
           this.seach();
+          this.snackBar.open(sucessMensage, "fechar", {
+            duration: 5000,
+            verticalPosition: 'top',
+          })
+
         })
       }
     })

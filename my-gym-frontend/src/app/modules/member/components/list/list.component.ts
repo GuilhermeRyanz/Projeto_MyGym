@@ -11,6 +11,7 @@ import {MemberPlan} from "../../interfaces/member-plan";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-list',
@@ -50,7 +51,9 @@ export class ListComponent implements OnInit {
     this.typeUser = localStorage.getItem("usuario_tipo");
   }
 
-  constructor(private httpMethods: HttpMethodsService, private router: Router) {
+  constructor(private httpMethods: HttpMethodsService,
+              private router: Router,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -77,6 +80,11 @@ export class ListComponent implements OnInit {
   public disable(member: Member): void {
     this.httpMethods.disable(this.pathUrlMemberPlan, member, 'desativar_aluno').subscribe(() => {
       this.seach();
+      let sucessMensage =  "Aluno desativado"
+      this.snackBar.open(  sucessMensage, 'Fechar', {
+        duration: 5000,
+        verticalPosition: 'top',
+      });
     })
   };
 

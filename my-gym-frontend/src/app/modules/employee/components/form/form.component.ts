@@ -9,6 +9,7 @@ import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Employee} from "../../interfaces/employee";
 import {MatOption, MatSelect} from "@angular/material/select";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-form',
@@ -47,12 +48,13 @@ export class FormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) {
 
     this.formGroup = this.formBuilder.group({
       id: [],
       nome: ['', Validators.required],
-      username: ['', Validators.required],
+      username: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       tipo_usuario: ['', Validators.required],
       academia: ['']
@@ -78,6 +80,7 @@ export class FormComponent implements OnInit {
 
       if (!this.created) {
         this.httpMethods.get(this.pathUrlEmployee + this.action + '/').subscribe((response: any) => {
+          console.log("conteudo do carinha",response);
           this.formGroup.setValue({
             id: response.id,
             nome: response.nome,
@@ -85,7 +88,6 @@ export class FormComponent implements OnInit {
             password: "",
             tipo_usuario: response.tipo_usuario,
             academia: this.gymId,
-
           });
         })
       }
@@ -94,17 +96,25 @@ export class FormComponent implements OnInit {
 
   public saveOrUpdate(employee: Employee) {
     if (this.created) {
+      let sucessMensagem = 'Funcionario cadastrado'
       this.httpMethods.post(this.pathUrlEmployee, employee).subscribe(() => {
         this.router.navigate(['/employee/list']).then();
+        this.snackBar.open(  sucessMensagem, 'Fechar', {
+          duration: 5000,
+          verticalPosition: 'top',
+        })
       })
     } else {
+      let sucessMensagem = 'Funcionario Atualizado'
       this.httpMethods.patch(this.pathUrlEmployee, employee).subscribe(() => {
         this.router.navigate(['/employee/list']).then();
+        this.snackBar.open(  sucessMensagem, 'Fechar', {
+          duration: 5000,
+          verticalPosition: 'top',
+        })
       })
     }
   }
-
-
 }
 
 

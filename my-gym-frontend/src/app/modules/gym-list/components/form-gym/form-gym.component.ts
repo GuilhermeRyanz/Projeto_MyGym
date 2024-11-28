@@ -49,8 +49,8 @@ export class FormGymComponent implements OnInit{
 
     this.formGroup = this.formBuilder.group({
       id: [],
-      nome: ['', Validators.required],
-      endereco: ['', Validators.required],
+      nome: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
+      endereco: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(60)]],
       telefone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
 
