@@ -49,7 +49,6 @@ export class PaymentConfirmComponent implements OnInit {
     private formBuilder: FormBuilder,
     private httpMethods: HttpMethodsService,
     private router: Router,
-    private route: ActivatedRoute,
 
   ) {
     this.formGroup = this.formBuilder.group({

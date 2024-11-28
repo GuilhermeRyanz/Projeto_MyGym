@@ -10,7 +10,6 @@ import {URLS} from "../../../../app.urls";
 import {MemberPlan} from "../../../member/interfaces/member-plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
-import {Member} from "../../../member/interfaces/member";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {PaymentConfirmComponent} from "../payment-confirm/payment-confirm.component";
 import {MatRadioButton} from "@angular/material/radio";
@@ -57,7 +56,7 @@ export class PaymentRegistrationComponent implements OnInit {
     this.typeUser = localStorage.getItem("usuario_tipo");
   }
 
-  constructor(private httpMethods: HttpMethodsService, private router: Router) {
+  constructor(private httpMethods: HttpMethodsService,) {
   }
 
   ngOnInit() {
@@ -69,7 +68,6 @@ export class PaymentRegistrationComponent implements OnInit {
   public seach(): void {
     this.httpMethods.get(this.pathUrlMemberPlan + `?expand=aluno&expand=plano&active=true&academia=${this.gym_id}`).subscribe((response: any) => {
       this.membersPlan = response;
-      console.log(response)
     });
   };
 

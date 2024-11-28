@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {Router, RouterModule} from "@angular/router";
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RouterModule} from "@angular/router";
 import {routes} from "./payments.routes";
-
 
 
 @NgModule({
@@ -12,4 +11,5 @@ import {routes} from "./payments.routes";
     RouterModule.forChild(routes)
   ]
 })
-export class PaymentModule { }
+export class PaymentModule {
+}

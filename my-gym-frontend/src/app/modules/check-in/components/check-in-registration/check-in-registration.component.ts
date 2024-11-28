@@ -54,7 +54,7 @@ export class CheckInRegistrationComponent implements OnInit {
     this.typeUser = localStorage.getItem("usuario_tipo");
   }
 
-  constructor(private httpMethods: HttpMethodsService, private router: Router) {
+  constructor(private httpMethods: HttpMethodsService,) {
   }
 
   ngOnInit() {
