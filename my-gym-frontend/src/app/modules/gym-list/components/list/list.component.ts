@@ -5,7 +5,6 @@ import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-m
 import {Router} from "@angular/router";
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {MatButton} from "@angular/material/button";
-import {loadavg} from "node:os";
 
 @Component({
   selector: 'app-list',
