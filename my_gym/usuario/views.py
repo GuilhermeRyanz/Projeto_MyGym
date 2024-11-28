@@ -70,11 +70,13 @@ class AuthTokenView(APIView):
             usuario_academia = UsuarioAcademia.objects.filter(usuario=usuario).first()
             if usuario_academia:
                 academia = usuario_academia.academia.id
+                academia_nome = usuario_academia.academia.nome
                 return Response({
                     'access_token': access_token,
                     'email': usuario.username,
                     'name': usuario.nome,
                     'academia': academia,
+                    'academia_nome': academia_nome,
                     'tipo_usuario': usuario.tipo_usuario,
                 })
             else:

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, DoCheck, OnInit} from '@angular/core';
 import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {AuthService} from "./auth/services/auth.service";
 import {MatAnchor, MatButton} from "@angular/material/button";
@@ -9,6 +9,7 @@ import {HttpMethodsService} from "./shared/services/httpMethods/http-methods.ser
 import {URLS} from "./app.urls";
 import {Observable} from "rxjs";
 import {HttpResponse} from "@angular/common/http";
+import {Gym} from "./modules/gym-list/interfaces/gym";
 
 
 @Component({
@@ -19,7 +20,7 @@ import {HttpResponse} from "@angular/common/http";
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements DoCheck{
   public title = 'my-gym-frontend';
   public user: string | null = '';
   public email: string | null = '';
@@ -27,8 +28,8 @@ export class AppComponent implements OnInit {
   public showBanner: boolean = false;
   public showNav: boolean = false;
   public opened = false;
-  public gym : Observable<HttpResponse<any>> | undefined;
-  public pathUrlGym: string = URLS.GYM
+  public gym_name: string | null = '';
+
 
 
   constructor(private authService: AuthService, private router: Router, private httpMethods: HttpMethodsService) {}
@@ -64,18 +65,22 @@ export class AppComponent implements OnInit {
         this.showBanner = !event.url.includes('auth/')
       }
 
-
-
     });
   }
+
+  ngDoCheck() {
+    const currentGymName = localStorage.getItem('academia_nome');
+    if (this.gym_name !== currentGymName) {
+      this.gym_name = currentGymName;
+    }
+  }
+
 
   userInfor() {
     this.user = localStorage.getItem('nome_usuario');
     this.email = localStorage.getItem('email');
     this.tipo_usuario = localStorage.getItem('tipo_usuario');
-    this.gym = this.httpMethods.get(this.pathUrlGym + localStorage.getItem("academia"));
-    console.log(this.gym);
-
+    this.gym_name = localStorage.getItem('academia_nome');
   }
 
   logout() {

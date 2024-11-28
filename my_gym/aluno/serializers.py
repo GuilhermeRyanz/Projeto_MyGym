@@ -10,7 +10,7 @@ class AlunoSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(read_only=True)
     matricula = serializers.CharField(read_only=True)
     nome = serializers.CharField(max_length=100)
-    email = serializers.EmailField(allow_blank=True)
+    email = serializers.EmailField(allow_blank=False)
     telefone = serializers.CharField(max_length=100, allow_blank=True)
     data_nascimento = serializers.DateField(allow_null=True)
 

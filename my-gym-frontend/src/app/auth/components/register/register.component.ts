@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
+import {EmailValidator, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
@@ -23,7 +23,7 @@ import {HttpMethodsService} from "../../services/http-methods.service";
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit{
 
   private pathUrlUser: string = URLS.USERS
   formGroup: FormGroup;
@@ -39,7 +39,7 @@ export class RegisterComponent {
     private router: Router,
   ) {
     this.formGroup = this.formBuilder.group({
-      nome: ['', Validators.required],
+      nome: ['', [Validators.email, Validators.required]],
       username: ['', Validators.required],
       password: ['', Validators.required],
       tipo_usuario: ['D', Validators.required],

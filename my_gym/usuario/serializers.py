@@ -4,10 +4,8 @@ from core.permissions import UsuarioPermission
 from usuario.models import Usuario
 
 class UsuarioSerializer(serializers.ModelSerializer):
-    academia = serializers.PrimaryKeyRelatedField(
-        queryset=Academia.objects.all(),
-        write_only=True,
-        required=False)
+    academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(),write_only=True,required=False)
+    username = serializers.EmailField(max_length=100)
     nome = serializers.CharField(max_length=100)
 
 

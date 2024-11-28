@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {EmailValidator, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {Credentials} from "../../interfaces/credentials";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -35,7 +35,7 @@ import {RouterLink} from "@angular/router";
       private authService: AuthService,
     ) {
       this.formGroup = this.formBuilder.group({
-        username: ['', Validators.required],
+        username: ['', [Validators.email, Validators.required]],
         password: ['', Validators.required],
       });
     }

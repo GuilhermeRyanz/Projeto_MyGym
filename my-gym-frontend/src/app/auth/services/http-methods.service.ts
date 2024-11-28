@@ -16,7 +16,7 @@ export class HttpMethodsService {
   constructor(private http: HttpClient,
               private snackBar: MatSnackBar){}
 
-  private handleError(error: any): Observable<never> {
+  public handleError(error: any): Observable<never> {
     let errorMessage = 'Ocorreu um erro inesperado.';
 
     if (error && error.error) {
