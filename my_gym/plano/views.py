@@ -18,6 +18,11 @@ class PlanoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
 
+    def get_queryset(self):
+        return models.Plano.objects.filter(
+            academia__usuarioacademia__usuario=self.request.user
+        )
+
     @action(detail=True, methods=['post'])
     def desativar(self, request, pk=None):
         plano = self.get_object()

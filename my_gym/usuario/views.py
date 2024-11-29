@@ -7,8 +7,6 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-
-from core.permissions import AcademiaPermissionMixin, UsuarioPermission
 from usuario import serializers
 from usuario.models import Usuario
 from academia.models import UsuarioAcademia
@@ -24,11 +22,12 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'create':
-            return [AllowAny()]  # Permite criar usuários sem autenticação
-        return [permissions.IsAuthenticated()]  # Exige autenticação para outras ações
+            return [AllowAny()]
+        return [permissions.IsAuthenticated()]
 
 
     def perform_create(self, serializer):
+
         tipo_usuario = self.request.data.get('tipo_usuario')
         if tipo_usuario:
             usuario = serializer.save(tipo_usuario=tipo_usuario)
@@ -41,6 +40,8 @@ class UsuarioViewSet(viewsets.ModelViewSet):
                     raise PermissionDenied ("Academia Necessaria para cadastrar funcionarios")
 
             return usuario
+
+
 
 
 class AuthTokenView(APIView):

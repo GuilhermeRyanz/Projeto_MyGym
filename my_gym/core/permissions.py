@@ -24,6 +24,7 @@ class AcademiaPermissionMixin:
 
 
 
+
 class UsuarioPermission(BasePermission):
 
 

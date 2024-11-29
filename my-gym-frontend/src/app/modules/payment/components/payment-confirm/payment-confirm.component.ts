@@ -9,6 +9,7 @@ import {URLS} from "../../../../app.urls";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-payment-confirm',
@@ -49,6 +50,7 @@ export class PaymentConfirmComponent implements OnInit {
     private formBuilder: FormBuilder,
     private httpMethods: HttpMethodsService,
     private router: Router,
+    private snackBar: MatSnackBar
 
   ) {
     this.formGroup = this.formBuilder.group({
@@ -69,8 +71,12 @@ export class PaymentConfirmComponent implements OnInit {
     console.log('Form Data:', this.formGroup.value);
     this.httpMethods.post(this.pathUrlPayment, this.formGroup.value).subscribe(
       response => {
-        console.log('Pagamento confirmado', response);
+      let sucessMensagem = "Pagmento efetuado com sucesso.";
         this.router.navigate(['payment/paymentoConfirm']);
+        this.snackBar.open(  sucessMensagem, 'Fechar', {
+          duration: 5000,
+          verticalPosition: 'top',
+        })
 
       },
       error => {

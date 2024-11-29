@@ -20,8 +20,12 @@ export class HttpMethodsService {
     let errorMessage = 'Ocorreu um erro inesperado.';
 
     if (error && error.error) {
-      if (error.error.username && error.error.username.length > 0) {
-        errorMessage = `Erro no email: Email invalido ou já esta sendo utilizado`;
+      console.log('Erro no corpo da resposta:', error.error);
+
+      if (error.error.detail && error.error.detail.length > 0) {
+        errorMessage = `Erro: ${error.error.detail}`;
+      } else if (error.error.username && error.error.username.length > 0) {
+        errorMessage = `Erro no email: ${error.error.username[0]}`;
       } else {
         for (let field in error.error) {
           if (error.error.hasOwnProperty(field) && error.error[field].length > 0) {
@@ -43,6 +47,7 @@ export class HttpMethodsService {
   }
 
 
+
   post(path: string, body: any): Observable<HttpResponse<any>> {
     return this.http.post(this.baseUrl + path, body,).pipe(
       tap((response: any) => response),
@@ -51,5 +56,6 @@ export class HttpMethodsService {
   }
 
 }
+
 
 

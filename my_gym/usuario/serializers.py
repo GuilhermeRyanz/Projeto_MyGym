@@ -1,12 +1,15 @@
+from enum import unique
+
+from django.db import IntegrityError
 from rest_framework import serializers
 from academia.models import Academia, UsuarioAcademia
-from core.permissions import UsuarioPermission
 from usuario.models import Usuario
 
 class UsuarioSerializer(serializers.ModelSerializer):
     academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(),write_only=True,required=False)
-    username = serializers.EmailField(max_length=100)
+    username = serializers.EmailField(max_length=100,)
     nome = serializers.CharField(max_length=100)
+
 
 
     class Meta:
@@ -16,7 +19,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_academia(self, value):
-
         request_user = self.context['request'].user
         if not UsuarioAcademia.objects.filter(usuario=request_user.usuario, academia=value).exists():
             raise serializers.ValidationError("Você não tem permissão para associar um usuário a esta academia.")
@@ -28,17 +30,20 @@ class UsuarioSerializer(serializers.ModelSerializer):
         if validated_data['tipo_usuario'] in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE] and not academia:
             raise serializers.ValidationError("O campo 'academia' é obrigatório para usuários desse tipo.")
 
-        usuario = Usuario(
-            username=validated_data['username'],
-            tipo_usuario=validated_data['tipo_usuario'],
-            nome=validated_data['nome']
-        )
-        usuario.set_password(validated_data['password'])
-        usuario.save()
+        try:
+            usuario = Usuario(
+                username=validated_data['username'],
+                tipo_usuario=validated_data['tipo_usuario'],
+                nome=validated_data['nome']
+            )
+            usuario.set_password(validated_data['password'])
+            usuario.save()
 
-        if usuario.tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
-            UsuarioAcademia.objects.create(usuario=usuario, academia=academia, tipo_usuario=usuario.tipo_usuario)
+            if usuario.tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
+                UsuarioAcademia.objects.create(usuario=usuario, academia=academia, tipo_usuario=usuario.tipo_usuario)
 
+        except IntegrityError as e:
+            raise serializers.ValidationError(f"Este Email já esta sendo utilizado")
 
         return usuario
 

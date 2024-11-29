@@ -39,15 +39,15 @@ export class RegisterComponent implements OnInit{
     private router: Router,
   ) {
     this.formGroup = this.formBuilder.group({
-      nome: ['', [Validators.email, Validators.required]],
-      username: ['', Validators.required],
+      nome: ['', Validators.required],
+      username: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       tipo_usuario: ['D', Validators.required],
     });
   }
 
 
-  public authentic(credentials: Credentials): void {
+  public createAccount(credentials: Credentials): void {
     this.httpMethods.post(this.pathUrlUser, credentials).subscribe(
       (response: any) => {
         console.log(response)
@@ -55,7 +55,6 @@ export class RegisterComponent implements OnInit{
       },
       (error: any) => {
         console.log(error);
-        alert(error.message);
       }
     )
   }

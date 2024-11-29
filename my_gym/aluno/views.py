@@ -15,10 +15,16 @@ class AlunoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     filterset_class = AlunoFilter
 
 
-class AlunoPlanoViewSet(viewsets.ModelViewSet):
+class AlunoPlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = models.AlunoPlano.objects.all()
     serializer_class = AlunoPlanoSerializer
     filterset_class = AlunoPlanoFilter
+
+    def get_queryset(self):
+        return models.AlunoPlano.objects.filter(
+            plano__academia__usuarioacademia__usuario=self.request.user
+        )
+
 
     @action(detail=False, methods=['POST'])
     def alterar_plano(self, request, *args, **kwargs):

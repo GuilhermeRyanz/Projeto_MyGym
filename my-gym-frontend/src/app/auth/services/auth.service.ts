@@ -49,7 +49,6 @@ export class AuthService {
         }
       }),
       catchError((error: any ) => this.httpMethods.handleError(error))
-
     );
   }
 
