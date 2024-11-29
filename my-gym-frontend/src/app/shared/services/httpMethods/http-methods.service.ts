@@ -25,14 +25,22 @@ export class HttpMethodsService {
 
   }
 
-  private handleError(error: any): Observable<never> {
+  public handleError(error: any): Observable<never> {
     let errorMessage = 'Ocorreu um erro inesperado.';
 
     if (error && error.error) {
-      for (let field in error.error) {
-        if (error.error.hasOwnProperty(field) && error.error[field].length > 0) {
-          errorMessage = `error "${field}": ${error.error[field][0]}`;
-          break;
+      console.log('Erro no corpo da resposta:', error.error);
+
+      if (error.error.detail && error.error.detail.length > 0) {
+        errorMessage = `Erro: ${error.error.detail}`;
+      } else if (error.error.username && error.error.username.length > 0) {
+        errorMessage = `Erro no email: ${error.error.username[0]}`;
+      } else {
+        for (let field in error.error) {
+          if (error.error.hasOwnProperty(field) && error.error[field].length > 0) {
+            errorMessage = `Erro "${field}": ${error.error[field][0]}`;
+            break;
+          }
         }
       }
     } else if (error.status) {
