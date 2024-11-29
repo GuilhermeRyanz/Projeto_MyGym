@@ -53,7 +53,7 @@ class AlunoPlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
             aluno = models.Aluno.objects.get(id=pk)
 
             try:
-                aluno_plano = models.AlunoPlano.objects.get(aluno=aluno, active=True)
+                aluno_plano = models.AlunoPlano.objects.get(aluno=aluno, active=True, plano__academia=request.data['academia'])
 
                 aluno_plano.active = False
                 aluno_plano.save()
