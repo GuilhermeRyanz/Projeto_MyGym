@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from academia.models import Academia, Frequencia
 from aluno.models import Aluno
+from academia.models import UsuarioAcademia
 from pagamento.models import Pagamento
 from django.utils import timezone
 
@@ -17,6 +18,17 @@ class AcademiaSerializer(serializers.ModelSerializer,):
     class Meta:
         model = Academia
         fields = ['id', 'nome', 'endereco', 'telefone', 'email',]
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        academia = super().create(validated_data)
+        UsuarioAcademia.objects.create(
+            academia=academia,
+            usuario=request.user.usuario,
+            tipo_usuario=request.user.usuario.tipo_usuario,
+        )
+        return academia
+
 
     def validate_email(self, value):
         if self.instance:

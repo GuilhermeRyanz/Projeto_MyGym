@@ -9,9 +9,13 @@ class AcademiaFilter(filters.FilterSet):
         fields = ['id','id_usuario','nome']
 
 
+
 class FrequenciaFilter(filters.FilterSet):
-    data = filters.DateFilter(field_name='data', lookup_expr='exact')
-    academia = filters.NumberFilter(field_name='academia', lookup_expr='exact')
+    data_inicio = filters.DateFilter(field_name='data', lookup_expr='gte')
+    data_fim = filters.DateFilter(field_name='data', lookup_expr='lte')
+    academia = filters.NumberFilter(field_name='academia__id')
+    aluno = filters.NumberFilter(field_name='aluno__id')
+
     class Meta:
         model = models.Frequencia
-        fields = ['id','aluno','academia','data']
+        fields = ['data_inicio', 'data_fim', 'academia', 'aluno']

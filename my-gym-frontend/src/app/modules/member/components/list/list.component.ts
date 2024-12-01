@@ -78,6 +78,13 @@ export class ListComponent implements OnInit {
   };
 
   public disable(member: Member): void {
+    if (this.gym_id) {
+      member.academia = this.gym_id;
+    } else {
+      console.error('Gym ID is missing');
+      return;
+    }
+    console.log(member);
     this.httpMethods.disable(this.pathUrlMemberPlan, member, 'desativar_aluno').subscribe(() => {
       this.seach();
       let sucessMensage =  "Aluno desativado"

@@ -30,7 +30,6 @@ export class HttpMethodsService {
 
     if (error && error.error) {
       console.log('Erro no corpo da resposta:', error.error);
-
       if (error.error.detail && error.error.detail.length > 0) {
         errorMessage = `Erro: ${error.error.detail}`;
       } else if (error.error.username && error.error.username.length > 0) {
@@ -44,7 +43,7 @@ export class HttpMethodsService {
         }
       }
     } else if (error.status) {
-      errorMessage = `Erro ${error.status}: ${error.statusText}`;
+      errorMessage = error.error;
     }
 
     this.snackBar.open(errorMessage, 'Fechar', {

@@ -31,6 +31,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("O campo 'academia' é obrigatório para usuários desse tipo.")
 
         try:
+
             usuario = Usuario(
                 username=validated_data['username'],
                 tipo_usuario=validated_data['tipo_usuario'],

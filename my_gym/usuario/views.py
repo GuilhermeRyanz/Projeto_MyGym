@@ -25,21 +25,21 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             return [AllowAny()]
         return [permissions.IsAuthenticated()]
 
-
-    def perform_create(self, serializer):
-
-        tipo_usuario = self.request.data.get('tipo_usuario')
-        if tipo_usuario:
-            usuario = serializer.save(tipo_usuario=tipo_usuario)
-
-            if tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
-                academia_id = self.request.data.get('academia')
-                if academia_id:
-                    UsuarioAcademia.objects.get_or_create(usuario=usuario, academia_id=academia_id, tipo_usuario=tipo_usuario)
-                else:
-                    raise PermissionDenied ("Academia Necessaria para cadastrar funcionarios")
-
-            return usuario
+    #
+    # def perform_create(self, serializer):
+    #
+    #     tipo_usuario = self.request.data.get('tipo_usuario')
+    #     if tipo_usuario:
+    #         usuario = serializer.save(tipo_usuario=tipo_usuario)
+    #
+    #         if tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
+    #             academia_id = self.request.data.get('academia')
+    #             if academia_id:
+    #                 UsuarioAcademia.objects.get_or_create(usuario=usuario, academia_id=academia_id, tipo_usuario=tipo_usuario)
+    #             else:
+    #                 raise PermissionDenied ("Academia Necessaria para cadastrar funcionarios")
+    #
+    #         return usuario
 
 
 

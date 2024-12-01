@@ -9,5 +9,6 @@ export interface Member {
   matricula: string
   data_nacimento: string
   plano?: Plan
+  academia?: string
 
 }
