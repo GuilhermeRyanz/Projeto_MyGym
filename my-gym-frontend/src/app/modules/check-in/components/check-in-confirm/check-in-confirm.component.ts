@@ -63,6 +63,7 @@ export class CheckInConfirmComponent implements OnInit{
     this.formGroup.patchValue({aluno: this.memberPlan?.aluno.id});
     this.httpMethods.post(this.pathUrlFrequncy, this.formGroup.value).subscribe(
       response => {
+        console.log(response)
         let  sucessMensage = "check-in realizado com sucesso.";
         this.router.navigate(['check-in/register']);
         this.snackBar.open( sucessMensage,'fechar', {

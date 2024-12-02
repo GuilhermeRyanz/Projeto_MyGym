@@ -1,6 +1,6 @@
 import {Routes} from '@angular/router';
 import {AuthGuardService} from "./guard/auth-guard.service";
-import {DashboardComponent} from "./modules/dashboards/components/dashboard/dashboard.component";
+
 export const routes: Routes = [
   {
     path: 'auth',

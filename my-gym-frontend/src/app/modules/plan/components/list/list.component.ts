@@ -5,7 +5,7 @@ import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-m
 import {Router} from "@angular/router";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
-import {MatList, MatListModule} from "@angular/material/list";
+import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
 
 @Component({
@@ -42,8 +42,7 @@ export class ListComponent implements OnInit {
   }
 
   getTypeUser() {
-    this.typeUser = localStorage.getItem("tipo_usuario")
-    console.log(this.typeUser)
+    this.typeUser = localStorage.getItem("tipo_usuario");
   }
 
   public seach(): void {
