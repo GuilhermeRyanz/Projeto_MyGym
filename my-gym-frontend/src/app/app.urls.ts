@@ -1,7 +1,3 @@
-import {
-  MembersFlowByTimeComponentComponent
-} from "./modules/dashboards/components/members-flow-by-time-component/members-flow-by-time-component.component";
-
 export const URLS = {
   LOGIN: 'api/token/',
   GYM: 'api/academia/academias/',
