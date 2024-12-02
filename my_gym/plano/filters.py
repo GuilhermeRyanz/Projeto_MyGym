@@ -8,3 +8,4 @@ class PlanoFilter(filters.FilterSet):
     class Meta:
         model = models.Plano
         fields = ['id','nome']
+
