@@ -1,1 +1,23 @@
-<p>members-flow-by-time-component works!</p>
+<mat-card class="members-flow-by-time">
+  <mat-card-header>
+    <mat-card-title>
+      Fluxo de alunos por dia da semana e hora
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Data de Início</mat-label>
+    <input matInput [matDatepicker]="pickerBegin" [(ngModel)]="beginDate" (dateChange)="search()">
+    <mat-datepicker-toggle matSuffix [for]="pickerBegin"></mat-datepicker-toggle>
+    <mat-datepicker #pickerBegin></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Data de Fim</mat-label>
+    <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="endDate" (dateChange)="search()">
+    <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+    <mat-datepicker #pickerEnd></mat-datepicker>
+  </mat-form-field>
+
+  <div echarts [options]="chartOption" style="height: 400px;"></div>
+</mat-card>

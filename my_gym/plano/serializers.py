@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from academia.models import Academia
+from aluno.models import AlunoPlano
 from plano.models import Plano
 
 
@@ -23,7 +24,6 @@ class PlanoSerializer(serializers.ModelSerializer):
         if request.user.usuario.tipo_usuario == "A":
             raise ValidationError("Tipo de usuario invalido")
 
-
     def create(self, validated_data):
         self.validate_user_permission()
         return super().create(validated_data)
@@ -31,3 +31,22 @@ class PlanoSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         self.validate_user_permission()
         return super().update(instance, validated_data)
+
+
+class PlanosAlunosAtivosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AlunoPlano
+        fields = '__all__'
+
+    def validate(self, data):
+
+        request = self.context.get('request')
+
+        if request and request.user.usuario.tipo_usuario not in ["G", "D"]:
+            raise ValidationError("Tipo de usuário inválido para essa funcionalidade.")
+
+        academia = request.query_params.get('academia')
+        if not academia:
+            raise ValidationError({"academia": "O parâmetro 'academia' é obrigatório na URL."})
+
+        return data

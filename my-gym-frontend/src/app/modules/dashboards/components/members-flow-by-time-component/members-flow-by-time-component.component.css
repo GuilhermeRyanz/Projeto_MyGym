@@ -1,0 +1,9 @@
+.members-flow-by-time .date-inputs {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.members-flow-by-time .date-inputs mat-form-field {
+  flex: 1;
+}

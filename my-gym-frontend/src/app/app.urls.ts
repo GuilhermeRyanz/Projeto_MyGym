@@ -1,3 +1,7 @@
+import {
+  MembersFlowByTimeComponentComponent
+} from "./modules/dashboards/components/members-flow-by-time-component/members-flow-by-time-component.component";
+
 export const URLS = {
   LOGIN: 'api/token/',
   GYM: 'api/academia/academias/',
@@ -7,6 +11,7 @@ export const URLS = {
   PAYMENT: 'api/pagamento/pagamentos/',
   FREQUENCY: 'api/academia/frequencias/',
   MEMBERPLAN: 'api/aluno/alunoPlano/',
-  MEMBERDATAHOUR: 'api/academia/frequenciaDiaHora/',
+  MEMBERSFLOWBYTIME: 'api/academia/frequenciaDiaHora/',
+  MEMBERPLANOVERVIEW: 'api/plano/planosAlunosAtivos/',
 
 }

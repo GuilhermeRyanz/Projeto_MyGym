@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
     { title: 'Funcionários', description: 'Cadastre e gerencie os funcionários.', route: 'employee/list', roles: ['D', 'G'] },
     { title: 'Check-in', description: 'Realize o check-in de um aluno', route: 'check-in/register', roles: ['D','G','A'] },
     { title: 'Academias', description: 'Selecione outra academia', route: 'adm/gym/list', roles: ['D'] },
-    { title: 'Dashboards', description: 'Veja graficos referentes ao desenpenho da academia', route: 'plan/list', roles: ['D', 'G'] },
+    { title: 'Dashboards', description: 'Veja graficos referentes ao desenpenho da academia', route: 'dashboards/dashboard', roles: ['D', 'G'] },
 
   ];
 
