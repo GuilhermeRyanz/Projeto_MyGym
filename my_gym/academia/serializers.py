@@ -53,7 +53,6 @@ class FrequenciaSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         aluno = data['aluno']
-        # academia = data['academia']
 
         pagamento = Pagamento.objects.filter(aluno_plano__aluno_id=aluno).order_by('-data_vencimento').first()
 

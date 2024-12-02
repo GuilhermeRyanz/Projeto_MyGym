@@ -57,10 +57,12 @@ export class ListComponent implements OnInit {
   }
 
   getTypeUser(){
-    this.typeUser = localStorage.getItem("usuario_tipo");
+    this.typeUser = localStorage.getItem("tipo_usuario");
   }
 
+
   public seach(): void {
+    console.log("tipo do user",this.typeUser);
     this.httpMethods.get(this.pathUrlEmployee + `?academia=${(this.gym_id)}`).subscribe((response: any) => {
       this.employers = response;
       console.log(response);

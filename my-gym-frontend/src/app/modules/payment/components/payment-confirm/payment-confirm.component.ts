@@ -72,7 +72,7 @@ export class PaymentConfirmComponent implements OnInit {
     this.httpMethods.post(this.pathUrlPayment, this.formGroup.value).subscribe(
       response => {
       let sucessMensagem = "Pagmento efetuado com sucesso.";
-        this.router.navigate(['payment/paymentoConfirm']);
+        this.router.navigate(['payment/paymentRegistration']);
         this.snackBar.open(  sucessMensagem, 'Fechar', {
           duration: 5000,
           verticalPosition: 'top',

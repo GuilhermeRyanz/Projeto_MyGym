@@ -1,10 +1,11 @@
-from django.contrib.admin import action
 from django_filters.rest_framework.backends import DjangoFilterBackend
-from rest_framework import viewsets, status
+from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.response import Response
+
 from core.permissions import AcademiaPermissionMixin
 from plano import models, serializers, filters
-from rest_framework.response import Response
 
 
 # Create your views here.
@@ -25,6 +26,10 @@ class PlanoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def desativar(self, request, pk=None):
+
+        if request.user.usuario.tipo_usuario == "A":
+            return Response({'erro': 'Seu cargo não tem permissão para desativar planos.'},status=403)
+
         try:
             plano = self.get_object()
             plano.active = False

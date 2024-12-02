@@ -1,5 +1,6 @@
 import {Routes} from '@angular/router';
 import {AuthGuardService} from "./guard/auth-guard.service";
+import {DashboardComponent} from "./modules/dashboards/components/dashboard/dashboard.component";
 export const routes: Routes = [
   {
     path: 'auth',
@@ -53,5 +54,11 @@ export const routes: Routes = [
     redirectTo: "my_gym/home",
     pathMatch: "full",
   },
+
+  {
+    path: "dashboards",
+    loadChildren: () => import('./modules/dashboards/dashboards.module').then(m => m.DashboardsModule),
+    canActivate: [AuthGuardService]
+  }
 
 ];

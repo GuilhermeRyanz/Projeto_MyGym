@@ -42,7 +42,8 @@ export class ListComponent implements OnInit {
   }
 
   getTypeUser() {
-    this.typeUser = localStorage.getItem("usuario_tipo")
+    this.typeUser = localStorage.getItem("tipo_usuario")
+    console.log(this.typeUser)
   }
 
   public seach(): void {

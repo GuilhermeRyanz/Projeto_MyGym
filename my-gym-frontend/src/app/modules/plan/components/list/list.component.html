@@ -18,7 +18,7 @@
         </div>
       </mat-card-content>
       <mat-card-actions>
-        <button [disabled]="typeUser == 'D'" mat-icon-button color="primary" (click)="edit(plan)">
+        <button [disabled]="typeUser == 'A'" mat-icon-button color="primary" (click)="edit(plan)">
           <mat-icon>edit</mat-icon>
         </button>
         <button [disabled]="typeUser == 'A'" mat-icon-button color="warn" (click)="disable(plan)">
@@ -27,6 +27,6 @@
       </mat-card-actions>
     </mat-card>
   }
-  <button mat-button color="warn" (click)="create()">Novo Plano</button>
+  <button [disabled]="typeUser == 'A'" mat-button color="warn" (click)="create()">Novo Plano</button>
 </div>
 

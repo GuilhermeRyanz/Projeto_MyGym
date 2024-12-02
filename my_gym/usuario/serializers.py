@@ -5,16 +5,15 @@ from rest_framework import serializers
 from academia.models import Academia, UsuarioAcademia
 from usuario.models import Usuario
 
+
 class UsuarioSerializer(serializers.ModelSerializer):
-    academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(),write_only=True,required=False)
-    username = serializers.EmailField(max_length=100,)
+    academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(), write_only=True, required=False)
+    username = serializers.EmailField(max_length=100, )
     nome = serializers.CharField(max_length=100)
-
-
 
     class Meta:
         model = Usuario
-        fields = ['id','nome', 'username', 'password', 'tipo_usuario', 'academia']
+        fields = ['id', 'nome', 'username', 'password', 'tipo_usuario', 'academia']
 
         extra_kwargs = {'password': {'write_only': True}}
 
@@ -25,13 +24,19 @@ class UsuarioSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+
+        request = self.context.get('request')
+
+        if request.user.usuario.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
+            raise serializers.ValidationError('esse tipo de usuario nao pode criar outros usuarios')
+
         academia = validated_data.pop('academia', None)
 
-        if validated_data['tipo_usuario'] in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE] and not academia:
+        if validated_data['tipo_usuario'] in [Usuario.TipoUsuario.ATENDENTE,
+                                              Usuario.TipoUsuario.GERENTE] and not academia:
             raise serializers.ValidationError("O campo 'academia' é obrigatório para usuários desse tipo.")
 
         try:
-
             usuario = Usuario(
                 username=validated_data['username'],
                 tipo_usuario=validated_data['tipo_usuario'],
@@ -50,6 +55,11 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
 
+        request = self.context.get('request')
+
+        if request.user.usuario.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
+            raise serializers.ValidationError("Esse tipo de usuario nao pode editar outros")
+
         instance.username = validated_data.get('username', instance.username)
 
         if 'password' in validated_data:
@@ -62,3 +72,11 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
         return instance
 
+    def delete(self, instance):
+        request = self.context.get('request')
+        user_type = request.user.usuario.tipo_usuario
+
+        if user_type == Usuario.TipoUsuario.ATENDENTE:
+            raise serializers.ValidationError("Esse tipo de usuário não pode apagar outros.")
+
+        instance.delete()

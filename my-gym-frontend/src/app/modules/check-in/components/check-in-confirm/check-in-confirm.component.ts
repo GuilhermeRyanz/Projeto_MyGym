@@ -7,6 +7,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-check-in-confirm',
@@ -43,17 +44,17 @@ export class CheckInConfirmComponent implements OnInit{
     private formBuilder: FormBuilder,
     private httpMethods: HttpMethodsService,
     private router: Router,
+    private snackBar: MatSnackBar
 
   ) {
     this.formGroup = this.formBuilder.group({
-      aluno: [this.memberPlan?.aluno.id],
+      aluno: [""],
       academia: [this.gymId]
     })
   }
 
   ngOnInit() {
     this.getGym()
-    console.log(this.memberPlan);
   }
 
 
@@ -62,8 +63,12 @@ export class CheckInConfirmComponent implements OnInit{
     this.formGroup.patchValue({aluno: this.memberPlan?.aluno.id});
     this.httpMethods.post(this.pathUrlFrequncy, this.formGroup.value).subscribe(
       response => {
-        console.log('Check-in efetuado com sucesso', response);
+        let  sucessMensage = "check-in realizado com sucesso.";
         this.router.navigate(['check-in/register']);
+        this.snackBar.open( sucessMensage,'fechar', {
+          duration: 5000,
+          verticalPosition: 'top',
+        });
 
       },
       error => {

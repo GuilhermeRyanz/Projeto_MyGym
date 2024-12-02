@@ -50,7 +50,7 @@ export class CheckInRegistrationComponent implements OnInit {
   }
 
   getTypeUser() {
-    this.typeUser = localStorage.getItem("usuario_tipo");
+    this.typeUser = localStorage.getItem("tipo_usuario");
   }
 
   constructor(private httpMethods: HttpMethodsService,) {
