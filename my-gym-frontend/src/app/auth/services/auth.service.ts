@@ -15,7 +15,6 @@ export class AuthService {
   showBannerEmmiter = new EventEmitter<boolean>();
   userUpdateEmitter = new EventEmitter<void>();
   private pathUrlAuth: string = environment.baseUrl;
-  private snackBar: any;
 
   private apiUrl = this.pathUrlAuth + 'api/token/';
 
@@ -43,11 +42,6 @@ export class AuthService {
         this.userUpdateEmitter.emit();
 
         const tipoUsuario = response.tipo_usuario;
-        let SucessMenssage = `Bem vindo! ${localStorage.getItem('nome_usuario')}`;
-        this.snackBar = SucessMenssage,'fechar',{
-          duration: 5000,
-          verticalPosition: 'top',
-        }
         if (tipoUsuario === 'D') {
           this.router.navigate(['/adm/gym/list/']);
         } else if (tipoUsuario === 'A' || tipoUsuario === 'G') {
