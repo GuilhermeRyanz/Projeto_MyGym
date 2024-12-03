@@ -43,6 +43,11 @@ export class AuthService {
         this.userUpdateEmitter.emit();
 
         const tipoUsuario = response.tipo_usuario;
+        let SucessMenssage = `Bem vindo! ${localStorage.getItem('nome_usuario')}`;
+        this.snackBar = SucessMenssage,'fechar',{
+          duration: 5000,
+          verticalPosition: 'top',
+        }
         if (tipoUsuario === 'D') {
           this.router.navigate(['/adm/gym/list/']);
         } else if (tipoUsuario === 'A' || tipoUsuario === 'G') {
