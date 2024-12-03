@@ -5,6 +5,7 @@ import {tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {catchError} from "rxjs";
 import {HttpMethodsService} from "./http-methods.service";
+import {environment} from "../../../environments/environments";
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +14,10 @@ export class AuthService {
 
   showBannerEmmiter = new EventEmitter<boolean>();
   userUpdateEmitter = new EventEmitter<void>();
+  private pathUrlAuth: string = environment.baseUrl;
   private snackBar: any;
 
-  private apiUrl = 'http://127.0.0.1:8000/api/token/';
+  private apiUrl = this.pathUrlAuth + 'api/token/';
 
   constructor(private http: HttpClient, private router: Router, private httpMethods: HttpMethodsService) {
   }

@@ -27,8 +27,8 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
         request = self.context.get('request')
 
-        if request.user.usuario.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
-            raise serializers.ValidationError('esse tipo de usuario nao pode criar outros usuarios')
+        # if request.user.usuario.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
+        #     raise serializers.ValidationError('esse tipo de usuario nao pode criar outros usuarios')
 
         academia = validated_data.pop('academia', None)
 
