@@ -43,7 +43,6 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
 
 
-
 class AuthTokenView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -58,11 +57,13 @@ class AuthTokenView(APIView):
 
         tokens = get_tokens_for_user(usuario)
         access_token = tokens['access_token']
+        refresh_token = tokens['refresh_token']
         tipo_usuario = usuario.tipo_usuario
 
         if tipo_usuario == Usuario.TipoUsuario.DONO:
             return Response({
                 'access_token': access_token,
+                'refresh_token': refresh_token,
                 'email': usuario.username,
                 'name': usuario.nome,
                 'tipo_usuario': usuario.tipo_usuario
@@ -75,6 +76,7 @@ class AuthTokenView(APIView):
                 return Response({
                     'access_token': access_token,
                     'email': usuario.username,
+                    'refresh_token': refresh_token,
                     'name': usuario.nome,
                     'academia': academia,
                     'academia_nome': academia_nome,

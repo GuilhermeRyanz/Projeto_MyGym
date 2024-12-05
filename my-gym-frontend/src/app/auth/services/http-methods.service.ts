@@ -46,14 +46,13 @@ export class HttpMethodsService {
     return throwError(errorMessage);
   }
 
-
-
   post(path: string, body: any): Observable<HttpResponse<any>> {
     return this.http.post(this.baseUrl + path, body,).pipe(
       tap((response: any) => response),
       catchError((error) => this.handleError(error))
     );
   }
+
 
 }
 

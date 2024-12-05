@@ -1,4 +1,4 @@
-import {Component, DoCheck, OnInit} from '@angular/core';
+import {Component, DoCheck} from '@angular/core';
 import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {AuthService} from "./auth/services/auth.service";
 import {MatAnchor, MatButton} from "@angular/material/button";
@@ -6,10 +6,6 @@ import {MatToolbar} from "@angular/material/toolbar";
 import {MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
 import {MatIcon} from "@angular/material/icon";
 import {HttpMethodsService} from "./shared/services/httpMethods/http-methods.service";
-import {URLS} from "./app.urls";
-import {Observable} from "rxjs";
-import {HttpResponse} from "@angular/common/http";
-import {Gym} from "./modules/gym-list/interfaces/gym";
 
 
 @Component({

@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Credentials} from '../interfaces/credentials';
 import {tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import {catchError} from "rxjs";
+import {catchError, map, Observable, throwError} from "rxjs";
 import {HttpMethodsService} from "./http-methods.service";
 import {environment} from "../../../environments/environments";
 
@@ -14,9 +14,7 @@ export class AuthService {
 
   showBannerEmmiter = new EventEmitter<boolean>();
   userUpdateEmitter = new EventEmitter<void>();
-  private pathUrlAuth: string = environment.baseUrl;
-
-  private apiUrl = this.pathUrlAuth + 'api/token/';
+  private pathUrl: string = environment.baseUrl;
 
   constructor(private http: HttpClient, private router: Router, private httpMethods: HttpMethodsService) {
   }
@@ -24,9 +22,11 @@ export class AuthService {
   login(payload: Credentials) {
     const headers = { 'Content-Type': 'application/json' };
 
-    return this.http.post(this.apiUrl, payload, { headers }).pipe(
+    const apiUrl = this.pathUrl + 'api/token/';
+
+    return this.http.post(apiUrl, payload, { headers }).pipe(
       tap((response: any) => {
-        this.setToken(response.access_token);
+        this.setToken(response.access_token, response.refresh_token);
         localStorage.setItem('tipo_usuario', response.tipo_usuario);
         localStorage.setItem('email', response.email);
         localStorage.setItem('nome_usuario', response.name);
@@ -53,13 +53,38 @@ export class AuthService {
     );
   }
 
+  public refreshToken(): Observable<string> {
+    const refreshToken = this.getTokenRefresh();
+    if (!refreshToken) {
+      return throwError('Erro nas credenciais do usuário');
+    }
 
-  private setToken(accessToken: string) {
+    const apiUrl = this.pathUrl + 'api/token/refresh/';
+    const headers = { 'Content-Type': 'application/json' };
+
+    return this.http.post<any>(apiUrl, { refresh: refreshToken }, { headers }).pipe(
+      map((response) => {
+        this.setToken(response.access, response.refresh);
+        return response.access;
+      }),
+      catchError((error) => {
+        this.logout();
+        return throwError(error);
+      })
+    );
+  }
+
+  public setToken(accessToken: string, refreshToken: string) {
     localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('refresh_token', refreshToken);
   }
 
   public getToken(): string|null {
     return localStorage.getItem("access_token");
+  }
+
+  public getTokenRefresh(): string|null {
+    return localStorage.getItem("refresh_token");
   }
 
   public logout() {

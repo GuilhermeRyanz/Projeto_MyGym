@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environments';
-import {catchError, Observable, throwError} from 'rxjs';
+import {catchError, map, Observable, of, switchMap, throwError} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthService} from "../../../auth/services/auth.service";
@@ -19,10 +19,20 @@ export class HttpMethodsService {
               private authService: AuthService,) {
   }
 
-  private getHearders(): HttpHeaders {
-    const toke  = this.authService.getToken() || "";
-    return new HttpHeaders({"Authorization": "Bearer " .concat(toke)});
+  private getHeaders(): Observable<HttpHeaders> {
+    let token = this.authService.getToken() || '';
+    console.log("Token atual", token);
 
+    if (this.isTokenExpired()) {
+      console.log("Token expirado, atualizando...");
+      return this.authService.refreshToken().pipe(
+        switchMap((newToken) => {
+          return of(new HttpHeaders({ "Authorization": "Bearer ".concat(newToken) }));
+        })
+      );
+    }
+
+    return of(new HttpHeaders({ "Authorization": "Bearer ".concat(token) }));
   }
 
   public handleError(error: any): Observable<never> {
@@ -53,40 +63,80 @@ export class HttpMethodsService {
 
     return throwError(errorMessage);
   }
+  isTokenExpired(): boolean {
+    const token = this.authService.getToken();
+    if (!token) {
+      console.warn('Token não encontrado. Considere-o expirado.');
+      return true;
+    }
 
+    try {
+      const decodedToken = this.decodedToken(token);
+      const expiration = new Date(decodedToken.exp * 1000);
+      return expiration < new Date();
+    } catch (error) {
+      return true;
+    }
+  }
 
-  post(path: string, body: any): Observable<HttpResponse<any>> {
-    return this.http.post(this.baseUrl + path, body, {headers: this.getHearders()}).pipe(
-      tap((response: any) => response),
-      catchError((error) => this.handleError(error))
+  decodedToken(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      return JSON.parse(atob(payload));
+    } catch (error) {
+      throw new Error('Token inválido ou não é um JWT válido.');
+    }
+  }
+
+  post(path: string, body: any): Observable<any> {
+    return this.getHeaders().pipe(
+      switchMap((headers) =>
+        this.http.post(this.baseUrl + path, body, { headers }).pipe(
+          catchError((error) => this.handleError(error))
+        )
+      )
     );
   }
 
-  get(path: string): Observable<HttpResponse<any>> {
-    return this.http.get(this.baseUrl + path, {headers: this.getHearders()}).pipe(
-      tap((response: any) => response),
-      catchError((error) => this.handleError(error))
+  get(path: string): Observable<any> {
+    return this.getHeaders().pipe(
+      switchMap((headers) =>
+        this.http.get(this.baseUrl + path, { headers }).pipe(
+          catchError((error) => this.handleError(error))
+        )
+      )
     );
   }
-
   patch(path: string, body: any): Observable<HttpResponse<any>> {
-    return this.http.patch(this.baseUrl + path + body.id + '/', body, {headers: this.getHearders()}).pipe(
-      tap((response: any) => response),
-      catchError((error) => this.handleError(error))
+    return this.getHeaders().pipe(
+      switchMap((headers) =>
+        this.http.patch(this.baseUrl + path + body.id + '/', body, { headers }).pipe(
+          tap((response: any) => response),
+          catchError((error) => this.handleError(error))
+        )
+      )
     );
   }
 
   delete(path: string, id: number): Observable<HttpResponse<any>> {
-    return this.http.delete(this.baseUrl + path + id + '/', {headers: this.getHearders()}).pipe(
-      tap((response: any) => response),
-      catchError((error) => this.handleError(error))
+    return this.getHeaders().pipe(
+      switchMap((headers) =>
+        this.http.delete(this.baseUrl + path + id + '/', { headers }).pipe(
+          tap((response: any) => response),
+          catchError((error) => this.handleError(error))
+        )
+      )
     );
   }
 
   disable(path: string, body: any, path_1: any): Observable<HttpResponse<any>> {
-    return this.http.post(this.baseUrl + path + body.id + `/${path_1}/`, body, {headers: this.getHearders()}).pipe(
-      tap((response: any) => response),
-      catchError((error) => this.handleError(error))
+    return this.getHeaders().pipe(
+      switchMap((headers) =>
+        this.http.post(this.baseUrl + path + body.id + `/${path_1}/`, body, { headers }).pipe(
+          tap((response: any) => response),
+          catchError((error) => this.handleError(error))
+        )
+      )
     );
   }
 

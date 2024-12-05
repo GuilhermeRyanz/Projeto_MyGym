@@ -93,8 +93,8 @@ DATABASES = {
         'ENGINE' : 'django.db.backends.postgresql',
         'NAME': 'my_gym',
         'USER': 'my_gym',
-        'PASSWORD': 'postgres',
-        'HOST' : 'postgres',
+        'PASSWORD': '123',
+        'HOST' : '127.0.0.1',
         'PORT' : '5432',
     }
 }
@@ -154,8 +154,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(hours=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
