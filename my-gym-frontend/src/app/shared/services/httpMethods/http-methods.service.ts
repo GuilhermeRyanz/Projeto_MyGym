@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environments';
-import {catchError, map, Observable, of, switchMap, throwError} from 'rxjs';
+import {catchError, Observable, of, switchMap, throwError} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthService} from "../../../auth/services/auth.service";
