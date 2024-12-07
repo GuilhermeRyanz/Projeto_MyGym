@@ -9,12 +9,13 @@ from core.permissions import AcademiaPermissionMixin
 from plano import models, serializers, filters
 from aluno.filters import AlunoPlanoFilter
 
+
 # Create your views here.
 
-class PlanoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
+class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = models.Plano.objects.all()
     serializer_class = serializers.PlanoSerializer
-    filter_backends = [DjangoFilterBackend,]
+    filter_backends = [DjangoFilterBackend, ]
     filterset_class = filters.PlanoFilter
 
     # def perform_create(self, serializer):
@@ -29,7 +30,7 @@ class PlanoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
     def desativar(self, request, pk=None):
 
         if request.user.usuario.tipo_usuario == "A":
-            return Response({'erro': 'Seu cargo não tem permissão para desativar planos.'},status=403)
+            return Response({'erro': 'Seu cargo não tem permissão para desativar planos.'}, status=403)
 
         try:
             plano = self.get_object()
@@ -41,20 +42,20 @@ class PlanoViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
         except Exception as e:
             return Response({'erro': str(e)}, status=500)
 
-class PlanosAlunosAtivosViewSet(AcademiaPermissionMixin,viewsets.ModelViewSet):
-    filter_backends = [DjangoFilterBackend,]
+
+class PlanosAlunosAtivosViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
+    filter_backends = [DjangoFilterBackend, ]
     filterset_class = AlunoPlanoFilter
     serializer_class = serializers.PlanosAlunosAtivosSerializer
     queryset = AlunoPlano.objects.all()
 
     def list(self, request, *args, **kwargs):
-
         academia_id = request.query_params.get('academia')
         if not academia_id:
             return Response({"error": "O parâmetro 'academia' é obrigatório na URL."}, status=400)
 
         planos = (
-            AlunoPlano.objects.filter(active=True, plano__active=True,plano__academia__id=academia_id)
+            AlunoPlano.objects.filter(active=True, plano__active=True, plano__academia__id=academia_id)
             .values('plano__nome')
             .annotate(total_alunos=Count('aluno'))
             .order_by('-total_alunos')

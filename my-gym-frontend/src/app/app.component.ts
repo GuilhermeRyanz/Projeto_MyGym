@@ -1,16 +1,19 @@
-import {Component, DoCheck} from '@angular/core';
+import {Component, DoCheck, ViewChild} from '@angular/core';
 import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {AuthService} from "./auth/services/auth.service";
-import {MatAnchor, MatButton} from "@angular/material/button";
+import {MatAnchor, MatButton, MatIconButton} from "@angular/material/button";
 import {MatToolbar} from "@angular/material/toolbar";
-import {MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
+import {MatSidenav, MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
 import {MatIcon} from "@angular/material/icon";
+import {MatListItem, MatNavList} from "@angular/material/list";
+import {BreakpointObserver} from "@angular/cdk/layout";
+import {DataRowOutlet} from "@angular/cdk/table";
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatButton, MatToolbar, MatSidenavContainer, MatSidenavModule, MatIcon, RouterLink, MatAnchor],
+  imports: [RouterOutlet, MatButton, MatToolbar, MatSidenavContainer, MatSidenavModule, MatIcon, RouterLink, MatAnchor, MatIconButton, MatNavList, MatListItem, DataRowOutlet,],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -24,16 +27,20 @@ export class AppComponent implements DoCheck{
   public showNav: boolean = false;
   public opened = false;
   public gym_name: string | null = '';
+  @ViewChild(MatSidenav)
+  sidenav!: MatSidenav;
 
 
 
-  constructor(private authService: AuthService, private router: Router,) {}
+
+  constructor(private authService: AuthService, private router: Router, private observer: BreakpointObserver) {}
 
   ngOnInit() {
     if (this.authService.userIsAuth()) {
       this.showBanner = true;
       this.userInfor();
     }
+
 
     if (this.authService.userIsAuthGy()) {
       this.showNav = true;
@@ -68,6 +75,7 @@ export class AppComponent implements DoCheck{
       this.gym_name = currentGymName;
     }
   }
+
 
 
   userInfor() {

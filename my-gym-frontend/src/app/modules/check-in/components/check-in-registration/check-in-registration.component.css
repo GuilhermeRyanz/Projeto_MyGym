@@ -4,6 +4,7 @@
 
 .search{
   width: 100%;
+  margin-top: 16px;
 }
 
 .member-info {
@@ -15,8 +16,21 @@
   padding-top: 16px;
 }
 
-.search {
-  margin-top: 16px;
+
+h2{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+
+}
+
+mat-tab-group {
+  padding-left: 1%;
+  width: 98%;
 }
 
 

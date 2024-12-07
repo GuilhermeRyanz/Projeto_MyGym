@@ -126,4 +126,7 @@ export class FormComponent implements OnInit {
       });
     }
   }
+  public return(){
+    this.router.navigate(['/member/list/'])
+  }
 }

@@ -1,5 +1,7 @@
 .plan-card {
   margin-bottom: 16px;
+  margin-left: 1%;
+  width: 98%;
 }
 
 .plan-details {
@@ -15,4 +17,13 @@
 .plan-description {
   flex: 1;
   margin-left: 16px;
+}
+
+h2{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+
 }

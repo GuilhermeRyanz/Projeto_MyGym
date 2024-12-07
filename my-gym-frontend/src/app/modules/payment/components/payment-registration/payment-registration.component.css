@@ -4,6 +4,7 @@
 
 .search{
   width: 100%;
+  margin-top: 16px;
 }
 
 .member-info {
@@ -11,7 +12,16 @@
   align-items: flex-start;
 }
 
-h3 {
-  color: #3f51b5;
+
+h2{
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+mat-tab-group {
+  padding-left: 1%;
+  width: 98%;
 }

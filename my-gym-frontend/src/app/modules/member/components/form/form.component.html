@@ -1,4 +1,3 @@
-<h3>Cadastro / Edicao de aluno</h3>
 <mat-tab-group [(selectedIndex)]="selectedIndex">
   <mat-tab label="Dados do Aluno">
     <div class="container">
@@ -32,5 +31,9 @@
   <mat-tab label="Seleção de Plano" [disabled]="!obj">
     <app-member-plan [member]="obj"></app-member-plan>
   </mat-tab>
+  <div>
+    <button mat-raised-button color="warn" (click)="return()">finalizar</button>
+  </div>
+
 </mat-tab-group>
 

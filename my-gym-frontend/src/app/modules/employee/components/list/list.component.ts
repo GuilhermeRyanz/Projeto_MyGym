@@ -11,20 +11,22 @@ import {MatCard, MatCardActions, MatCardContent, MatCardSubtitle} from "@angular
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatToolbar} from "@angular/material/toolbar";
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-    MatLine,
-    MatCard,
-    MatCardContent,
-    MatCardSubtitle,
-    MatCardActions
-  ],
+    imports: [
+        MatListModule,
+        MatIconModule,
+        MatButtonModule,
+        MatLine,
+        MatCard,
+        MatCardContent,
+        MatCardSubtitle,
+        MatCardActions,
+        MatToolbar
+    ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })

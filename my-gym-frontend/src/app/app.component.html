@@ -1,39 +1,65 @@
 @if (showBanner) {
   <mat-toolbar color="primary" class="header">
-    <button mat-button (click)="opened=!opened">
+    <button mat-icon-button aria-label="Menu icon" (click)="opened=!opened">
       <mat-icon>menu</mat-icon>
     </button>
 
     <div class="user-info">
-      <span>Usuario: {{ user }}</span>
-      @if (gym_name ){<span>Academia: {{ gym_name }}</span>}
+      <span>Usuário: {{ user }}</span>
+      @if (gym_name) { <span>Academia: {{ gym_name }}</span> }
     </div>
     <span class="spacer"></span>
     <button mat-raised-button color="warn" (click)="logout()">Sair</button>
   </mat-toolbar>
 }
-  <mat-sidenav-container>
-    @if(showNav){<mat-sidenav [(opened)]="opened" mode="push">
+<mat-sidenav-container autosize>
+  @if(showNav) {
+    <mat-sidenav [(opened)]="opened" mode="side">
       <nav class="side-nav">
-          <a mat-button routerLink="my_gym/home">Home</a>
+        <a mat-button routerLink="my_gym/home">
+          <mat-icon>home</mat-icon>
+          Home
+        </a>
+
         @if(tipo_usuario === "D" || tipo_usuario === "G") {
           <ng-container>
-            <a mat-button routerLink="employee/list">Funcionarios</a>
-            <a mat-button routerLink="dashboards/dashboard">DashBoards</a>
+            <a mat-button routerLink="employee/list">
+              <mat-icon>badge</mat-icon>
+              Funcionários
+            </a>
+            <a mat-button routerLink="dashboards/dashboard">
+              <mat-icon>bar_chart</mat-icon>
+              DashBoards
+            </a>
           </ng-container>
         }
-          <ng-container>
-            <a mat-button routerLink="member/list">Alunos</a>
-            <a mat-button routerLink="plan/list">Planos</a>
-            <a mat-button routerLink="check-in/register">Check-in de Aluno</a>
-            <a mat-button routerLink="payment/paymentRegistration">Pagamento</a>
-            <a mat-button routerLink="member/form/create">Cadastro de aluno</a>
-          </ng-container>
+
+        <ng-container>
+          <a mat-button routerLink="member/list">
+            <mat-icon>people</mat-icon>
+            Alunos
+          </a>
+          <a mat-button routerLink="plan/list">
+            <mat-icon>view_list</mat-icon>
+            Planos
+          </a>
+          <a mat-button routerLink="check-in/register">
+            <mat-icon>check_circle</mat-icon>
+            Check-in de Aluno
+          </a>
+          <a mat-button routerLink="payment/paymentRegistration">
+            <mat-icon>payment</mat-icon>
+            Pagamento
+          </a>
+          <a mat-button routerLink="member/form/create">
+            <mat-icon>person_add</mat-icon>
+            Cadastro de aluno
+          </a>
+        </ng-container>
       </nav>
-    </mat-sidenav>}
-    <mat-sidenav-content>
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-
-
+    </mat-sidenav>
+  }
+  <mat-sidenav-content class="main-container">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,5 +1,6 @@
 <div class="container">
   <form [formGroup]="formGroup" (ngSubmit)="saveOrUpdate(formGroup.value)" class="mat-elevation-z2 form">
+    <h2 class="form-title">Cadastro de Funcionário</h2>
     <mat-form-field appearance="fill" class="nome">
       <mat-label>Nome</mat-label>
       <input matInput formControlName="nome" placeholder="Digite o nome do funcionario" />

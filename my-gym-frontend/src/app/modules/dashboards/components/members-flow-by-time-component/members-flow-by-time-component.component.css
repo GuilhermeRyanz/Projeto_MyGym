@@ -7,3 +7,40 @@
 .members-flow-by-time .date-inputs mat-form-field {
   flex: 1;
 }
+
+.help-icon mat-icon {
+  font-size: 24px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+
+mat-form-field {
+  padding: 23px;
+}
+
+mat-card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.help-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.help-icon mat-icon {
+  font-size: 24px;
+  color: #4dca4f;
+}
+
+
+
+

@@ -39,3 +39,8 @@ button {
 
 }
 
+mat-tab-group {
+  padding-left: 1%;
+  width: 98%;
+}
+

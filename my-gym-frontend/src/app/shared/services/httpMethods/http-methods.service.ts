@@ -21,10 +21,8 @@ export class HttpMethodsService {
 
   private getHeaders(): Observable<HttpHeaders> {
     let token = this.authService.getToken() || '';
-    console.log("Token atual", token);
 
     if (this.isTokenExpired()) {
-      console.log("Token expirado, atualizando...");
       return this.authService.refreshToken().pipe(
         switchMap((newToken) => {
           return of(new HttpHeaders({ "Authorization": "Bearer ".concat(newToken) }));
@@ -47,7 +45,7 @@ export class HttpMethodsService {
       } else {
         for (let field in error.error) {
           if (error.error.hasOwnProperty(field) && error.error[field].length > 0) {
-            errorMessage = `Erro "${field}": ${error.error[field][0]}`;
+            errorMessage = `${error.error[field]}`;
             break;
           }
         }
