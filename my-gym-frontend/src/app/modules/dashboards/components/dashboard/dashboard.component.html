@@ -3,8 +3,13 @@
   <div class="dashboard-item">
     <app-members-flow-by-time-component></app-members-flow-by-time-component>
   </div>
-  <div class="dashboard-item">
-    <app-member-plans-overview-component></app-member-plans-overview-component>
+  <div class="dashboard-item" style="display: flex; width: 100%;">
+    <div class="chart-container">
+      <app-member-plans-overview-component></app-member-plans-overview-component>
+    </div>
+    <div class="chart-container">
+      <app-plans-with-new-members-component></app-plans-with-new-members-component>
+    </div>
   </div>
   <div class="dashboard-item">
     <app-monthly-earnings-chart></app-monthly-earnings-chart>

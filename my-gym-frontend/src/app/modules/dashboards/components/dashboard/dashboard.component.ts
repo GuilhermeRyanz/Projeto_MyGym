@@ -7,6 +7,9 @@ import {
   MemberPlansOverviewComponentComponent
 } from "../member-plans-overview-component/member-plans-overview-component.component";
 import {MonthlyEarningsChartComponent} from "../monthly-earnings-chart/monthly-earnings-chart.component";
+import {
+  PlansWithNewMembersComponentComponent
+} from "../plans-with-new-members-component/plans-with-new-members-component.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +19,7 @@ import {MonthlyEarningsChartComponent} from "../monthly-earnings-chart/monthly-e
     MatListSubheaderCssMatStyler,
     MemberPlansOverviewComponentComponent,
     MonthlyEarningsChartComponent,
+    PlansWithNewMembersComponentComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'

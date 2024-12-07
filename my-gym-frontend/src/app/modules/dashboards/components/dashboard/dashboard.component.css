@@ -16,3 +16,14 @@ h2{
   text-align: center;
 }
 
+
+.chart-container {
+  flex: 1; /* Faz os gráficos se ajustarem ao espaço disponível */
+  margin: 0 10px; /* Espaçamento entre os gráficos */
+}
+
+app-member-plans-overview-component,
+app-plans-with-new-members-component {
+  width: 100%; /* Garante que o gráfico ocupe toda a largura do contêiner */
+  height: 300px; /* Defina a altura conforme necessário */
+}

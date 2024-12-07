@@ -1,0 +1,8 @@
+mat-form-field {
+  padding: 23px;
+  width: 15%;
+}
+
+.month-picker .mat-calendar-body-cell-content {
+  display: none;
+}

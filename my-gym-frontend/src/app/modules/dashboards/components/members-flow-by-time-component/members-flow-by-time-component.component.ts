@@ -86,6 +86,7 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
         this.chartOption = {
           tooltip: { trigger: 'axis' },
           legend: { data: ['Fluxo de alunos por dia', 'Fluxo de alunos por hora'] },
+
           grid: [
             { top: '10%', left: '5%', right: '5%', bottom: '50%' }, // Grid superior
             { top: '60%', left: '5%', right: '5%', bottom: '10%' }, // Grid inferior
@@ -99,7 +100,6 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
               type: 'category',
               data: hours,
               gridIndex: 1,
-              name: 'Tempo',
               nameLocation: 'middle',
               nameTextStyle: {
                 fontSize: 14,
@@ -110,7 +110,7 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
           yAxis: [
             {
               type: 'value',
-              name: 'Quantidade de Alunos',
+              name: 'Qtd de Alunos',
               nameLocation: 'end',
               nameTextStyle: {
                 fontSize: 14,

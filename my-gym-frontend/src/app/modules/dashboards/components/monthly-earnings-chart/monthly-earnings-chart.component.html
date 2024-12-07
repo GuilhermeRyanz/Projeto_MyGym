@@ -1,0 +1,16 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      Ganhos Mensais por Plano
+    </mat-card-title>
+  </mat-card-header>
+  <mat-form-field appearance="outline">
+    <mat-label>Selecione o Mês e Ano</mat-label>
+    <input matInput [matDatepicker]="pickerBegin" [value]="data | date: 'yyyy-MM'" readonly>
+    <mat-datepicker-toggle matSuffix [for]="pickerBegin"></mat-datepicker-toggle>
+    <mat-datepicker #pickerBegin startView="multi-year" (monthSelected)="setMonthAndYear($event, pickerBegin)" panelClass="month-picker"></mat-datepicker>
+  </mat-form-field>
+  <div>
+    <div echarts [options]="chartOption" style="height: 400px;"></div>
+  </div>
+</mat-card>
