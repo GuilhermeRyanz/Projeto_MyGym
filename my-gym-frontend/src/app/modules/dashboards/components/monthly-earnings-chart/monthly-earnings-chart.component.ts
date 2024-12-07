@@ -12,7 +12,7 @@ import { MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field"
 import { MatInput } from "@angular/material/input";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgxEchartsDirective } from "ngx-echarts";
-import {DateAdapter, MatNativeDateModule} from "@angular/material/core";
+import {MatNativeDateModule} from "@angular/material/core";
 import {DatePipe} from "@angular/common";
 
 
