@@ -70,15 +70,10 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
     let formattedBeginDate = this.formatDate(this.beginDate);
     let formattedEndDate = this.formatDate(this.endDate);
 
-    console.log('Data de Início formatada:', formattedBeginDate);
-    console.log('Data de Fim formatada:', formattedEndDate);
-
     const url = `?data_inicio=${formattedBeginDate}&data_fim=${formattedEndDate}&academia=${this.gym_id}`;
 
     this.httpMethods.get(this.pathUrlMembersFlowByTime + url).subscribe(
       (response: any) => {
-        console.log('Resposta do servidor:', response);
-
         const membersByDay = response.alunos_por_dia;
         const membersByHour = response.alunos_por_hora;
 
@@ -92,20 +87,56 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
           tooltip: { trigger: 'axis' },
           legend: { data: ['Fluxo de alunos por dia', 'Fluxo de alunos por hora'] },
           grid: [
-            { top: '10%', left: '5%', right: '5%', bottom: '50%' },
-            { top: '60%', left: '5%', right: '5%', bottom: '10%' },
+            { top: '10%', left: '5%', right: '5%', bottom: '50%' }, // Grid superior
+            { top: '60%', left: '5%', right: '5%', bottom: '10%' }, // Grid inferior
           ],
           xAxis: [
-            { type: 'category', data: days },
-            { type: 'category', data: hours, gridIndex: 1 },
+            {
+              type: 'category',
+              data: days,
+            },
+            {
+              type: 'category',
+              data: hours,
+              gridIndex: 1,
+              name: 'Tempo',
+              nameLocation: 'middle',
+              nameTextStyle: {
+                fontSize: 14,
+                padding: 20,
+              },
+            },
           ],
           yAxis: [
-            { type: 'value' },
-            { type: 'value', gridIndex: 1 },
+            {
+              type: 'value',
+              name: 'Quantidade de Alunos',
+              nameLocation: 'end',
+              nameTextStyle: {
+                fontSize: 14,
+                padding: 10,
+              },
+            },
+            {
+              type: 'value',
+              gridIndex: 1,
+            },
           ],
           series: [
-            { name: 'Fluxo de alunos por dia', type: 'line', data: flowByDay as number[], smooth: true },
-            { name: 'Fluxo de alunos por hora', type: 'line', data: flowByHour as number[], smooth: true, xAxisIndex: 1, yAxisIndex: 1 },
+            {
+              name: 'Fluxo de alunos por dia',
+              type: 'line',
+              data: flowByDay as number[],
+              smooth: true,
+            },
+            {
+              name: 'Fluxo de alunos por hora',
+              type: 'line',
+              data: flowByHour as number[],
+              smooth: true,
+              xAxisIndex: 1,
+              yAxisIndex: 1,
+            },
           ],
         };
       },
@@ -114,6 +145,7 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
       }
     );
   }
+
 
 
 }

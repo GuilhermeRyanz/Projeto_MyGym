@@ -6,6 +6,7 @@ import {MatListSubheaderCssMatStyler} from "@angular/material/list";
 import {
   MemberPlansOverviewComponentComponent
 } from "../member-plans-overview-component/member-plans-overview-component.component";
+import {MonthlyEarningsChartComponent} from "../monthly-earnings-chart/monthly-earnings-chart.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,8 @@ import {
   imports: [
     MembersFlowByTimeComponentComponent,
     MatListSubheaderCssMatStyler,
-    MemberPlansOverviewComponentComponent
+    MemberPlansOverviewComponentComponent,
+    MonthlyEarningsChartComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
@@ -21,3 +23,4 @@ import {
 export class DashboardComponent {
 
 }
+
