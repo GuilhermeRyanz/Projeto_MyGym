@@ -35,6 +35,7 @@ export class FormComponent implements OnInit {
   protected formGroup: FormGroup;
   private created: boolean = true
   private gymId: string | null = "";
+  protected title: string = "Cadastro de Funcionario";
 
   getGym(): void {
     this.gymId = localStorage.getItem("academia");
@@ -79,6 +80,7 @@ export class FormComponent implements OnInit {
       this.created = !(this.action && this.action !== 'create');
 
       if (!this.created) {
+        this.title = "Edicao de Funcionario";
         this.httpMethods.get(this.pathUrlEmployee + this.action + '/').subscribe((response: any) => {
           console.log("conteudo do carinha",response);
           this.formGroup.setValue({

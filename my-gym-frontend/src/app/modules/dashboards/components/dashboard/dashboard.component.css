@@ -1,6 +1,5 @@
 .dashboard-container {
-  flex-wrap: wrap;
-  gap: 20px; /* Espaçamento entre os itens */
+  gap: 20px;
   padding: 20px;
 }
 

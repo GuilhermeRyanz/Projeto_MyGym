@@ -61,13 +61,6 @@ mat-sidenav {
   color: #4dca4f;
 }
 
-body, html {
-  background-color: #f4f7fc;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: Arial, Helvetica, sans-serif;
-}
 
 .main-container {
   background-color: #ebf0f8;

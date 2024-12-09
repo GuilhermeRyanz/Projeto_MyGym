@@ -33,6 +33,7 @@ export class FormGymComponent implements OnInit{
   private pathUrlGym: string = URLS.GYM;
   formGroup: FormGroup
   private created: boolean = true
+  public title: string = "Cadastro de Academia";
 
   toggleLock(){
     this.isUnlocked = !this.isUnlocked;
@@ -67,6 +68,7 @@ export class FormGymComponent implements OnInit{
       this.created = !(this.action && this.action !== 'create');
 
       if (!this.created) {
+        this.title = "Edicao de Academia";
         this.httpMethods.get(this.pathUrlGym + this.action + '/').subscribe((response: any) => {
           this.formGroup.setValue({
             id: response.id,

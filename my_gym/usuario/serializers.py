@@ -24,12 +24,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-
-        request = self.context.get('request')
-
-        # if request.user.usuario.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
-        #     raise serializers.ValidationError('esse tipo de usuario nao pode criar outros usuarios')
-
         academia = validated_data.pop('academia', None)
 
         if validated_data['tipo_usuario'] in [Usuario.TipoUsuario.ATENDENTE,
@@ -49,7 +43,9 @@ class UsuarioSerializer(serializers.ModelSerializer):
                 UsuarioAcademia.objects.create(usuario=usuario, academia=academia, tipo_usuario=usuario.tipo_usuario)
 
         except IntegrityError as e:
-            raise serializers.ValidationError(f"Este Email já esta sendo utilizado")
+            if 'auth_user_username_key' in str(e):
+                raise serializers.ValidationError("Este email já está sendo utilizado.")
+            raise serializers.ValidationError(f"Erro inesperado: {str(e)}")
 
         return usuario
 

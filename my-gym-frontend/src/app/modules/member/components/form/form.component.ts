@@ -45,6 +45,7 @@ export class FormComponent implements OnInit {
   private created: boolean = true;
   private gymId: string | null = "";
   selectedIndex: number = 0;
+  public title: string = "Cadastro de aluno";
 
 
   getGym(): void {
@@ -82,7 +83,9 @@ export class FormComponent implements OnInit {
       this.action = <string>params.get('action');
       this.created = !(this.action && this.action !== 'create');
 
+
       if (!this.created) {
+        this.title = "Edicao de Aluno"
         this.httpMethods.get(this.pathUrlMember + `${this.action}/`).subscribe((response: any) => {
           this.obj = response
           this.formGroup.setValue({

@@ -76,10 +76,9 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #6cd566;
-}
 
 .mat-tab-group {
   padding-top: 16px; /* Ajuste conforme necessário */
 }
+
+

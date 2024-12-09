@@ -37,11 +37,10 @@ export class HttpMethodsService {
     let errorMessage = 'Ocorreu um erro inesperado.';
 
     if (error && error.error) {
-      console.log('Erro no corpo da resposta:', error.error);
       if (error.error.detail && error.error.detail.length > 0) {
         errorMessage = `Erro: ${error.error.detail}`;
       } else if (error.error.username && error.error.username.length > 0) {
-        errorMessage = `Erro no email: ${error.error.username[0]}`;
+        errorMessage = `Erro no email: ${error.error.username}`;
       } else {
         for (let field in error.error) {
           if (error.error.hasOwnProperty(field) && error.error[field].length > 0) {

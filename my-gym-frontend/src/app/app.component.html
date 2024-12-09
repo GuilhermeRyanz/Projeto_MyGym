@@ -45,7 +45,7 @@
           </a>
           <a mat-button routerLink="check-in/register">
             <mat-icon>check_circle</mat-icon>
-            Check-in de Aluno
+            Check-in
           </a>
           <a mat-button routerLink="payment/paymentRegistration">
             <mat-icon>payment</mat-icon>
@@ -53,10 +53,20 @@
           </a>
           <a mat-button routerLink="member/form/create">
             <mat-icon>person_add</mat-icon>
-            Cadastro de aluno
+            Cadastro
           </a>
         </ng-container>
-      </nav>
+
+        @if(tipo_usuario === "D") {
+          <ng-container>
+            <a mat-button routerLink="adm/gym/list">
+              <mat-icon>corporate_fare</mat-icon>
+              Academias
+            </a>
+          </ng-container>
+        }
+
+          </nav>
     </mat-sidenav>
   }
   <mat-sidenav-content class="main-container">

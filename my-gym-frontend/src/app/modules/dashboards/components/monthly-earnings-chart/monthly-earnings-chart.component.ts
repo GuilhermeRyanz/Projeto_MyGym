@@ -71,11 +71,14 @@ export class MonthlyEarningsChartComponent implements OnInit {
     const formattedDate = this.data.toISOString().slice(0, 7);
     this.httpMethods.get(this.pathUrlMonthltlyEarnings + `?month=${formattedDate}&academia=${this.gym_id}`).subscribe(
       response => {
+        console.log(response.data.total);
         const data = response.data;
+        const totalSum = data.total;
+
 
         this.chartOption = {
           title: {
-            text: `Ganhos Mensais por Plano (${formattedDate})`,
+            text: `Ganhos Mensais por Plano (${formattedDate}) - Total: R$ ${totalSum}`,
             left: 'center'
           },
           tooltip: {

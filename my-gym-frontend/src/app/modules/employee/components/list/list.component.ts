@@ -35,7 +35,7 @@ export class ListComponent implements OnInit {
   private pathUrlEmployee: string = URLS.USERS;
   public employers: Employee[] | undefined;
   public gym_id: string | null = "";
-  protected typeUser: string | null = "";
+  public typeUser: string | null = "";
 
 
   private getIdGym(): void {
@@ -64,7 +64,6 @@ export class ListComponent implements OnInit {
 
 
   public seach(): void {
-    console.log("tipo do user",this.typeUser);
     this.httpMethods.get(this.pathUrlEmployee + `?academia=${(this.gym_id)}`).subscribe((response: any) => {
       this.employers = response;
       console.log(response);

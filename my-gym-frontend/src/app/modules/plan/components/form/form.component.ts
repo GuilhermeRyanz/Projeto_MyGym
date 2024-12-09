@@ -31,6 +31,7 @@ export class FormComponent implements OnInit {
   formGroup: FormGroup;
   private created: boolean = true
   private gymId: string | null = "";
+  public title: string = "Criação de Plano";
 
   getPlan(): void {
     this.gymId = localStorage.getItem("academia");
@@ -68,6 +69,7 @@ export class FormComponent implements OnInit {
       this.created = !(this.action && this.action !== 'create');
 
       if (!this.created) {
+        this.title = "Edição de Plano";
         this.httpMethods.get(this.pathUrlPlan + this.action + '/').subscribe((response: any) => {
           this.formGroup.setValue({
             id: response.id,

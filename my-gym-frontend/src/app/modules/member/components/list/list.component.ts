@@ -12,6 +12,8 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
 
 @Component({
   selector: 'app-list',
@@ -48,12 +50,14 @@ export class ListComponent implements OnInit {
   }
 
   getTypeUser() {
-    this.typeUser = localStorage.getItem("usuario_tipo");
+    this.typeUser = localStorage.getItem("tipo_usuario");
   }
 
   constructor(private httpMethods: HttpMethodsService,
               private router: Router,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private dialog: MatDialog,
+              ) {
   }
 
   ngOnInit() {
@@ -65,7 +69,6 @@ export class ListComponent implements OnInit {
   public seach(): void {
     this.httpMethods.get(this.pathUrlMemberPlan + `?expand=aluno&expand=plano&active=true&academia=${this.gym_id}`).subscribe((response: any) => {
       this.members = response;
-      console.log(response)
     });
   };
 
@@ -78,20 +81,26 @@ export class ListComponent implements OnInit {
   };
 
   public disable(member: Member): void {
-    if (this.gym_id) {
-      member.academia = this.gym_id;
-    } else {
-      console.error('Gym ID is missing');
-      return;
-    }
-    console.log(member);
-    this.httpMethods.disable(this.pathUrlMemberPlan, member, 'desativar_aluno').subscribe(() => {
-      this.seach();
-      let sucessMensage =  "Aluno desativado"
-      this.snackBar.open(  sucessMensage, 'Fechar', {
-        duration: 5000,
-        verticalPosition: 'top',
-      });
+    const dialogRef = this.dialog.open(ConfirmDialogComponentComponent)
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (this.gym_id) {
+          member.academia = this.gym_id;
+        } else {
+          console.error('Gym ID is missing');
+          return;
+        }
+        console.log(member);
+        this.httpMethods.disable(this.pathUrlMemberPlan, member, 'desativar_aluno').subscribe(() => {
+          this.seach();
+          let sucessMensage =  "Aluno desativado"
+          this.snackBar.open(  sucessMensage, 'Fechar', {
+            duration: 5000,
+            verticalPosition: 'top',
+          });
+        })
+      }
     })
   };
 
