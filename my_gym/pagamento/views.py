@@ -38,6 +38,9 @@ class PagamentosMensaisPorPlano(AcademiaPermissionMixin, viewsets.ModelViewSet):
             .annotate(total=Sum('valor'))
             .order_by('aluno_plano__plano__nome')
         )
+        total_sum = pagamentos.aggregate(total_sum=Sum('total'))['total_sum']
 
         return Response(
-            {"month": mes, "data": list(pagamentos)})
+            {"month": mes,
+             "data": list(pagamentos),
+             "total": total_sum})
