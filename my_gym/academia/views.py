@@ -23,17 +23,6 @@ class AcademiaViewSet( viewsets.ModelViewSet):
             usuarioacademia__usuario=self.request.user
         )
 
-    # def perform_create(self, serializer):
-    #     academia = serializer.save()
-    #
-    #     models.UsuarioAcademia.objects.create(
-    #         academia=academia,
-    #         usuario=self.request.user.usuario,
-    #         tipo_usuario=self.request.user.usuario.tipo_usuario
-    #     )
-    #
-    #     return academia
-
 
 class FrequenciaViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = models.Frequencia.objects.all()
