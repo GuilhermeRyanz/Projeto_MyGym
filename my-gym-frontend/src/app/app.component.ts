@@ -6,7 +6,6 @@ import {MatToolbar} from "@angular/material/toolbar";
 import {MatSidenav, MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
 import {MatIcon} from "@angular/material/icon";
 import {MatListItem, MatNavList} from "@angular/material/list";
-import {BreakpointObserver} from "@angular/cdk/layout";
 import {DataRowOutlet} from "@angular/cdk/table";
 
 
