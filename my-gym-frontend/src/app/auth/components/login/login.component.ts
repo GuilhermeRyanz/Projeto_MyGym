@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {EmailValidator, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {Credentials} from "../../interfaces/credentials";
 import {MatFormFieldModule} from "@angular/material/form-field";

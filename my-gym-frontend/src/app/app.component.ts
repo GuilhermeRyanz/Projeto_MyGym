@@ -33,7 +33,7 @@ export class AppComponent implements DoCheck{
 
 
 
-  constructor(private authService: AuthService, private router: Router, private observer: BreakpointObserver) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     if (this.authService.userIsAuth()) {

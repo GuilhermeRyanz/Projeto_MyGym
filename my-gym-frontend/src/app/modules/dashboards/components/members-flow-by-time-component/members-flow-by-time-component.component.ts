@@ -12,9 +12,6 @@ import {MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDat
 import {MY_DATE_FORMATS} from "../date-format";
 import {MatIconModule} from "@angular/material/icon";
 import {MatDialog} from "@angular/material/dialog";
-import {
-  ConfirmDialogComponentComponent
-} from "../../../employee/components/confirm-dialog-component/confirm-dialog-component.component";
 import {HelpMensageComponent} from "./help-mensage/help-mensage.component";
 
 @Component({
