@@ -36,4 +36,12 @@ button {
   padding: 0.75rem;
   font-size: 1rem;
   font-weight: bold;
+  border-radius: 2px;
+}
+
+.header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }

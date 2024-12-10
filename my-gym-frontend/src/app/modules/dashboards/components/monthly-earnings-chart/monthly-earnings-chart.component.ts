@@ -71,10 +71,11 @@ export class MonthlyEarningsChartComponent implements OnInit {
     const formattedDate = this.data.toISOString().slice(0, 7);
     this.httpMethods.get(this.pathUrlMonthltlyEarnings + `?month=${formattedDate}&academia=${this.gym_id}`).subscribe(
       response => {
-        console.log(response.data.total);
-        const data = response.data;
-        const totalSum = data.total;
+        console.log('API Response:', response);
 
+        const totalSum = response.total;
+
+        const chartData = response.data;
 
         this.chartOption = {
           title: {
@@ -87,7 +88,7 @@ export class MonthlyEarningsChartComponent implements OnInit {
           },
           xAxis: {
             type: 'category',
-            data: data.map((item: any) => item.planos),
+            data: chartData.map((item: any) => item.planos),
             name: 'Planos',
             nameLocation: 'middle',
             nameTextStyle: {
@@ -106,7 +107,7 @@ export class MonthlyEarningsChartComponent implements OnInit {
           },
           series: [
             {
-              data: data.map((item: any) => item.total),
+              data: chartData.map((item: any) => item.total),
               type: 'bar',
               name: 'Ganhos',
               itemStyle: {
@@ -115,7 +116,12 @@ export class MonthlyEarningsChartComponent implements OnInit {
             }
           ]
         };
+      },
+      error => {
+        console.error('Erro ao carregar dados:', error);
       }
     );
   }
+
+
 }

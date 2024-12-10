@@ -13,3 +13,14 @@ h2{
   width: 100%;
   text-align: center;
 }
+
+button {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+button.add_button {
+  margin-left: 9px;
+  border-radius: 2px;
+
+}

@@ -8,8 +8,14 @@
       <span>Usuário: {{ user }}</span>
       @if (gym_name) { <span>Academia: {{ gym_name }}</span> }
     </div>
+
+    <div class="logo-container">
+      <img src="img/MyGymLogoOnly_0003.png" width="50px">
+      <h1>MyGym</h1>
+    </div>
+
     <span class="spacer"></span>
-    <button mat-raised-button color="warn" (click)="logout()">Sair</button>
+    <button mat-raised-button class="add_button" color="warn" (click)="logout()">Sair</button>
   </mat-toolbar>
 }
 <mat-sidenav-container autosize>

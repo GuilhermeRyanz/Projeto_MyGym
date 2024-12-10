@@ -2,6 +2,11 @@
   <div class="form-container">
     <form [formGroup]="formGroup" (ngSubmit)="createAccount(formGroup.value)" class="mat-elevation-z2 form">
 
+      <div class="header">
+        <img src="img/MyGymLogoOnly_0002.png" alt="teste" height="100" width="100">
+        <h2> Junte-se ao MyGym</h2>
+      </div>
+
       <mat-form-field appearance="fill" class="email">
         <mat-label>Nome</mat-label>
         <input matInput formControlName="nome" placeholder="Digite seu Nome">
@@ -17,13 +22,16 @@
         <input matInput type="password" formControlName="password" placeholder="Digite sua senha"/>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit">Entrar</button>
+      <button mat-raised-button color="primary"  [disabled]="!formGroup.valid" type="submit">Entrar</button>
+
+      <div>
+        Já é cadastrado?
+        <a routerLink="/auth/login" class="register-link">Login</a>
+      </div>
+
     </form>
     <br>
-    <h2>
-      Já é cadastrado?
-      <a routerLink="/auth/login" class="register-link">Login</a>
-    </h2>
+
   </div>
 </div>
 <p>register works!</p>

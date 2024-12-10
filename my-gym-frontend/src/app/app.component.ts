@@ -61,9 +61,12 @@ export class AppComponent implements DoCheck{
 
       if (event instanceof NavigationEnd) {
         this.showNav = !event.url.includes('adm/');
+        this.opened = !event.url.includes('adm/');
       }
       if (event instanceof NavigationEnd){
         this.showBanner = !event.url.includes('auth/')
+        this.opened = !event.url.includes('auth/');
+
       }
 
     });

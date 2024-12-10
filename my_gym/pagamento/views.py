@@ -1,12 +1,12 @@
-from django.shortcuts import render
+from rest_framework import viewsets, permissions
+from django.db.models import Sum, F
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
-from django.db.models import Sum, F
-from plano.filters import filters, PlanoFilter
 
 from core.permissions import AcademiaPermissionMixin
 from pagamento import models, serializers
 from pagamento.models import Pagamento
+from plano.filters import PlanoFilter
 
 
 class PagamentoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):

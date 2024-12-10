@@ -6,6 +6,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
+import {NgOptimizedImage} from "@angular/common";
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ import {RouterLink} from "@angular/router";
     MatInputModule,
     MatButtonModule,
     RouterLink,
+    NgOptimizedImage,
 
   ],
   templateUrl: './login.component.html',

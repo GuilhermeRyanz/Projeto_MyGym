@@ -11,6 +11,11 @@ import {MatLabel} from "@angular/material/form-field";
 import {MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter} from "@angular/material/core";
 import {MY_DATE_FORMATS} from "../date-format";
 import {MatIconModule} from "@angular/material/icon";
+import {MatDialog} from "@angular/material/dialog";
+import {
+  ConfirmDialogComponentComponent
+} from "../../../employee/components/confirm-dialog-component/confirm-dialog-component.component";
+import {HelpMensageComponent} from "./help-mensage/help-mensage.component";
 
 @Component({
   selector: 'app-members-flow-by-time-component',
@@ -48,7 +53,10 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
   public gym_id: string | null = "";
   private pathUrlMembersFlowByTime: string = URLS.MEMBERSFLOWBYTIME;
 
-  constructor(private httpMethods: HttpMethodsService) { }
+  constructor(
+    private httpMethods: HttpMethodsService,
+    private dialog: MatDialog,
+    ) { }
 
   ngOnInit() {
     this.getIdGym();
@@ -64,6 +72,12 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  help(){
+    const dialogRef = this.dialog.open(HelpMensageComponent);
+    dialogRef.afterClosed()
+
   }
 
   search() {
@@ -88,8 +102,8 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
           legend: { data: ['Fluxo de alunos por dia', 'Fluxo de alunos por hora'] },
 
           grid: [
-            { top: '10%', left: '5%', right: '5%', bottom: '50%' }, // Grid superior
-            { top: '60%', left: '5%', right: '5%', bottom: '10%' }, // Grid inferior
+            { top: '10%', left: '5%', right: '5%', bottom: '50%' },
+            { top: '60%', left: '5%', right: '5%', bottom: '10%' },
           ],
           xAxis: [
             {
