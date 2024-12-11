@@ -42,7 +42,8 @@ class AcademiaViewSet(viewsets.ModelViewSet):
                 for plano in planos:
                     aluno_plano = AlunoPlano.objects.filter(plano=plano, active=True)
                     aluno_plano.update(active=False)
-                    aluno_plano.plano.update(active=False)
+                    plano.active = False
+                    plano.save()
 
 
 
