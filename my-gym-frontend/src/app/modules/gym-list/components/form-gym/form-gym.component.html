@@ -28,7 +28,7 @@
     @if(action!=="create"){<button mat-icon-button (click)="toggleLock()" color="warn" type="button">
       <mat-icon>{{ isUnlocked ? 'lock_open' : 'lock' }}</mat-icon>
     </button>}
-    @if(action!=="create"){<button (click)="delete(formGroup.value.id)" [disabled]="!isUnlocked" mat-raised-button color="warn" type="button" class="delete">Deletar</button>}
+    @if(action!=="create"){<button (click)="disable(formGroup.value)" [disabled]="!isUnlocked" mat-raised-button color="warn" type="button" class="delete">Deletar</button>}
 
   </form>
 </div>
