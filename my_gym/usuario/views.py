@@ -1,8 +1,11 @@
+from itertools import filterfalse
 from os import error
+from rest_framework.decorators import action
+from usuario import params_serializer
 
 from django.core.exceptions import PermissionDenied
 from django_filters.rest_framework.backends import DjangoFilterBackend
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -25,22 +28,61 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             return [AllowAny()]
         return [permissions.IsAuthenticated()]
 
-    #
-    # def perform_create(self, serializer):
-    #
-    #     tipo_usuario = self.request.data.get('tipo_usuario')
-    #     if tipo_usuario:
-    #         usuario = serializer.save(tipo_usuario=tipo_usuario)
-    #
-    #         if tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
-    #             academia_id = self.request.data.get('academia')
-    #             if academia_id:
-    #                 UsuarioAcademia.objects.get_or_create(usuario=usuario, academia_id=academia_id, tipo_usuario=tipo_usuario)
-    #             else:
-    #                 raise PermissionDenied ("Academia Necessaria para cadastrar funcionarios")
-    #
-    #         return usuario
+    @action(detail=True, methods=['post'])
+    def desativar_usuario(self, request, pk=None):
 
+        if request.user.usuario.tipo_usuario == "A":
+            return Response(
+                {'erro': 'Seu cargo não tem permissão para desativar outros usuários.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        try:
+
+            usuario_academia = UsuarioAcademia.objects.get(academia__usuarioacademia__usuario=request.user.usuario, usuario_id=pk)
+
+            usuario_academia.active = False
+            usuario_academia.save()
+
+            return Response(
+                {
+                    'status': 'usuario desativado',
+                },
+                status=status.HTTP_200_OK
+            )
+
+        except UsuarioAcademia.DoesNotExist:
+            return Response({'erro': "Usuario não esta ligado a essa academia."}, status=403)
+
+    @action(detail=False, methods=['post'])
+    def alterar_academia(self, request, *args, **kwargs):
+        ps = params_serializer.AlterarAcademiaParamSerializer(data=request.data)
+        ps.is_valid(raise_exception=True)
+        academia, usuario = ps.validated_data.values()
+
+        UsuarioAcademia.objects.filter(
+            usuario=usuario,
+            active=True
+        ).update(active=False)
+
+        usuario_academia, created = UsuarioAcademia.objects.update_or_create(
+            usuario=usuario,
+            academia=academia,
+            defaults={
+                'active': True,
+                'tipo_usuario': request.data['tipo_usuario'],
+            }
+        )
+
+        if "password" in request.data:
+            usuario.set_password(request.data["password"])
+        if "tipo_usuario" in request.data:
+            usuario.tipo_usuario = request.data["tipo_usuario"]
+        usuario.save()
+        if "nome" in request.data:
+            usuario.nome = request.data["nome"]
+
+        return Response(data={'status': 'Usuario vinculado a academia'}, status=status.HTTP_200_OK)
 
 
 class AuthTokenView(APIView):
@@ -69,7 +111,7 @@ class AuthTokenView(APIView):
                 'tipo_usuario': usuario.tipo_usuario
             })
         elif tipo_usuario in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE]:
-            usuario_academia = UsuarioAcademia.objects.filter(usuario=usuario).first()
+            usuario_academia = UsuarioAcademia.objects.filter(usuario=usuario, active=True).first()
             if usuario_academia:
                 academia = usuario_academia.academia.id
                 academia_nome = usuario_academia.academia.nome

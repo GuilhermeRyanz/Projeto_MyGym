@@ -107,7 +107,7 @@ export class FormComponent implements OnInit {
       this.httpMethods.get(this.pathUrlMember + `?email=${member.email}`).subscribe((response: any) => {
         if (response && response.length > 0) {
           this.router.navigate([`/member/form/${response[0].id}`]);
-          const userExistMessage = 'O usuário com esse e-mail já existe. Altere apenas seu plano.';
+          const userExistMessage = 'O usuário já existe no sistema. Altere apenas seu plano.';
           this.snackBar.open(userExistMessage, 'Fechar', {
             duration: 5000,
             verticalPosition: 'top',

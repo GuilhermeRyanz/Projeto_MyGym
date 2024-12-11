@@ -1,18 +1,16 @@
+from datetime import timedelta
+
+from django.db.models import F, Count
+from django.utils.timezone import now
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from datetime import timedelta
-from django.utils.timezone import now
-from django.db.models import F, Count
 
-import aluno
+from aluno.filters import AlunoPlanoFilter
 from aluno.models import AlunoPlano
 from core.permissions import AcademiaPermissionMixin
 from plano import models, serializers, filters
-from aluno.filters import AlunoPlanoFilter
-from plano.models import Plano
-from plano.serializers import PlanoSerializer
 
 
 # Create your views here.
@@ -22,9 +20,6 @@ class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     serializer_class = serializers.PlanoSerializer
     filter_backends = [DjangoFilterBackend, ]
     filterset_class = filters.PlanoFilter
-
-    # def perform_create(self, serializer):
-    #     super().perform_create(serializer)
 
     def get_queryset(self):
         return models.Plano.objects.filter(

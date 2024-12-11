@@ -64,15 +64,9 @@ class UsuarioSerializer(serializers.ModelSerializer):
         if 'tipo_usuario' in validated_data:
             instance.tipo_usuario = validated_data.get('tipo_usuario', instance.tipo_usuario)
 
+        if "nome" in validated_data:
+            instance.nome = validated_data.get('nome', instance.nome)
+
         instance.save()
 
         return instance
-
-    def delete(self, instance):
-        request = self.context.get('request')
-        user_type = request.user.usuario.tipo_usuario
-
-        if user_type == Usuario.TipoUsuario.ATENDENTE:
-            raise serializers.ValidationError("Esse tipo de usuário não pode apagar outros.")
-
-        instance.delete()

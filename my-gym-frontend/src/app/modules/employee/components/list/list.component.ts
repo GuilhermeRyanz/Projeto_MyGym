@@ -16,17 +16,17 @@ import {MatToolbar} from "@angular/material/toolbar";
 @Component({
   selector: 'app-list',
   standalone: true,
-    imports: [
-        MatListModule,
-        MatIconModule,
-        MatButtonModule,
-        MatLine,
-        MatCard,
-        MatCardContent,
-        MatCardSubtitle,
-        MatCardActions,
-        MatToolbar
-    ],
+  imports: [
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
+    MatLine,
+    MatCard,
+    MatCardContent,
+    MatCardSubtitle,
+    MatCardActions,
+    MatToolbar
+  ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
@@ -47,7 +47,7 @@ export class ListComponent implements OnInit {
     private httpMethods: HttpMethodsService,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
   }
 
@@ -58,13 +58,13 @@ export class ListComponent implements OnInit {
     this.getTypeUser()
   }
 
-  getTypeUser(){
+  getTypeUser() {
     this.typeUser = localStorage.getItem("tipo_usuario");
   }
 
 
   public seach(): void {
-    this.httpMethods.get(this.pathUrlEmployee + `?academia=${(this.gym_id)}`).subscribe((response: any) => {
+    this.httpMethods.get(this.pathUrlEmployee + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
       this.employers = response;
       console.log(response);
     });
@@ -78,23 +78,40 @@ export class ListComponent implements OnInit {
     this.router.navigate([`/employee/form/${employee.id}`]).then();
   }
 
-  public delete(id: number): void {
+  // public delete(id: number): void {
+  //   const dialogRef = this.dialog.open(ConfirmDialogComponentComponent);
+  //
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result) {
+  //       let sucessMensage = "Funcionario apagado"
+  //       this.httpMethods.delete(this.pathUrlEmployee, id).subscribe(() => {
+  //         this.seach();
+  //         this.snackBar.open(sucessMensage, "fechar", {
+  //           duration: 5000,
+  //           verticalPosition: 'top',
+  //         })
+  //       })
+  //     }
+  //   })
+  // }
+
+  public disable(employee: Employee): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponentComponent);
+    const path: string = 'desativar_usuario'
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let sucessMensage =  "Funcionario apagado"
-        this.httpMethods.delete(this.pathUrlEmployee, id).subscribe(() => {
-          this.seach();
-          this.snackBar.open(sucessMensage, "fechar", {
-            duration: 5000,
-            verticalPosition: 'top',
-          })
-
+        let sucessMensage = "Funcionario apagado"
+        this.httpMethods.disable(this.pathUrlEmployee, employee, path).subscribe(() => {
+          this.seach()
+        })
+        this.snackBar.open(sucessMensage, "fechar", {
+          duration: 5000,
+          verticalPosition: 'top',
         })
       }
     })
 
-
   }
+
 }
