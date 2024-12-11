@@ -2,7 +2,10 @@
   <mat-card-header>
     <mat-card-title>
       Distribuição de alunos por plano
+      <div class="help-icon" (click)="help()">
+        <mat-icon>help</mat-icon>
+      </div>
     </mat-card-title>
   </mat-card-header>
-  <div echarts [options]="chartOption" style="height: 400px;"></div>
+    <div echarts [options]="chartOption" style="height: 400px;"></div>
 </mat-card>

@@ -3,6 +3,9 @@ import { URLS } from "../../../../app.urls";
 import { HttpMethodsService } from "../../../../shared/services/httpMethods/http-methods.service";
 import { NgxEchartsDirective } from "ngx-echarts";
 import { MatCard, MatCardHeader, MatCardTitle } from "@angular/material/card";
+import {MatDialog} from "@angular/material/dialog";
+import {MatIcon} from "@angular/material/icon";
+import {HelpMensageComponent} from "./help-mensage/help-mensage.component";
 
 @Component({
   selector: 'app-plans-with-new-members-component',
@@ -11,7 +14,8 @@ import { MatCard, MatCardHeader, MatCardTitle } from "@angular/material/card";
     MatCard,
     MatCardHeader,
     MatCardTitle,
-    NgxEchartsDirective
+    NgxEchartsDirective,
+    MatIcon
   ],
   templateUrl: './plans-with-new-members-component.component.html',
   styleUrl: './plans-with-new-members-component.component.css'
@@ -22,7 +26,10 @@ export class PlansWithNewMembersComponentComponent implements OnInit {
   private gym_id: string | null = "";
   public chartOption: any;
 
-  constructor(private httpMethods: HttpMethodsService) { }
+  constructor(
+    private httpMethods: HttpMethodsService,
+    private dialog: MatDialog,
+  ) { }
 
   ngOnInit() {
     this.getIdGym();
@@ -31,6 +38,11 @@ export class PlansWithNewMembersComponentComponent implements OnInit {
 
   private getIdGym(): void {
     this.gym_id = localStorage.getItem("academia");
+  }
+
+  help(): void{
+    const dialogRef = this.dialog.open(HelpMensageComponent);
+    dialogRef.afterClosed()
   }
 
   search(): void {
@@ -42,7 +54,7 @@ export class PlansWithNewMembersComponentComponent implements OnInit {
         this.chartOption = {
           tooltip: {
             trigger: 'item',
-            formatter: "{b}: {c} alunos"
+            formatter: "{b}: {c} novos alunos"
           },
           series: [{
             name: 'Novos Alunos por Plano',

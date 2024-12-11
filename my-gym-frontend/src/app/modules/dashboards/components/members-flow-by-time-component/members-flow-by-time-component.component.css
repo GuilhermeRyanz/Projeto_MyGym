@@ -1,11 +1,17 @@
 .members-flow-by-time .date-inputs {
   display: flex;
-  gap: 1rem;
+  gap: 9rem;
   margin-top: 1rem;
 }
 
 .members-flow-by-time .date-inputs mat-form-field {
   flex: 1;
+}
+
+mat-card-content {
+  display: flex;
+  margin-top: 12px;
+
 }
 
 .help-icon mat-icon {
@@ -34,6 +40,13 @@ mat-card-title {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.help-icon:hover{
+  opacity: 0.7;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  color: #b0bec5;
 }
 
 .help-icon mat-icon {

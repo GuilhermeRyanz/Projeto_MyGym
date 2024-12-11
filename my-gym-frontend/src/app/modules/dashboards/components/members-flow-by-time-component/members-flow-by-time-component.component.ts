@@ -76,7 +76,6 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
     dialogRef.afterClosed()
 
   }
-
   search() {
     let formattedBeginDate = this.formatDate(this.beginDate);
     let formattedEndDate = this.formatDate(this.endDate);

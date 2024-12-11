@@ -16,6 +16,7 @@ import {MatList, MatListSubheaderCssMatStyler} from "@angular/material/list";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatRadioButton} from "@angular/material/radio";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-member-plan',
@@ -51,7 +52,10 @@ export class MemberPlanComponent implements OnInit {
     this.gym_id = localStorage.getItem("academia")
   }
 
-  constructor(private httpMethods: HttpMethodsService, private router: Router) {
+  constructor(private httpMethods: HttpMethodsService,
+              private router: Router,
+              private dialog: MatDialog
+  ) {
   }
 
   ngOnInit() {

@@ -13,8 +13,8 @@ import {MatButton} from "@angular/material/button";
     MatDialogClose
   ],
   template:`
-    <h1 mat-dialog-title>Graficos de alunos por dia e hora</h1>
-    <div mat-dialog-content>Esse grafico mostram a quantidade de alunos com base na hora e nos dias que realizou seu check-in.</div>
+    <h1 mat-dialog-title>Grafico planos com novos alunos</h1>
+    <div mat-dialog-content>Esse grafico mostra os planos em que houve um aumento no numeros de alunos nos ultimos 30 dias.</div>
     <div mat-dialog-actions>
     </div>
   `,

@@ -13,13 +13,11 @@ import {MatButton} from "@angular/material/button";
     MatDialogClose
   ],
   template:`
-    <h1 mat-dialog-title>Graficos de alunos por dia e hora</h1>
-    <div mat-dialog-content>Esse grafico mostram a quantidade de alunos com base na hora e nos dias que realizou seu check-in.</div>
+    <h1 mat-dialog-title>Gráfico de distribuição de alunos por plano </h1>
+    <div mat-dialog-content>Esse grafico mostram a quantidade de alunos dividos por planos ativos na academia.</div>
     <div mat-dialog-actions>
     </div>
   `,
   styleUrl: './help-mensage.component.css'
 })
-export class HelpMensageComponent {
-
-}
+export class HelpMensageComponent {}

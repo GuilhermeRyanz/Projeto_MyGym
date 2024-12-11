@@ -39,6 +39,13 @@ class AcademiaSerializer(serializers.ModelSerializer,):
                 raise serializers.ValidationError("Já existe uma academia com esse email cadastrado")
         return value
 
+    def delete(self, value):
+        request = self.context.get('request')
+
+
+
+
+
 
 
 class FrequenciaSerializer(serializers.ModelSerializer):

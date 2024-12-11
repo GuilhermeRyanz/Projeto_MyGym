@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
     { title: 'Planos', description: 'Veja os planos ativos', route: 'plan/list', roles: ['A'] },
     { title: 'Pagamentos', description: 'Registre os pagamentos dos alunos.', route: 'payment/paymentRegistration', roles: ['D','G','A'] },
     { title: 'Funcionários', description: 'Cadastre e gerencie os funcionários.', route: 'employee/list', roles: ['D', 'G'] },
-    { title: 'Check-in', description: 'Realize o check-in de um aluno', route: 'check-in/register.', roles: ['D','G','A'] },
+    { title: 'Check-in', description: 'Realize o check-in de um aluno.', route: 'check-in/register.', roles: ['D','G','A'] },
     { title: 'Academias', description: 'Selecione outra academia.', route: 'adm/gym/list', roles: ['D'] },
     { title: 'Dashboards', description: 'Veja graficos referentes ao desenpenho da academia.', route: 'dashboards/dashboard', roles: ['D', 'G'] },
 
