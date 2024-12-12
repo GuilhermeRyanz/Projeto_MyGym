@@ -12,7 +12,6 @@ class PlanoSerializer(serializers.ModelSerializer):
     preco = serializers.DecimalField(max_digits=10, decimal_places=2)
     descricao = serializers.CharField(default="Acesso total áacademia por um mes")
     duracao = serializers.IntegerField(default=1)
-    # tipo_acesso = serializers.CharField(default="Total")
     academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all())
 
     class Meta:
@@ -43,7 +42,7 @@ class PlanosAlunosAtivosSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
 
         if request and request.user.usuario.tipo_usuario not in ["G", "D"]:
-            raise ValidationError("Tipo de usuário inválido para essa funcionalidade.")
+            raise ValidationError({"academia": "Tipo de usuário inválido para essa funcionalidade."})
 
         academia = request.query_params.get('academia')
         if not academia:
