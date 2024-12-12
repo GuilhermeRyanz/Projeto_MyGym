@@ -16,6 +16,7 @@ import {MatList, MatListSubheaderCssMatStyler} from "@angular/material/list";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatRadioButton} from "@angular/material/radio";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-member-plan',
@@ -51,7 +52,10 @@ export class MemberPlanComponent implements OnInit {
     this.gym_id = localStorage.getItem("academia")
   }
 
-  constructor(private httpMethods: HttpMethodsService, private router: Router) {
+  constructor(private httpMethods: HttpMethodsService,
+              private router: Router,
+              private snackBar: MatSnackBar
+  ) {
   }
 
   ngOnInit() {
@@ -67,7 +71,6 @@ export class MemberPlanComponent implements OnInit {
   public seach(): void {
     this.httpMethods.get(this.pathUrlPlan + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
       this.plans = response
-      console.log(response);
     });
   }
 
@@ -79,15 +82,15 @@ export class MemberPlanComponent implements OnInit {
       academia: plan.academia
 
     }
+    this.httpMethods.post(this.pathUrlPlanMember + 'alterar_plano/', new_body).subscribe(() => {
+      const sucessMensage = "Aluno vinculado a plano"
+      this.snackBar.open(sucessMensage, 'Fechar', {
+        duration: 5000,
+        verticalPosition: 'top',
+      });
+      this.router.navigate(['/member/list/']);
 
-    console.log(`aluno` ,this.member?.id)
-
-    this.httpMethods.post(this.pathUrlPlanMember + 'alterar_plano/', new_body).subscribe((response: any) => {
-      console.log(response);
     })
-  }
-  public return(){
-    this.router.navigate(['/member/list/'])
   }
 
 }

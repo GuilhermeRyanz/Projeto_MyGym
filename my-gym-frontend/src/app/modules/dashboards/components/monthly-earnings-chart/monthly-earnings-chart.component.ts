@@ -14,6 +14,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgxEchartsDirective } from "ngx-echarts";
 import {MatNativeDateModule} from "@angular/material/core";
 import {DatePipe} from "@angular/common";
+import {MatIcon} from "@angular/material/icon";
+import {MatDialog} from "@angular/material/dialog";
+import {HelpMensageComponent} from "./help-mensage/help-mensage.component";
 
 
 @Component({
@@ -36,7 +39,8 @@ import {DatePipe} from "@angular/common";
     MatCardHeader,
     MatCardContent,
     MatDatepickerModule,
-    DatePipe
+    DatePipe,
+    MatIcon
   ],
   templateUrl: './monthly-earnings-chart.component.html',
   styleUrl: './monthly-earnings-chart.component.css',
@@ -50,7 +54,10 @@ export class MonthlyEarningsChartComponent implements OnInit {
   public chartOption: any;
   public data: Date = new Date();
 
-  constructor(private httpMethods: HttpMethodsService,) { }
+  constructor(
+    private httpMethods: HttpMethodsService,
+    private dialog: MatDialog,
+    ) { }
 
   ngOnInit() {
     this.getIdGym();
@@ -65,6 +72,11 @@ export class MonthlyEarningsChartComponent implements OnInit {
 
   private getIdGym(): void {
     this.gym_id = localStorage.getItem("academia");
+  }
+
+  help(): void{
+    const dialogRef = this.dialog.open(HelpMensageComponent);
+    dialogRef.afterClosed()
   }
 
   search(): void {

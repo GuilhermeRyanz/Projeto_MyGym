@@ -13,10 +13,9 @@ import {MatButton} from "@angular/material/button";
     MatDialogClose
   ],
   template:`
-    <h1 mat-dialog-title>Confirmação</h1>
-    <div mat-dialog-content>Esse grafico mostram a quantidade de alunos com base na hora e no dias que realizou seu chack</div>
+    <h1 mat-dialog-title>Graficos de alunos por dia e hora</h1>
+    <div mat-dialog-content>Esse grafico mostram a quantidade de alunos com base na hora e nos dias que realizou seu check-in.</div>
     <div mat-dialog-actions>
-      <button mat-button color="warn" [mat-dialog-close]="true">Ok</button>
     </div>
   `,
   styleUrl: './help-mensage.component.css'

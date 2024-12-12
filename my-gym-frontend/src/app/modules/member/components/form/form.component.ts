@@ -85,7 +85,7 @@ export class FormComponent implements OnInit {
 
 
       if (!this.created) {
-        this.title = "Edicao de Aluno"
+        this.title = "Edição de Aluno"
         this.httpMethods.get(this.pathUrlMember + `${this.action}/`).subscribe((response: any) => {
           this.obj = response
           this.formGroup.setValue({
@@ -107,7 +107,7 @@ export class FormComponent implements OnInit {
       this.httpMethods.get(this.pathUrlMember + `?email=${member.email}`).subscribe((response: any) => {
         if (response && response.length > 0) {
           this.router.navigate([`/member/form/${response[0].id}`]);
-          const userExistMessage = 'O usuário com esse e-mail já existe. Altere apenas seu plano.';
+          const userExistMessage = 'O usuário já existe no sistema. Altere apenas seu plano.';
           this.snackBar.open(userExistMessage, 'Fechar', {
             duration: 5000,
             verticalPosition: 'top',
@@ -125,6 +125,11 @@ export class FormComponent implements OnInit {
       })
     } else {
       this.httpMethods.patch(`${this.pathUrlMember}`, member).subscribe(() => {
+        const sucessMenssage = 'Dados do aluno atualizados'
+        this.snackBar.open(sucessMenssage, 'O usuário', {
+          duration: 5000,
+          verticalPosition: 'top',
+        })
         this.obj = member;
       });
     }

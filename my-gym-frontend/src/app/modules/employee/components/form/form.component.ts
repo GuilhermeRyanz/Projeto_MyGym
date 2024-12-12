@@ -10,6 +10,8 @@ import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-m
 import {Employee} from "../../interfaces/employee";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatDialog} from "@angular/material/dialog";
+import {UserRelinkConfirmationComponent} from "../user-relink-confirmation/user-relink-confirmation.component";
 
 @Component({
   selector: 'app-form',
@@ -49,7 +51,8 @@ export class FormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {
 
     this.formGroup = this.formBuilder.group({
@@ -98,14 +101,34 @@ export class FormComponent implements OnInit {
 
   public saveOrUpdate(employee: Employee) {
     if (this.created) {
-      let sucessMensagem = 'Funcionario cadastrado'
-      this.httpMethods.post(this.pathUrlEmployee, employee).subscribe(() => {
-        this.router.navigate(['/employee/list']).then();
-        this.snackBar.open(  sucessMensagem, 'Fechar', {
-          duration: 5000,
-          verticalPosition: 'top',
-        })
+      this.httpMethods.get(this.pathUrlEmployee + `?email=${employee.username}`).subscribe((response: any) => {
+        if (response && response.length > 0) {
+
+          const dialogoRef = this.dialog.open(UserRelinkConfirmationComponent)
+          dialogoRef.afterClosed().subscribe(result => {
+            if(result){
+            const usuario = response[0].id
+
+            const newBody = { ...employee, usuario: usuario}
+
+            this.httpMethods.post(this.pathUrlEmployee + 'alterar_academia/', newBody).subscribe(() => {
+              this.router.navigate(['/employee/list'])
+            })}
+          })
+
+        }
+        else {
+          let sucessMensagem = 'Funcionario cadastrado'
+          this.httpMethods.post(this.pathUrlEmployee, employee).subscribe(() => {
+            this.router.navigate(['/employee/list']).then();
+            this.snackBar.open(  sucessMensagem, 'Fechar', {
+              duration: 5000,
+              verticalPosition: 'top',
+            })
+          })
+        }
       })
+
     } else {
       let sucessMensagem = 'Funcionario Atualizado'
       this.httpMethods.patch(this.pathUrlEmployee, employee).subscribe(() => {

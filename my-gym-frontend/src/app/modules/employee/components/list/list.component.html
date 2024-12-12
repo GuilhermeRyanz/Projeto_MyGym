@@ -14,7 +14,7 @@
         <button [disabled]="employee.tipo_usuario == 'D' || (typeUser == 'A' )" mat-icon-button color="primary" (click)="edit(employee)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button [disabled]="employee.tipo_usuario == 'D' || (typeUser == 'A' )" mat-icon-button color="warn" (click)="delete(employee.id)">
+        <button [disabled]="employee.tipo_usuario == 'D' || (typeUser == 'A' )" mat-icon-button color="warn" (click)="disable(employee)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-card-actions>

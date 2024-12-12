@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {EmailValidator, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {Router, RouterLink} from "@angular/router";
 import {Credentials} from "../../interfaces/credentials";
@@ -18,7 +18,8 @@ import {HttpMethodsService} from "../../services/http-methods.service";
         MatInput,
         MatLabel,
         ReactiveFormsModule,
-        RouterLink
+        RouterLink,
+        MatError
     ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'

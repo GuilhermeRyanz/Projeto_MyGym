@@ -8,10 +8,15 @@ from academia import models, serializers, filters
 from academia.filters import FrequenciaFilter
 from academia.models import Frequencia, Academia
 from academia.serializers import FrequenciaSerializer
+from aluno.models import AlunoPlano
 from core.permissions import AcademiaPermissionMixin
+from rest_framework.decorators import action
+from rest_framework import status
+from plano import models as plano
+from plano.models import Plano
 
 
-class AcademiaViewSet( viewsets.ModelViewSet):
+class AcademiaViewSet(viewsets.ModelViewSet):
     queryset = models.Academia.objects.all()
     filter_backends = [DjangoFilterBackend, ]
     filterset_class = filters.AcademiaFilter
@@ -20,16 +25,48 @@ class AcademiaViewSet( viewsets.ModelViewSet):
 
     def get_queryset(self):
         return models.Academia.objects.filter(
-            usuarioacademia__usuario=self.request.user
+            usuarioacademia__usuario=self.request.user,
+            usuarioacademia__active=True
         )
+
+    @action(detail=True, methods=['POST'])
+    def desativar_academia(self, request, pk=None):
+        try:
+            academia = models.Academia.objects.get(pk=pk)
+
+
+            try:
+                usuario_academia = models.UsuarioAcademia.objects.filter(academia=academia, active=True)
+                usuario_academia.update(active=False)
+                planos = Plano.objects.filter(academia=academia, active=True)
+                for plano in planos:
+                    aluno_plano = AlunoPlano.objects.filter(plano=plano, active=True)
+                    aluno_plano.update(active=False)
+                    plano.active = False
+                    plano.save()
+
+
+
+                return Response(
+                    {
+                        'status': 'Academia desativada',
+                    },
+                    status=status.HTTP_200_OK
+                )
+            except models.Academia.DoesNotExist:
+                return Response({'erro': "Academia não existe"})
+
+        except Exception as e:
+            return Response({'erro': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 class FrequenciaViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = models.Frequencia.objects.all()
     serializer_class = serializers.FrequenciaSerializer
-    filter_backends = [DjangoFilterBackend,]
+    filter_backends = [DjangoFilterBackend, ]
     filterset_class = filters.FrequenciaFilter
-    permission_classes = [permissions.IsAuthenticated,]
+    permission_classes = [permissions.IsAuthenticated, ]
 
     def get_queryset(self):
         return models.Academia.objects.filter(
@@ -45,7 +82,7 @@ class FrequenciaDiaHoraViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
 
-        academia_id= self.request.query_params.get('academia')
+        academia_id = self.request.query_params.get('academia')
 
         academias = Academia.objects.filter(usuarioacademia__usuario=self.request.user)
 

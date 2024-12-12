@@ -5,16 +5,20 @@ import {NgxEchartsDirective, provideEcharts} from "ngx-echarts";
 import {MAT_DATE_FORMATS, MAT_DATE_LOCALE, provideNativeDateAdapter} from "@angular/material/core";
 import {MY_DATE_FORMATS} from "../date-format";
 import {MatCard, MatCardHeader, MatCardModule} from "@angular/material/card";
+import {MatIcon} from "@angular/material/icon";
+import {MatDialog} from "@angular/material/dialog";
+import {HelpMensageComponent} from "./help-mensage/help-mensage.component";
 
 @Component({
   selector: 'app-member-plans-overview-component',
   standalone: true,
-  imports: [
-    MatCard,
-    MatCardHeader,
-    NgxEchartsDirective,
-    MatCardModule,
-  ],
+    imports: [
+        MatCard,
+        MatCardHeader,
+        NgxEchartsDirective,
+        MatCardModule,
+        MatIcon,
+    ],
   templateUrl: './member-plans-overview-component.component.html',
   styleUrl: './member-plans-overview-component.component.css',
   providers: [
@@ -32,7 +36,10 @@ export class MemberPlansOverviewComponentComponent implements OnInit {
   private pathUrlMemberPlanOverView: string = URLS.MEMBERPLANOVERVIEW;
   public chartOption: any;
 
-  constructor(private httpMethods: HttpMethodsService) { }
+  constructor(
+    private httpMethods: HttpMethodsService,
+    private dialog: MatDialog,
+  ) { }
 
   ngOnInit() {
     this.getIdGym();
@@ -41,6 +48,12 @@ export class MemberPlansOverviewComponentComponent implements OnInit {
 
   private getIdGym(): void {
     this.gym_id = localStorage.getItem("academia");
+  }
+
+  help(){
+    const dialogRef = this.dialog.open(HelpMensageComponent);
+    dialogRef.afterClosed()
+
   }
 
   search(): void {

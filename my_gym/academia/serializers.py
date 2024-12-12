@@ -40,7 +40,6 @@ class AcademiaSerializer(serializers.ModelSerializer,):
         return value
 
 
-
 class FrequenciaSerializer(serializers.ModelSerializer):
     id = serializers.CharField(read_only=True)
     academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all())
