@@ -59,7 +59,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
         try:
 
             if request.user.usuario.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
-                raise serializers.ValidationError("Esse tipo de usuario nao pode editar outros")
+                raise serializers.ValidationError("error","Esse tipo de usuario nao pode editar outros")
 
             instance.username = validated_data.get('username', instance.username)
 

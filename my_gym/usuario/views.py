@@ -61,7 +61,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
         if usuario.tipo_usuario == Usuario.TipoUsuario.DONO:
             raise ValidationError(
-                "usuario do tipo dono não pode ter sua academia alterada"
+                "error","usuario do tipo dono não pode ter sua academia alterada"
             )
 
 
