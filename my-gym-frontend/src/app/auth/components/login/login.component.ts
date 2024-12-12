@@ -44,11 +44,7 @@ import {NgOptimizedImage} from "@angular/common";
 
 
     public authentic(credentials: Credentials): void {
-      this.authService.login(credentials).subscribe(
-        (error: any) => {
-          console.log(error);
-        }
-      )
+      this.authService.login(credentials).subscribe()
     }
 
 
