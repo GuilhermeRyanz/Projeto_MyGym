@@ -125,6 +125,11 @@ export class FormComponent implements OnInit {
       })
     } else {
       this.httpMethods.patch(`${this.pathUrlMember}`, member).subscribe(() => {
+        const sucessMenssage = 'Dados do aluno atualizados'
+        this.snackBar.open(sucessMenssage, 'O usuário', {
+          duration: 5000,
+          verticalPosition: 'top',
+        })
         this.obj = member;
       });
     }

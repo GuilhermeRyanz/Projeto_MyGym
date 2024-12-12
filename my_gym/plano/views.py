@@ -12,9 +12,6 @@ from aluno.models import AlunoPlano
 from core.permissions import AcademiaPermissionMixin
 from plano import models, serializers, filters
 
-
-# Create your views here.
-
 class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = models.Plano.objects.all()
     serializer_class = serializers.PlanoSerializer

@@ -48,7 +48,7 @@ export class ListComponent implements OnInit {
   public seach(): void {
     this.httpMethods.get(this.pathUrlPlan + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
       this.plans = response
-      console.log(response);
+
     });
   }
 

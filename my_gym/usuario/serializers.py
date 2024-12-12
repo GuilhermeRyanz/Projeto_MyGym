@@ -1,5 +1,3 @@
-from enum import unique
-
 from django.db import IntegrityError
 from rest_framework import serializers
 from academia.models import Academia, UsuarioAcademia
@@ -44,7 +42,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
         except IntegrityError as e:
             if 'auth_user_username_key' in str(e):
-                raise serializers.ValidationError("Este email já está sendo utilizado.")
+                raise serializers.ValidationError("email", "Este email já está sendo utilizado.")
             raise serializers.ValidationError(f"Erro inesperado: {str(e)}")
 
         return usuario
@@ -53,20 +51,32 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
         request = self.context.get('request')
 
-        if request.user.usuario.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
-            raise serializers.ValidationError("Esse tipo de usuario nao pode editar outros")
+        usuario = self.instance
 
-        instance.username = validated_data.get('username', instance.username)
+        if usuario.tipo_usuario == Usuario.TipoUsuario.DONO:
+            raise serializers.ValidationError("Erro tipo dono não pode ser alterado.")
 
-        if 'password' in validated_data:
-            instance.set_password(validated_data['password'])
+        try:
 
-        if 'tipo_usuario' in validated_data:
-            instance.tipo_usuario = validated_data.get('tipo_usuario', instance.tipo_usuario)
+            if request.user.usuario.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
+                raise serializers.ValidationError("Esse tipo de usuario nao pode editar outros")
 
-        if "nome" in validated_data:
-            instance.nome = validated_data.get('nome', instance.nome)
+            instance.username = validated_data.get('username', instance.username)
 
-        instance.save()
+            if 'password' in validated_data:
+                instance.set_password(validated_data['password'])
+
+            if 'tipo_usuario' in validated_data:
+                instance.tipo_usuario = validated_data.get('tipo_usuario', instance.tipo_usuario)
+
+            if "nome" in validated_data:
+                instance.nome = validated_data.get('nome', instance.nome)
+
+            instance.save()
+
+        except IntegrityError as e:
+            if 'auth_user_username_key' in str(e):
+                raise serializers.ValidationError("Este email já está sendo utilizado.")
+            raise serializers.ValidationError(f"Erro inesperado: {str(e)}")
 
         return instance

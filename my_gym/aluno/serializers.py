@@ -2,6 +2,7 @@ from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
 
 from aluno import models
+from aluno.models import Aluno
 from plano import models as plano_models
 from plano.serializers import PlanoSerializer
 
@@ -16,7 +17,24 @@ class AlunoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Aluno
-        fields = ['active', 'id', 'nome', 'email', 'telefone', 'matricula', "data_nascimento", ]
+        fields = ['active', 'id', 'nome', 'email', 'telefone', 'matricula', "data_nascimento",]
+
+    def update(self, instance, validated_data):
+        email = validated_data.get('email')
+
+        if email and instance.email != email:
+            if Aluno.objects.filter(email=email).exclude(id=instance.id).exists():
+                raise serializers.ValidationError(
+                    {"email": "Já existe um aluno cadastrado com esse email"}
+                )
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
+
+
 
 
 class AlunoPlanoSerializer(FlexFieldsModelSerializer):

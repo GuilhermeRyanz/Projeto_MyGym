@@ -1,9 +1,7 @@
-from itertools import filterfalse
-from os import error
 from rest_framework.decorators import action
 from usuario import params_serializer
 
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import viewsets, permissions, status
 from rest_framework.permissions import AllowAny
@@ -56,16 +54,23 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def alterar_academia(self, request, *args, **kwargs):
+
         ps = params_serializer.AlterarAcademiaParamSerializer(data=request.data)
         ps.is_valid(raise_exception=True)
         academia, usuario = ps.validated_data.values()
+
+        if usuario.tipo_usuario == Usuario.TipoUsuario.DONO:
+            raise ValidationError(
+                "usuario do tipo dono não pode ter sua academia alterada"
+            )
+
 
         UsuarioAcademia.objects.filter(
             usuario=usuario,
             active=True
         ).update(active=False)
 
-        usuario_academia, created = UsuarioAcademia.objects.update_or_create(
+        UsuarioAcademia.objects.update_or_create(
             usuario=usuario,
             academia=academia,
             defaults={
@@ -78,9 +83,11 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             usuario.set_password(request.data["password"])
         if "tipo_usuario" in request.data:
             usuario.tipo_usuario = request.data["tipo_usuario"]
-        usuario.save()
         if "nome" in request.data:
             usuario.nome = request.data["nome"]
+
+        usuario.save()
+
 
         return Response(data={'status': 'Usuario vinculado a academia'}, status=status.HTTP_200_OK)
 

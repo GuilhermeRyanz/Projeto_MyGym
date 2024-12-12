@@ -66,8 +66,10 @@ export class ListComponent implements OnInit {
   public seach(): void {
     this.httpMethods.get(this.pathUrlEmployee + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
       this.employers = response;
-      console.log(response);
-    });
+    },
+      (error) => {
+        console.error("Erro ao carregar os dados do funcionarios:", error);
+      });
   }
 
   public create(): void {
