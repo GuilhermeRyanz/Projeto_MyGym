@@ -16,7 +16,6 @@ import {MatList, MatListSubheaderCssMatStyler} from "@angular/material/list";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatRadioButton} from "@angular/material/radio";
-import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -83,7 +82,7 @@ export class MemberPlanComponent implements OnInit {
       academia: plan.academia
 
     }
-    this.httpMethods.post(this.pathUrlPlanMember + 'alterar_plano/', new_body).subscribe((response: any) => {
+    this.httpMethods.post(this.pathUrlPlanMember + 'alterar_plano/', new_body).subscribe(() => {
       const sucessMensage = "Aluno vinculado a plano"
       this.snackBar.open(sucessMensage, 'Fechar', {
         duration: 5000,
