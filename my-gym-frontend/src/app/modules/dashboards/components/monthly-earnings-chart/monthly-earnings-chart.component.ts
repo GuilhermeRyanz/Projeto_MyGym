@@ -83,7 +83,6 @@ export class MonthlyEarningsChartComponent implements OnInit {
     const formattedDate = this.data.toISOString().slice(0, 7);
     this.httpMethods.get(this.pathUrlMonthltlyEarnings + `?month=${formattedDate}&academia=${this.gym_id}`).subscribe(
       response => {
-        console.log('API Response:', response);
 
         const totalSum = response.total;
 

@@ -67,6 +67,7 @@ mat-sidenav {
 }
 
 .side-nav mat-icon {
+  padding: 4px;
   margin-right: 10px;
   font-size: 20px;
   color: #4dca4f;

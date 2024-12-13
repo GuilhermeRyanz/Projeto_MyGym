@@ -12,7 +12,6 @@ from aluno.models import AlunoPlano
 from core.permissions import AcademiaPermissionMixin
 from rest_framework.decorators import action
 from rest_framework import status
-from plano import models as plano
 from plano.models import Plano
 
 

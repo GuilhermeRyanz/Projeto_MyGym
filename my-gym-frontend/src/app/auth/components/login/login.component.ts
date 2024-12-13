@@ -38,7 +38,7 @@ import {NgOptimizedImage} from "@angular/common";
     ) {
       this.formGroup = this.formBuilder.group({
         username: ['', [Validators.email, Validators.required]],
-        password: ['', Validators.required],
+        password: ['', [Validators.required]],
       });
     }
 

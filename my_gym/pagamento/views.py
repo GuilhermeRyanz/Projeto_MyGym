@@ -24,7 +24,7 @@ class PagamentosMensaisPorPlano(AcademiaPermissionMixin, viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         academia_id = request.query_params.get('academia')
         if not academia_id:
-            return Response({"error": "O parâmetro 'academia' é obrigatório na URL."}, status=400)
+            return Response({"error": " Academia é obrigatório "}, status=400)
 
         mes = request.query_params.get('month')
 

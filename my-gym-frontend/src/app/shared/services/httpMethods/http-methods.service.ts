@@ -63,7 +63,7 @@ export class HttpMethodsService {
   isTokenExpired(): boolean {
     const token = this.authService.getToken();
     if (!token) {
-      console.warn('Token não encontrado. Considere-o expirado.');
+      console.warn('Token não encontrado.');
       return true;
     }
 
@@ -81,7 +81,7 @@ export class HttpMethodsService {
       const payload = token.split('.')[1];
       return JSON.parse(atob(payload));
     } catch (error) {
-      throw new Error('Token inválido ou não é um JWT válido.');
+      throw new Error('Token inválido.');
     }
   }
 

@@ -19,7 +19,7 @@ from usuario import filters
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all().order_by(
         Case(
-            When(tipo_usuario='D', then=Value(0)),  # Dono vem primeiro
+            When(tipo_usuario='D', then=Value(0)),
             default=Value(1),
             output_field=IntegerField()
         ),

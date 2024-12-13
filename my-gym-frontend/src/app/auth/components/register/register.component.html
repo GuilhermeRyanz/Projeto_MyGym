@@ -23,6 +23,9 @@
       <mat-form-field appearance="fill">
         <mat-label>Senha</mat-label>
         <input matInput type="password" formControlName="password" placeholder="Digite sua senha"/>
+        @if(formGroup.value.password){<mat-error>
+          tamanho mínimo de 3
+        </mat-error>}
       </mat-form-field>
 
       <button mat-raised-button color="primary"  [disabled]="!formGroup.valid" type="submit">Entrar</button>
