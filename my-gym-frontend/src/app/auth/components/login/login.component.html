@@ -7,19 +7,22 @@
       </div>
       <mat-form-field appearance="fill" class="email">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="username" placeholder="Digite seu usuário" />
-        @if(formGroup.value.username){<mat-error>
-          Email Obrigatorio
-        </mat-error>}
+        <input matInput formControlName="username" placeholder="Digite seu usuário"/>
+        @if (formGroup.get('username')?.hasError('required')) {
+          <mat-error>
+            Email Obrigatório
+          </mat-error>
+        }
+        @if (formGroup.get('username')?.hasError('email')) {
+          <mat-error>
+            Por favor, insira um email válido.
+          </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Senha</mat-label>
         <input matInput type="password" formControlName="password" placeholder="Digite sua senha" />
-        @if(formGroup.value.password){
-          <mat-error>
-          </mat-error>
-        }
       </mat-form-field>
 
       <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit">Entrar</button>

@@ -7,16 +7,8 @@
 }
 mat-form-field {
   width: 100%;
+  gap: 1rem;
   margin-bottom: 1rem;
-}
-
-form {
-  width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -37,6 +29,7 @@ button {
   font-size: 1rem;
   font-weight: bold;
   border-radius: 2px;
+  margin: 2px;
 }
 
 .header{
@@ -45,3 +38,10 @@ button {
   align-items: center;
   padding: 2rem;
 }
+
+mat-form-field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+

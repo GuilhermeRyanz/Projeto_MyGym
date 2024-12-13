@@ -5,21 +5,53 @@
     <mat-form-field appearance="fill" class="email">
       <mat-label>Nome</mat-label>
       <input matInput formControlName="nome" placeholder="Digite o nome da academia" />
+      @if(formGroup.get('nome')?.hasError('required')){<mat-error>
+        Campo Obrigatorio
+      </mat-error>}
+
+      @if(formGroup.get('nome')?.hasError('maxlength')){<mat-error>
+        Nome tem limite de 20 caracteres
+      </mat-error>}
+
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Endereco</mat-label>
       <input matInput type="text" formControlName="endereco" placeholder="Digite o endereco da academia" />
+      @if(formGroup.get('endereco')?.hasError('required')){<mat-error>
+        Campo Obrigatorio
+      </mat-error>}
+
+      @if(formGroup.get('endereco')?.hasError('maxlength')){<mat-error>
+        Endereço tem limite de 60 caracteres
+      </mat-error>}
+
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Telefone</mat-label>
       <input matInput type="tel" formControlName="telefone" placeholder="Digite o telefone da academia" />
+      @if(formGroup.get('telefone')?.hasError('required')){<mat-error>
+        Campo Obrigatorio
+      </mat-error>}
+
+      @if(formGroup.get('telefone')?.hasError('pattern')){<mat-error>
+        Número de telefone inválido
+      </mat-error>}
+
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
       <input matInput type="email" formControlName="email" placeholder="Digite o email da academia" />
+
+      @if(formGroup.get('email')?.hasError('required')){<mat-error>
+        Campo Obrigatorio
+      </mat-error>}
+
+      @if(formGroup.get('email')?.hasError('email')){<mat-error>
+        Insira um email valido
+      </mat-error>}
     </mat-form-field>
 
     <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit" class="save">Salvar</button>

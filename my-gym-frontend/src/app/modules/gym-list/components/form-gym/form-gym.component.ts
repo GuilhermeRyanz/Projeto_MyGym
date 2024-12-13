@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
@@ -21,7 +21,8 @@ import {MatIcon} from "@angular/material/icon";
     MatLabel,
     ReactiveFormsModule,
     MatIcon,
-    MatIconButton
+    MatIconButton,
+    MatError
   ],
   templateUrl: './form-gym.component.html',
   styleUrl: './form-gym.component.css'
@@ -50,9 +51,9 @@ export class FormGymComponent implements OnInit{
 
     this.formGroup = this.formBuilder.group({
       id: [],
-      nome: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
-      endereco: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(60)]],
-      telefone: ['', Validators.required],
+      nome: ['', [Validators.required, Validators.maxLength(20)]],
+      endereco: ['', [Validators.required, Validators.maxLength(60)]],
+      telefone: ['', [Validators.required,Validators.pattern('[0-9]{10,11}')]],
       email: ['', [Validators.required, Validators.email]],
 
     })
@@ -82,8 +83,6 @@ export class FormGymComponent implements OnInit{
     });
   }
 
-
-
   public saveOrUpdate(gym: Gym): void {
     if (this.created) {
       this.httpMethods.post(this.pathUrlGym, gym).subscribe(() => {
@@ -94,20 +93,6 @@ export class FormGymComponent implements OnInit{
         this.router.navigate(['/adm/gym/list']);
       });
     }
-  }
-
-  public delete(id: number): void {
-
-    const dialogRef = this.dialog.open(ConfirmDialogComponentComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            this.httpMethods.delete(URLS.GYM, id).subscribe(() => {
-              this.router.navigate(['/adm/gym/list']);
-            });
-          }
-        });
-
   }
 
   public disable(id: number):void{

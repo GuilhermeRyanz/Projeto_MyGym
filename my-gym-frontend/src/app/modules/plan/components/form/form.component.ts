@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -8,6 +8,7 @@ import {URLS} from "../../../../app.urls";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Plan} from "../../interfaces/plan";
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @Component({
   selector: 'app-form',
@@ -19,7 +20,8 @@ import {Plan} from "../../interfaces/plan";
     MatIconButton,
     MatInput,
     MatLabel,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatError
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css'
@@ -49,10 +51,10 @@ export class FormComponent implements OnInit {
 
     this.formGroup = this.formBuilder.group({
       id: [],
-      nome: ['', Validators.required],
-      preco: ['', Validators.required],
+      nome: ['', [Validators.required, Validators.maxLength(20)]],
+      preco: ['', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,2})?$')]],
       duracao: ['', Validators.required],
-      descricao: ['', Validators.required],
+      descricao: ['', [Validators.required, Validators.maxLength(80)]],
       academia: ['']
     });
 
