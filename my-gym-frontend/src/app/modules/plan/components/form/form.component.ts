@@ -8,7 +8,6 @@ import {URLS} from "../../../../app.urls";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Plan} from "../../interfaces/plan";
-import {MatExpansionModule} from "@angular/material/expansion";
 
 @Component({
   selector: 'app-form',
