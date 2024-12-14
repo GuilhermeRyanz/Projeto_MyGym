@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-pxko1^3hvt0vpe8epqqb7ubxy@$!g4_j@pc0n-_-@%bipp5f3a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -93,7 +93,7 @@ DATABASES = {
         'ENGINE' : 'django.db.backends.postgresql',
         'NAME': 'my_gym',
         'USER': 'my_gym',
-        'PASSWORD': 'postgres',
+        'PASSWORD': '123',
         'HOST' : 'postgres',
         'PORT' : '5432',
     }
@@ -154,7 +154,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(hours=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,

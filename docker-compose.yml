@@ -37,15 +37,15 @@ services:
         python run_with_cherrypy.py
       "
 
-#  nginx:
-#    image: nginx:alpine
-#    container_name: my-gym-nginx
-#    ports:
-#      - "80:80"
-#    volumes:
-#      - ./my-gym-frontend/dist/my-gym-frontend/browser:/usr/share/nginx/html
-#    depends_on:
-#      - postgres
+  nginx:
+    image: nginx:alpine
+    container_name: my-gym-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./my-gym-frontend/dist/my-gym-frontend/browser:/usr/share/nginx/html
+    depends_on:
+      - postgres
 
 volumes:
   postgres-data:
