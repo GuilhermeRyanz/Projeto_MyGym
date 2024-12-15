@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from django.db.models import F, Count
+from django.db.models import F, Count, Sum
 from django.utils.timezone import now
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import viewsets
@@ -59,7 +59,9 @@ class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
             .order_by('-novos_alunos')
         )
 
-        return Response(novos_alunos)
+        total_sum = novos_alunos.aggregate(total_sum=Sum('novos_alunos'))['total_sum']
+
+        return Response({"novos_alunos": novos_alunos, "total_sum": total_sum})
 
 
 class PlanosAlunosAtivosViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
@@ -79,5 +81,8 @@ class PlanosAlunosAtivosViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
             .annotate(total_alunos=Count('aluno'))
             .order_by('-total_alunos')
         )
+
+        total_sum = planos.aggregate(total_sum=Sum('total_alunos'))['total_sum']
+
         data = [{'plano': plano['plano__nome'], 'alunos_ativos': plano['total_alunos']} for plano in planos]
-        return Response(data)
+        return Response({"planos": data, "total_sum": total_sum})

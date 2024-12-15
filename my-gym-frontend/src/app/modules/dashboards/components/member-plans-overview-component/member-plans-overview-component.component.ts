@@ -35,6 +35,7 @@ export class MemberPlansOverviewComponentComponent implements OnInit {
   public gym_id: string | null = "";
   private pathUrlMemberPlanOverView: string = URLS.MEMBERPLANOVERVIEW;
   public chartOption: any;
+  public membersall: string | null = '0';
 
   constructor(
     private httpMethods: HttpMethodsService,
@@ -59,7 +60,8 @@ export class MemberPlansOverviewComponentComponent implements OnInit {
   search(): void {
     this.httpMethods.get(this.pathUrlMemberPlanOverView + `?academia=${this.gym_id}`).subscribe(
       response => {
-        const plans = response;
+        const plans = response.planos;
+        this.membersall = response.total_sum;
 
         if (Array.isArray(plans)) {
           const chartData = plans.map((item: any) => ({

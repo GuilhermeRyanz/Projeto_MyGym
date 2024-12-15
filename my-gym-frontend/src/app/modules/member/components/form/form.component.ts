@@ -85,7 +85,7 @@ export class FormComponent implements OnInit {
 
 
       if (!this.created) {
-        this.title = "Edição de Aluno"
+        this.title = "Edição de aluno"
         this.httpMethods.get(this.pathUrlMember + `${this.action}/`).subscribe((response: any) => {
           this.obj = response
           this.formGroup.setValue({

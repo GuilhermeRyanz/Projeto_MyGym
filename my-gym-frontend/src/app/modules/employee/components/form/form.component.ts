@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -25,7 +25,8 @@ import {UserRelinkConfirmationComponent} from "../user-relink-confirmation/user-
     MatLabel,
     ReactiveFormsModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatError
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css'
@@ -37,7 +38,7 @@ export class FormComponent implements OnInit {
   protected formGroup: FormGroup;
   private created: boolean = true
   private gymId: string | null = "";
-  protected title: string = "Cadastro de Funcionario";
+  protected title: string = "Cadastro de funcionário";
 
   getGym(): void {
     this.gymId = localStorage.getItem("academia");
@@ -59,7 +60,8 @@ export class FormComponent implements OnInit {
       id: [],
       nome: ['', Validators.required],
       username: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6),Validators.pattern('^(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$'),
+      ]],
       tipo_usuario: ['', Validators.required],
       academia: ['']
     });
@@ -83,7 +85,7 @@ export class FormComponent implements OnInit {
       this.created = !(this.action && this.action !== 'create');
 
       if (!this.created) {
-        this.title = "Edicao de Funcionario";
+        this.title = "Edição de funcionário";
         this.httpMethods.get(this.pathUrlEmployee + this.action + '/').subscribe((response: any) => {
           console.log("conteudo do carinha",response);
           this.formGroup.setValue({

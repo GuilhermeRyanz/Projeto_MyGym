@@ -4,16 +4,42 @@
     <mat-form-field appearance="fill" class="nome">
       <mat-label>Nome</mat-label>
       <input matInput formControlName="nome" placeholder="Digite o nome do funcionario" />
+      @if(formGroup.get('nome')?.hasError('required')){<mat-error>
+        Campo Obrigatorio
+      </mat-error>}
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
       <input matInput type="email" formControlName="username" placeholder="Digite o email do funcinario" />
+      @if(formGroup.get('username')?.hasError('required')){<mat-error>
+        Campo Obrigatorio
+      </mat-error>}
+
+      @if(formGroup.get('username')?.hasError('email')){<mat-error>
+        Insira um email valido
+      </mat-error>}
+
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Senha</mat-label>
       <input matInput type="password" formControlName="password" placeholder="Digite uma senha" />
+      @if (formGroup.get('password')?.hasError('required')) {
+        <mat-error>
+          Campo Obrigatorio
+        </mat-error>
+      }
+      @if (formGroup.get('password')?.hasError('minlength')){
+        <mat-error>
+          Deve conter no minimo 6 caracteres.
+        </mat-error>
+      }
+
+      @if (formGroup.get('password')?.hasError('pattern')){
+        <mat-error>
+          Deve conter um número e um caracter especial
+        </mat-error>}
     </mat-form-field>
 
     <mat-form-field appearance="fill">
