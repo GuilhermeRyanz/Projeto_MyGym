@@ -2,14 +2,13 @@
 .container {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Alterado para flex-start para começar no topo */
-  min-height: 100vh; /* Garantir que ocupe pelo menos 100% da altura da tela */
+  align-items: flex-start;
+  min-height: 100vh;
   background-color: #f4f4f9;
-  padding-top: 20px; /* Adicionar um pequeno espaçamento no topo */
-  padding-bottom: 20px; /* Garantir que o conteúdo não fique colado ao fundo */
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-/* Form styling */
 .form {
   width: 100%;
   max-width: 600px;
@@ -27,19 +26,16 @@
   margin-bottom: 20px;
 }
 
-/* Input field styling */
 mat-form-field {
   width: 100%;
   margin-bottom: 20px;
 }
 
-/* Labels styling */
 mat-label {
   font-weight: 600;
   color: #333;
 }
 
-/* Input text styles */
 input {
   font-size: 16px;
   padding: 10px;
@@ -47,7 +43,6 @@ input {
   border: 1px solid #ddd;
 }
 
-/* Button styling */
 button {
   width: 100%;
   padding: 12px;
@@ -84,7 +79,6 @@ button.delete:hover:enabled {
   background-color: #e33c3c;
 }
 
-/* Responsive form */
 @media (max-width: 600px) {
   .form {
     padding: 20px;
@@ -98,4 +92,10 @@ button.delete:hover:enabled {
     font-size: 14px;
     padding: 12px;
   }
+}
+
+mat-icon-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }

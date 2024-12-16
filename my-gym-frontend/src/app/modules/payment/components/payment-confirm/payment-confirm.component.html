@@ -25,7 +25,7 @@
         <mat-radio-button value="P">Pix</mat-radio-button>
       </mat-radio-group>
       <mat-card-actions>
-        <button mat-button (click)="confirm()">Confirmar</button>
+        <button mat-button (click)="confirm()" [disabled]="!formGroup.get('tipo_pagamento')?.value">Confirmar</button>
       </mat-card-actions>
     </form>
   </mat-card>

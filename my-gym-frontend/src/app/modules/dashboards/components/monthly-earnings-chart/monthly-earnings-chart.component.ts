@@ -17,6 +17,7 @@ import {DatePipe} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
 import {MatDialog} from "@angular/material/dialog";
 import {HelpMensageComponent} from "./help-mensage/help-mensage.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -57,6 +58,7 @@ export class MonthlyEarningsChartComponent implements OnInit {
   constructor(
     private httpMethods: HttpMethodsService,
     private dialog: MatDialog,
+    private snackBar: MatSnackBar
     ) { }
 
   ngOnInit() {
@@ -83,8 +85,15 @@ export class MonthlyEarningsChartComponent implements OnInit {
     const formattedDate = this.data.toISOString().slice(0, 7);
     this.httpMethods.get(this.pathUrlMonthltlyEarnings + `?month=${formattedDate}&academia=${this.gym_id}`).subscribe(
       response => {
-
         const totalSum = response.total;
+
+        if(totalSum<=0) {
+          const nullTotalSum = "Sem dados de pagamentos para esse data";
+          this.snackBar.open(nullTotalSum, 'fechar', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
+        }
 
         const chartData = response.data;
 
@@ -128,9 +137,6 @@ export class MonthlyEarningsChartComponent implements OnInit {
           ]
         };
       },
-      error => {
-        console.error('Erro ao carregar dados:', error);
-      }
     );
   }
 

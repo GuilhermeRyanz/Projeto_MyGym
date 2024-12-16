@@ -37,7 +37,6 @@ export class ListComponent implements OnInit {
   public seach(): void {
     this.httpMethods.get(this.pathUrlClient).subscribe((response: any) => {
       this.gyms = response;
-      console.log(response);
     });
   }
 

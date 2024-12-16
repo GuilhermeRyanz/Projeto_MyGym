@@ -14,7 +14,7 @@ import {MatButton} from "@angular/material/button";
   ],
   template:`
     <h1 mat-dialog-title>Grafico de ganhos mensais</h1>
-    <div mat-dialog-content>Esse grafico mostra a renda feita por cada um dos Planos em determinado mês, Selecione o mês e ano que deseja consultar.</div>
+    <div mat-dialog-content>Este gráfico mostra a receita arrecadada por cada um dos planos em um determinado mês. Selecione o mês e o ano que deseja consultar.</div>
     <div mat-dialog-actions>
     </div>
   `,

@@ -26,13 +26,13 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Descrição</mat-label>
-      <input matInput type="text" formControlName="descricao" placeholder="Digite uma descrição" />
+      <textarea matInput formControlName="descricao" placeholder="Digite uma descrição" rows="4"></textarea>
       @if(formGroup.get('descricao')?.hasError('required')){<mat-error>
         Campo Obrigatório
       </mat-error>}
 
       @if(formGroup.get('descricao')?.hasError('maxlength')){<mat-error>
-        Nome tem limite de 80 caracteres
+        Nome tem limite de 120 caracteres
       </mat-error>}
 
     </mat-form-field>

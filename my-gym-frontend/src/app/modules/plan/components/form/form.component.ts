@@ -53,7 +53,7 @@ export class FormComponent implements OnInit {
       nome: ['', [Validators.required, Validators.maxLength(20)]],
       preco: ['', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,2})?$')]],
       duracao: ['', Validators.required],
-      descricao: ['', [Validators.required, Validators.maxLength(80)]],
+      descricao: ['', [Validators.required, Validators.maxLength(120)]],
       academia: ['']
     });
 

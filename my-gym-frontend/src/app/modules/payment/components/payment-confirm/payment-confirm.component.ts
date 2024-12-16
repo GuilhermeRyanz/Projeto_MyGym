@@ -43,7 +43,6 @@ export class PaymentConfirmComponent implements OnInit {
     if (this.gymId) {
       this.formGroup.patchValue({academia: this.gymId});
     }
-    console.log( 'Member Plan',this.memberPlan?.id);
   }
 
   constructor(
@@ -68,10 +67,8 @@ export class PaymentConfirmComponent implements OnInit {
   public confirm() {
 
     this.formGroup.patchValue({aluno_plano: this.memberPlan?.id});
-    console.log('Form Data:', this.formGroup.value);
     this.httpMethods.post(this.pathUrlPayment, this.formGroup.value).subscribe(
       response => {
-        console.log(response)
       let sucessMensagem = "Pagamento efetuado com sucesso.";
         this.router.navigate(['payment/paymentRegistration']);
         this.snackBar.open(  sucessMensagem, 'Fechar', {
@@ -80,9 +77,6 @@ export class PaymentConfirmComponent implements OnInit {
         })
 
       },
-      error => {
-        console.error('Erro ao confirmar pagamento', error);
-      }
     );
   }
 }

@@ -6,21 +6,47 @@
         <mat-form-field appearance="fill" class="nome">
           <mat-label>Nome</mat-label>
           <input matInput formControlName="nome" placeholder="Digite o nome"/>
+          @if(formGroup.get('nome')?.hasError('required')){<mat-error>
+            Campo Obrigatorio
+          </mat-error>}
+
+          @if(formGroup.get('nome')?.hasError('maxlength')){<mat-error>
+            Nome tem limite de 50 caracteres
+          </mat-error>}
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
           <input matInput type="email" formControlName="email" placeholder="Digite o Email"/>
+          @if(formGroup.get('email')?.hasError('required')){<mat-error>
+            Campo Obrigatorio
+          </mat-error>}
+
+          @if(formGroup.get('email')?.hasError('email')){<mat-error>
+            Insira um email valido
+          </mat-error>}
+
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Telefone</mat-label>
           <input matInput type="cellphone" formControlName="telefone" placeholder="Digite o Telefone"/>
+          @if(formGroup.get('telefone')?.hasError('required')){<mat-error>
+            Campo Obrigatorio
+          </mat-error>}
+
+          @if(formGroup.get('telefone')?.hasError('pattern')){<mat-error>
+            Número de telefone inválido
+          </mat-error>}
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de nascimento</mat-label>
           <input matInput type="date" formControlName="data_nascimento" placeholder="digite a data de nascimento"/>
+          @if(formGroup.get('data_nascimento')?.hasError('required')){<mat-error>
+            Campo Obrigatorio
+          </mat-error>}
+
         </mat-form-field>
 
         <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit" class="save">Salvar
