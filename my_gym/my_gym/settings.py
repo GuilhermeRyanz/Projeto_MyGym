@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': 'my_gym',
         'USER': 'my_gym',
         'PASSWORD': '123',
-        'HOST' : '127.0.0.1',
+        'HOST' : 'postgres',
         'PORT' : '5432',
     }
 }
