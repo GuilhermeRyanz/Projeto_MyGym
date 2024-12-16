@@ -87,7 +87,6 @@ export class FormComponent implements OnInit {
       if (!this.created) {
         this.title = "Edição de funcionário";
         this.httpMethods.get(this.pathUrlEmployee + this.action + '/').subscribe((response: any) => {
-          console.log("conteudo do carinha",response);
           this.formGroup.setValue({
             id: response.id,
             nome: response.nome,

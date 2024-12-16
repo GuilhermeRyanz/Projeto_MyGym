@@ -1,5 +1,6 @@
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
+from datetime import date
 
 from aluno import models
 from aluno.models import Aluno
@@ -18,6 +19,11 @@ class AlunoSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Aluno
         fields = ['active', 'id', 'nome', 'email', 'telefone', 'matricula', "data_nascimento",]
+
+    def validate_data_nascimento(self, value):
+        if value and value > date.today():
+            raise serializers.ValidationError("A data de nascimento não pode ser no futuro.")
+        return value
 
     def update(self, instance, validated_data):
         email = validated_data.get('email')
