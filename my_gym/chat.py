@@ -19,10 +19,19 @@ class Chat():
 
         """
 
-    def ask_question(self):
-        model = OllamaLLM(model="llama3")
-        prompt = ChatPromptTemplate.from_template(self.template)
-        chain = prompt | model
-        result = chain.invoke({"context": f"{self.context}", "question": f"{self.question}"})
 
-        return f"{result}"
+    def ask_question(self, df):
+        try:
+            model = OllamaLLM(model="llama3:8b")
+            prompt = ChatPromptTemplate.from_template(self.template)
+
+            df_descricao = df.to_string(index=False)
+
+            contexto_completo = f"{self.context}\n\nDados do DataFrame:\n{df_descricao}"
+
+            chain = prompt | model
+            result = chain.invoke({"context": contexto_completo, "question": self.question})
+
+            return str(result)
+        except Exception as e:
+            return f"Erro ao processar a pergunta: {str(e)}"
