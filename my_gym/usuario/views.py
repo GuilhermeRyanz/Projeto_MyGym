@@ -1,5 +1,6 @@
 from rest_framework.decorators import action
 from usuario import params_serializer
+from django.db.models import Case, When, Value, IntegerField
 
 from django.core.exceptions import PermissionDenied, ValidationError
 from django_filters.rest_framework.backends import DjangoFilterBackend
@@ -16,7 +17,14 @@ from usuario import filters
 
 
 class UsuarioViewSet(viewsets.ModelViewSet):
-    queryset = Usuario.objects.all()
+    queryset = Usuario.objects.all().order_by(
+        Case(
+            When(tipo_usuario='D', then=Value(0)),  # Dono vem primeiro
+            default=Value(1),
+            output_field=IntegerField()
+        ),
+        'nome'
+    )
     serializer_class = serializers.UsuarioSerializer
     filter_backends = [DjangoFilterBackend, ]
     filterset_class = filters.UsuarioFilter
