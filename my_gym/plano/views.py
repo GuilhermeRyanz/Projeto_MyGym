@@ -52,7 +52,8 @@ class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
             AlunoPlano.objects.filter(
                 modified_at__gte=data_limite,
                 active=True,
-                plano__academia__id=academia_id
+                plano__academia__id=academia_id,
+                plano__active=True,
             )
             .values(plano_nome=F('plano__nome'))
             .annotate(novos_alunos=Count('id'))

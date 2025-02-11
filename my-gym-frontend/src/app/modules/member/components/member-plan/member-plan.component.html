@@ -9,12 +9,12 @@
       <mat-card-content>
         <div class="plan-details">
           <div class="plan-info">
-            <div>Preço: R${{ plan.preco }}</div>
-            <div>Duração: {{ plan.duracao }} meses</div>
+            <div> <strong> Preço:</strong> R${{plan.preco}} </div>
+            <div> <strong>Duração:</strong> {{plan.duracao}} meses</div>
           </div>
-          <div class="plan-description">
-            Descrição: {{ plan.descricao }}
-          </div>
+          <p class="plan-description">
+            <strong> Descrição: </strong>{{ plan.descricao }}
+          </p>
         </div>
       </mat-card-content>
       <mat-card-actions>
