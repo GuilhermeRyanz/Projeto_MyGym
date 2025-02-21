@@ -1,6 +1,12 @@
 from datetime import timedelta
+from lib2to3.fixes.fix_input import context
 
-from django.db.models import F, Count
+import pandas as pd
+from langchain_core.beta.runnables.context import Context
+
+from chat import Chat
+
+from django.db.models import F, Count, Sum
 from django.utils.timezone import now
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import viewsets
@@ -52,15 +58,16 @@ class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
             AlunoPlano.objects.filter(
                 modified_at__gte=data_limite,
                 active=True,
-                plano__academia__id=academia_id,
-                plano__active=True,
+                plano__academia__id=academia_id
             )
             .values(plano_nome=F('plano__nome'))
             .annotate(novos_alunos=Count('id'))
             .order_by('-novos_alunos')
         )
 
-        return Response(novos_alunos)
+        total_sum = novos_alunos.aggregate(total_sum=Sum('novos_alunos'))['total_sum']
+
+        return Response({"novos_alunos": novos_alunos, "total_sum": total_sum})
 
 
 class PlanosAlunosAtivosViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
@@ -80,5 +87,48 @@ class PlanosAlunosAtivosViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
             .annotate(total_alunos=Count('aluno'))
             .order_by('-total_alunos')
         )
+
+        total_sum = planos.aggregate(total_sum=Sum('total_alunos'))['total_sum']
+
         data = [{'plano': plano['plano__nome'], 'alunos_ativos': plano['total_alunos']} for plano in planos]
-        return Response(data)
+        return Response({"planos": data, "total_sum": total_sum})
+
+    @action(detail=False, methods=['post'])
+    def chat_comparar_planos(self, request):
+        academia_id = request.data.get('academia')
+        question = request.data.get('question')
+
+        if not academia_id:
+            return Response({"error": "O campo 'academia' é obrigatório."}, status=400)
+
+        if not question:
+            return Response({"error": "O campo 'question' é obrigatório."}, status=400)
+
+        context = (
+            "Você é um assistente que analisa os dados financeiros de uma academia. Seu objetivo é responder perguntas "
+            "sobre o desempenho dos planos com base nos dados fornecidos pelo sistema da academia."
+        )
+
+        planos = (
+            AlunoPlano.objects.filter(active=True, plano__active=True, plano__academia__id=academia_id)
+            .values("plano__nome", "plano__preco", "plano__duracao", "plano__descricao")
+            .annotate(total_pago=Sum("pagamento__valor"))
+            .order_by("-total_pago")
+        )
+
+        df = pd.DataFrame(planos)
+
+        print(df)
+
+        if df.empty:
+            return Response({"error": "Nenhum dado encontrado para a academia fornecida."}, status=404)
+
+        df_descricao = df.to_string(index=False)
+        contexto_completo = f"{context}\n\nDados dos planos:\n{df_descricao}"
+
+        try:
+            chat = Chat(contexto_completo, question)
+            resposta = chat.ask_question(df)
+            return Response({"question": question, "response": resposta}, status=200)
+        except Exception as e:
+            return Response({"error": f"Erro ao processar a pergunta: {str(e)}"}, status=500)

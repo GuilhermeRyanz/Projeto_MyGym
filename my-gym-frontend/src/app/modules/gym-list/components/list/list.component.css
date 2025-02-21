@@ -8,7 +8,7 @@
 
 .gym-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsivo */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   width: 100%;
   max-width: 1200px;
@@ -46,8 +46,6 @@ mat-card-subtitle {
 }
 
 mat-card-content {
-  color: #555;
-  font-size: 14px;
   line-height: 1.5;
 }
 

@@ -150,9 +150,6 @@ export class MembersFlowByTimeComponentComponent implements OnInit {
           ],
         };
       },
-      (error) => {
-        console.error('Erro ao carregar os dados:', error);
-      }
     );
   }
 

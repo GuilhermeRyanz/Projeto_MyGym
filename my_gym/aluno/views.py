@@ -68,7 +68,7 @@ class AlunoPlanoViewSet(viewsets.ModelViewSet):
 
             except models.AlunoPlano.DoesNotExist:
                 return Response(
-                    {'erro': "Aluno não possui um plano ativo para ser desativado."},
+                    {'erro': "Aluno não possui um plano ativo."},
                     status=status.HTTP_404_NOT_FOUND
                 )
 

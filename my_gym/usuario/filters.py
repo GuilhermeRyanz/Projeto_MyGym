@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from django.db.models import Q, Exists, OuterRef
+from django.db.models import Exists, OuterRef
 
 
 from academia.models import UsuarioAcademia

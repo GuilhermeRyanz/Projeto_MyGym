@@ -7,6 +7,7 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-list',
@@ -32,7 +33,10 @@ export class ListComponent implements OnInit {
     this.gym_id = localStorage.getItem("academia")
   }
 
-  constructor(private httpMethods: HttpMethodsService, private router: Router) {
+  constructor(private httpMethods: HttpMethodsService,
+              private router: Router,
+              private snackBar: MatSnackBar,
+              ) {
   }
 
   ngOnInit() {
@@ -47,8 +51,14 @@ export class ListComponent implements OnInit {
 
   public seach(): void {
     this.httpMethods.get(this.pathUrlPlan + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
+      if (response.length <= 0) {
+        const errosMensager = "Não há planos ativos cadastrados!"
+        this.snackBar.open(errosMensager, 'fechar', {
+          duration: 2000,
+          verticalPosition: 'top',
+        });
+      }
       this.plans = response
-
     });
   }
 

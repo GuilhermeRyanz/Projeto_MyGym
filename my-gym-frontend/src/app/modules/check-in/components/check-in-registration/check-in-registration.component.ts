@@ -82,7 +82,6 @@ export class CheckInRegistrationComponent implements OnInit {
     this.httpMethods.get(`${this.pathUrlMemberPlan}?expand=aluno&expand=plano&active=true${searchParam}&academia=${this.gym_id}`)
       .subscribe((response: any) => {
         this.membersPlan = response;
-        console.log(response);
       });
   }
 

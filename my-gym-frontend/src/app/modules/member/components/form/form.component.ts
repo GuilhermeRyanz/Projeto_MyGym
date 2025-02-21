@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
@@ -29,7 +29,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     MatOption,
     MatTabGroup,
     MatTab,
-    MemberPlanComponent
+    MemberPlanComponent,
+    MatError
   ],
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css']
@@ -64,7 +65,7 @@ export class FormComponent implements OnInit {
   ) {
     this.formGroup = this.formBuilder.group({
       id: [],
-      nome: ['', Validators.required],
+      nome: ['', [Validators.required, Validators.maxLength(50)]],
       telefone: ['', [Validators.required, Validators.pattern('[0-9]{10,11}')]],
       email: ['', [Validators.required, Validators.email]],
       data_nascimento: ['', Validators.required],
@@ -85,7 +86,7 @@ export class FormComponent implements OnInit {
 
 
       if (!this.created) {
-        this.title = "Edição de Aluno"
+        this.title = "Edição de aluno"
         this.httpMethods.get(this.pathUrlMember + `${this.action}/`).subscribe((response: any) => {
           this.obj = response
           this.formGroup.setValue({

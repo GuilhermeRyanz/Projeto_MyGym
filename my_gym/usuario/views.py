@@ -1,6 +1,8 @@
 from rest_framework.decorators import action
 from usuario import params_serializer
 from django.db.models import Case, When, Value, IntegerField
+from rest_framework.exceptions import NotFound, PermissionDenied
+
 
 from django.core.exceptions import PermissionDenied, ValidationError
 from django_filters.rest_framework.backends import DjangoFilterBackend
@@ -19,7 +21,7 @@ from usuario import filters
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all().order_by(
         Case(
-            When(tipo_usuario='D', then=Value(0)),  # Dono vem primeiro
+            When(tipo_usuario='D', then=Value(0)),
             default=Value(1),
             output_field=IntegerField()
         ),
@@ -68,8 +70,8 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         academia, usuario = ps.validated_data.values()
 
         if usuario.tipo_usuario == Usuario.TipoUsuario.DONO:
-            raise ValidationError(
-                "error","usuario do tipo dono não pode ter sua academia alterada"
+            raise PermissionDenied(
+                "usuario do tipo dono não pode ter sua academia alterada"
             )
 
 
@@ -107,7 +109,10 @@ class AuthTokenView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
 
-        usuario = get_object_or_404(Usuario, username=username)
+        try:
+            usuario = get_object_or_404(Usuario, username=username)
+        except Exception as e:
+            raise NotFound("Usuário não encontrado.")
 
         if not usuario.check_password(password):
             raise PermissionDenied("Credenciais inválidas")
@@ -140,6 +145,7 @@ class AuthTokenView(APIView):
                     'tipo_usuario': usuario.tipo_usuario,
                 })
             else:
-                return Response({'error': 'Nenhuma academia associada ao usuário.'}, status=400)
+                raise PermissionDenied("Usuário não possui vínculo ativo com nenhuma academia.")
+
         else:
-            return Response({'error': 'Tipo de usuário não reconhecido.'}, status=400)
+            return PermissionDenied('Tipo de usuário não reconhecido.')

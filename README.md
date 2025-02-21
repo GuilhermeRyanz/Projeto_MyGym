@@ -18,7 +18,7 @@ Como fazer backup e restaurar o bd com uso do db.dump
     
     restaura bd no containaer {
     docker exec -it CONTAINER bash
-    dropdb -U my_gym my_gym
+    dropdb my_gym
     pg_restore -C -d postgres db.dump
     }
 

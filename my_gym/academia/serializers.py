@@ -53,12 +53,11 @@ class FrequenciaSerializer(serializers.ModelSerializer):
     def validate(self, data):
         aluno = data['aluno']
 
-        pagamento = Pagamento.objects.filter(aluno_plano__aluno_id=aluno).order_by('-data_vencimento').first()
+        pagamento = Pagamento.objects.filter(aluno_plano__aluno_id=aluno, aluno_plano__active=True).order_by('-data_vencimento').first()
 
         if pagamento:
             if pagamento.data_vencimento < timezone.now().date():
                 raise serializers.ValidationError("Pagamento expirado!")
         else:
-            raise serializers.ValidationError("Nenhum pagamento registrado para o aluno nesta academia.")
-
+            raise serializers.ValidationError("Na há pagamentos validos registrado para esse aluno no plano atual.")
         return data

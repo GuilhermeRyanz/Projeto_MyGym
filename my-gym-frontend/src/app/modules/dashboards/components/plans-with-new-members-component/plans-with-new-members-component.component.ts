@@ -25,6 +25,7 @@ export class PlansWithNewMembersComponentComponent implements OnInit {
   private pathUrlPlansWithNewMembers: string = URLS.PLANSWITHNEWMEMBERS;
   private gym_id: string | null = "";
   public chartOption: any;
+  public allnewMebers: string | null = "0"
 
   constructor(
     private httpMethods: HttpMethodsService,
@@ -48,8 +49,9 @@ export class PlansWithNewMembersComponentComponent implements OnInit {
   search(): void {
     this.httpMethods.get(this.pathUrlPlansWithNewMembers + `?academia=${this.gym_id}`).subscribe(
       (response: any) => {
-        const plans = response.map((item: any) => item.plano_nome);
-        const newMembers = response.map((item: any) => item.novos_alunos);
+        const plans = response.novos_alunos.map((item: any) => item.plano_nome);
+        const newMembers = response.novos_alunos.map((item: any) => item.novos_alunos);
+        this.allnewMebers = response.total_sum
 
         this.chartOption = {
           tooltip: {
