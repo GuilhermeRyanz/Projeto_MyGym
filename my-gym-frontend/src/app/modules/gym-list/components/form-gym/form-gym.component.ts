@@ -110,20 +110,5 @@ export class FormGymComponent implements OnInit{
 
   }
 
-  public disable(id: number):void{
-
-    const dialogRef = this.dialog.open(ConfirmDialogComponentComponent);
-    const path: string = 'desativar_academia'
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.httpMethods.disable(this.pathUrlGym, id , path).subscribe(() => {
-          this.router.navigate(['/adm/gym/list']);
-        });
-      }
-    });
-
-  }
-
 
 }
