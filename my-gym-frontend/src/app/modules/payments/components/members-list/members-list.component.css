@@ -1,0 +1,24 @@
+.member-card {
+  margin-bottom: 16px;
+  margin-left: 1%;
+  width: 98%;
+
+}
+
+.search{
+  width: 98%;
+  margin-left: 1%;
+}
+
+.member-info {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+h2{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}

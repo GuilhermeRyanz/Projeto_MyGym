@@ -1,0 +1,19 @@
+<div class="member-list">
+  <h2 mat-subheader>Pagamentos por Aluno</h2>
+  <mat-form-field appearance="outline" class="search">
+    <mat-label>Busca Aluno</mat-label>
+    <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm" (input)="searchMember()"/>
+  </mat-form-field>
+  @for (member of members; track member.aluno.id) {
+    <mat-card class="member-card" appearance="outlined">
+      <mat-card-content>
+        <div class="member-info">
+          <div><strong>Matricula:</strong> {{ member.aluno.matricula }}</div>
+          <div><strong>Nome:</strong> {{ member.aluno.nome }}</div>
+          <div><strong>Email:</strong> {{ member.aluno.email }}</div>
+          <div><strong>Plano:</strong>  {{ member.plano.nome }}</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

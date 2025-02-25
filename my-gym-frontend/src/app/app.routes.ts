@@ -59,6 +59,12 @@ export const routes: Routes = [
     path: "dashboards",
     loadChildren: () => import('./modules/dashboards/dashboards.module').then(m => m.DashboardsModule),
     canActivate: [AuthGuardService]
+  },
+
+  {
+    path: "payments",
+    loadChildren: () => import('./modules/payments/payments.module').then(m => m.PaymentsModule),
+    canActivate: [AuthGuardService]
   }
 
 ];
