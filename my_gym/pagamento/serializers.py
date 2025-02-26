@@ -14,10 +14,11 @@ class PagamentoSerializer(serializers.ModelSerializer):
     academia_nome = serializers.CharField(source='aluno_plano.plano.academia', read_only=True)
     tipo_pagamento = serializers.ChoiceField(choices=Pagamento.TipoPagamento.choices)
     valor = serializers.FloatField(read_only=True)
+    plano_nome = serializers.CharField(source='aluno_plano.plano.nome', read_only=True)
 
     class Meta:
         model = Pagamento
-        fields = ['id', 'data_pagamento', 'data_vencimento', 'aluno_plano', 'aluno_nome', 'academia_nome' , 'tipo_pagamento', 'valor']
+        fields = ['id', 'data_pagamento', 'data_vencimento', 'aluno_plano', 'aluno_nome', 'academia_nome' , 'tipo_pagamento', 'valor', 'plano_nome']
 
     def validate(self, data):
 
