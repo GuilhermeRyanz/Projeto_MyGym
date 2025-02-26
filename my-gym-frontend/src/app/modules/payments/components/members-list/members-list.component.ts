@@ -2,17 +2,16 @@ import {Component, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {MatListSubheaderCssMatStyler} from "@angular/material/list";
 import {URLS} from "../../../../app.urls";
 import {MemberPlan} from "../../../member/interfaces/member-plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
-import {MatCard, MatCardActions, MatCardContent} from "@angular/material/card";
-import {MatIcon} from "@angular/material/icon";
-import {MatIconButton} from "@angular/material/button";
+import {MatCard, MatCardContent} from "@angular/material/card";
 import {MemberPaymentsComponent} from "../member-payments/member-payments.component";
+import {MatIcon} from "@angular/material/icon";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-members-list',
@@ -22,12 +21,10 @@ import {MemberPaymentsComponent} from "../member-payments/member-payments.compon
     MatFormField,
     MatInput,
     MatLabel,
-    MatListSubheaderCssMatStyler,
     MatCard,
-    MatCardActions,
     MatCardContent,
     MatIcon,
-    MatIconButton
+    NgForOf,
   ],
   templateUrl: './members-list.component.html',
   styleUrl: './members-list.component.css'
@@ -77,10 +74,14 @@ export class MembersListComponent implements OnInit {
       });
   }
 
+  trackById(index: number, member: MemberPlan) {
+    return member.aluno.id;
+  }
+
   public selectMember(member: MemberPlan): void {
     this.dialog.open(MemberPaymentsComponent, {
-      width: '80%',
-      height: '80%',
+      width: '60rem',
+      maxWidth: 'none',
       data: { memberInfo: member }
     });
   }

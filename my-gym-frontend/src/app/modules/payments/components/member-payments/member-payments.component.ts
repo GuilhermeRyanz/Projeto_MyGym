@@ -18,7 +18,6 @@ import {
   selector: 'app-member-payments',
   standalone: true,
   imports: [
-    NgForOf,
     MatTable,
     MatColumnDef,
     MatHeaderCell,
