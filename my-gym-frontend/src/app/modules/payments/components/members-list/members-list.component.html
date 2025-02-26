@@ -5,7 +5,7 @@
     <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm" (input)="searchMember()"/>
   </mat-form-field>
   @for (member of members; track member.aluno.id) {
-    <mat-card class="member-card" appearance="outlined">
+    <mat-card class="member-card" appearance="outlined" (click)="selectMember(member)">
       <mat-card-content>
         <div class="member-info">
           <div><strong>Matricula:</strong> {{ member.aluno.matricula }}</div>

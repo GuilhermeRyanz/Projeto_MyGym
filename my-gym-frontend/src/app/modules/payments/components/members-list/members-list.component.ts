@@ -12,6 +12,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {MatCard, MatCardActions, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
+import {MemberPaymentsComponent} from "../member-payments/member-payments.component";
 
 @Component({
   selector: 'app-members-list',
@@ -73,12 +74,17 @@ export class MembersListComponent implements OnInit {
     this.httpMethods.get(`${this.pathUrlMemberPlan}?expand=aluno&expand=plano&active=true${searchParam}&academia=${this.gym_id}`)
       .subscribe((response: any) => {
         this.members = response;
-        console.log(response);
       });
   }
 
-  public selectMember(): void {
-
+  public selectMember(member: MemberPlan): void {
+    this.dialog.open(MemberPaymentsComponent, {
+      width: '80%',
+      height: '80%',
+      data: { memberInfo: member }
+    });
   }
+
+
 
 }

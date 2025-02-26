@@ -91,7 +91,6 @@ export class ListComponent implements OnInit {
           console.error('Gym ID is missing');
           return;
         }
-        console.log(member);
         this.httpMethods.disable(this.pathUrlMemberPlan, member, 'desativar_aluno').subscribe(() => {
           this.seach();
           let sucessMensage =  "Aluno desativado"
