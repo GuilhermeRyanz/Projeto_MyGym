@@ -10,9 +10,9 @@ import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {MatCard, MatCardActions, MatCardContent} from "@angular/material/card";
-import {MatIcon} from "@angular/material/icon";
-import {MatIconButton} from "@angular/material/button";
 import {MemberPaymentsComponent} from "../member-payments/member-payments.component";
+import {MatIcon} from "@angular/material/icon";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-members-list',
@@ -24,10 +24,9 @@ import {MemberPaymentsComponent} from "../member-payments/member-payments.compon
     MatLabel,
     MatListSubheaderCssMatStyler,
     MatCard,
-    MatCardActions,
     MatCardContent,
     MatIcon,
-    MatIconButton
+    NgForOf,
   ],
   templateUrl: './members-list.component.html',
   styleUrl: './members-list.component.css'
@@ -77,10 +76,15 @@ export class MembersListComponent implements OnInit {
       });
   }
 
+  trackById(index: number, member: MemberPlan) {
+    return member.aluno.id;
+  }
+
   public selectMember(member: MemberPlan): void {
     this.dialog.open(MemberPaymentsComponent, {
-      width: '80%',
-      height: '80%',
+      width: '50rem',  // 90% da largura da tela
+      height: '80vh', // 80% da altura da tela
+      maxWidth: 'none', // Remove o limite de largura
       data: { memberInfo: member }
     });
   }

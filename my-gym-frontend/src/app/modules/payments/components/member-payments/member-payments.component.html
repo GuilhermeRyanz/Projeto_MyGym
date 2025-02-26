@@ -6,48 +6,44 @@
 
   <div>
 
-    <table mat-table [dataSource]="payments" class="mat-elevation-z8 w-full">
+    <mat-table [dataSource]="payments" class="mat-elevation-z8">
 
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let pay"> {{ pay.id }} </td>
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>>
+        <mat-cell *matCellDef="let pay"> {{ pay.id }} </mat-cell>>
       </ng-container>
 
       <ng-container matColumnDef="valor">
-        <th mat-header-cell *matHeaderCellDef> Valor (R$) </th>
-        <td mat-cell *matCellDef="let pay"> R$ {{ pay.valor }} </td>
+        <mat-header-cell *matHeaderCellDef> Valor (R$) </mat-header-cell>>
+        <mat-cell *matCellDef="let pay"> R$ {{ pay.valor }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="data_pagamento">
-        <th mat-header-cell *matHeaderCellDef> Data de Pagamento </th>
-        <td mat-cell *matCellDef="let pay"> {{ pay.data_pagamento | date:'dd/MM/yyyy' }} </td>
+        <mat-header-cell *matHeaderCellDef> Data de Pagamento </mat-header-cell>
+        <mat-cell *matCellDef="let pay"> {{ pay.data_pagamento | date:'dd/MM/yyyy' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="data_vencimento">
-        <th mat-header-cell *matHeaderCellDef> Data de Vencimento </th>
-        <td mat-cell *matCellDef="let pay"> {{ pay.data_vencimento | date:'dd/MM/yyyy' }} </td>
+        <mat-header-cell *matHeaderCellDef> Data de Vencimento </mat-header-cell>
+        <mat-cell *matCellDef="let pay"> {{ pay.data_vencimento | date:'dd/MM/yyyy' }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tipo_pagamento">
-        <th mat-header-cell *matHeaderCellDef> Tipo de Pagamento </th>
-        <td mat-cell *matCellDef="let pay"> {{ pay.tipo_pagamento }} </td>
+        <mat-header-cell *matHeaderCellDef> Tipo de Pagamento </mat-header-cell>
+        <mat-cell *matCellDef="let pay"> {{ pay.tipo_pagamento }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="plano_nome">
-        <th mat-header-cell *matHeaderCellDef> Plano </th>
-        <td mat-cell *matCellDef="let pay"> {{ pay.plano_nome}} </td>
+        <mat-header-cell *matHeaderCellDef> Plano </mat-header-cell>
+        <mat-cell *matCellDef="let pay"> {{ pay.plano_nome}} </mat-cell>
 
       </ng-container>
 
-      <thead>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      </thead>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-      <tbody>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </tbody>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
-    </table>
+    </mat-table>
 
   </div>
 </div>
