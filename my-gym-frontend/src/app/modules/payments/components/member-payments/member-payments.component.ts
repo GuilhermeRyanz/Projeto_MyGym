@@ -3,7 +3,7 @@ import {MemberPlan} from "../../../member/interfaces/member-plan";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {URLS} from "../../../../app.urls";
-import {DatePipe, NgForOf} from "@angular/common";
+import {DatePipe, DecimalPipe, NgClass, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
 import {
   MatCell, MatCellDef,
   MatColumnDef,
@@ -12,6 +12,8 @@ import {
   MatTable,
   MatTableDataSource
 } from "@angular/material/table";
+import {MatIcon} from "@angular/material/icon";
+import {MatCard} from "@angular/material/card";
 
 
 @Component({
@@ -28,7 +30,15 @@ import {
     DatePipe,
     MatCellDef,
     MatRowDef,
-    MatHeaderRowDef
+    MatHeaderRowDef,
+    NgIf,
+    MatIcon,
+    MatCard,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+    DecimalPipe,
+    NgClass
   ],
   templateUrl: './member-payments.component.html',
   styleUrl: './member-payments.component.css'
@@ -37,7 +47,7 @@ export class MemberPaymentsComponent implements OnInit {
 
   public memberInfo: MemberPlan | undefined;
   public payments = new MatTableDataSource<any>();
-  public displayedColumns: string[] = ['id', 'valor', 'data_pagamento', 'data_vencimento', 'tipo_pagamento', 'plano_nome'];
+  public displayedColumns: string[] = ['valor', 'data_pagamento', 'tipo_pagamento', 'plano_nome'];
   public urlPathPayments: string = URLS.PAYMENT
 
   constructor(

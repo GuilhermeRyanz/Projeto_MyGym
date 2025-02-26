@@ -1,49 +1,58 @@
 <div class="p-4">
-  <h3 class="text-lg font-semibold mb-4" style="text-align: center;
-">
-    Pagamentos do aluno: {{ memberInfo?.aluno?.nome }}
-  </h3>
 
   <div>
-    <mat-table [dataSource]="payments" class="mat-elevation-z8">
+    <h3 class="flex align-items-center gap-2">
+      <mat-icon>credit_card</mat-icon>
+      Pagamentos de {{ memberInfo?.aluno?.nome }}
+    </h3>
+    <p>Email: {{ memberInfo?.aluno?.email }}</p>
 
-      <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>>
-        <mat-cell *matCellDef="let pay"> {{ pay.id }} </mat-cell>>
-      </ng-container>
+  </div>
+
+  <mat-card class="p-4 shadow-lg rounded-lg " style="background-color: #ededed; border-radius: 2px">
+    <h1 class="text-gray-700 text-lg font-semibold border-b pb-2">
+      Histórico de Pagamentos
+    </h1>
+
+    <mat-table [dataSource]="payments" class="mat-elevation-z1 w-full mt-3" style="background-color: #fafafa" >
 
       <ng-container matColumnDef="valor">
-        <mat-header-cell *matHeaderCellDef> Valor (R$) </mat-header-cell>>
-        <mat-cell *matCellDef="let pay"> R$ {{ pay.valor }} </mat-cell>
+        <mat-header-cell *matHeaderCellDef class="text-gray-600 font-medium"> Valor (R$) </mat-header-cell>
+        <mat-cell *matCellDef="let pay" class="py-3 px-2">
+          <strong>R$ {{ pay.valor | number:'1.2-2' }}</strong>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="data_pagamento">
-        <mat-header-cell *matHeaderCellDef> Data de Pagamento </mat-header-cell>
-        <mat-cell *matCellDef="let pay"> {{ pay.data_pagamento | date:'dd/MM/yyyy' }} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="data_vencimento">
-        <mat-header-cell *matHeaderCellDef> Data de Vencimento </mat-header-cell>
-        <mat-cell *matCellDef="let pay"> {{ pay.data_vencimento | date:'dd/MM/yyyy' }} </mat-cell>
+        <mat-header-cell *matHeaderCellDef class="text-gray-600 font-medium"> Data </mat-header-cell>
+        <mat-cell *matCellDef="let pay" class="py-3 px-2">
+          {{ pay.data_pagamento | date:'dd/MM/yyyy' }}
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="tipo_pagamento">
-        <mat-header-cell *matHeaderCellDef> Tipo de Pagamento </mat-header-cell>
-        <mat-cell *matCellDef="let pay"> {{ pay.tipo_pagamento }} </mat-cell>
+        <mat-header-cell *matHeaderCellDef> Tipo de Pagamento</mat-header-cell>
+        <mat-cell *matCellDef="let pay">
+          <span [ngSwitch]="pay.tipo_pagamento">
+            <span *ngSwitchCase="'C'">Crédito</span>
+            <span *ngSwitchCase="'P'">Pix</span>
+            <span *ngSwitchCase="'D'">Dinheiro</span>
+            <span *ngSwitchDefault>Outro</span>
+          </span>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="plano_nome">
-        <mat-header-cell *matHeaderCellDef> Plano </mat-header-cell>
-        <mat-cell *matCellDef="let pay"> {{ pay.plano_nome}} </mat-cell>
-
+        <mat-header-cell *matHeaderCellDef class="text-gray-600 font-medium"> Plano </mat-header-cell>
+        <mat-cell *matCellDef="let pay" class="py-3 px-2">
+          {{ pay.plano_nome }}
+        </mat-cell>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="bg-gray-100"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50"></mat-row>
 
     </mat-table>
+  </mat-card>
 
-  </div>
-</div>
-
+</div>]

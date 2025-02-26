@@ -6,13 +6,16 @@
   text-align: center;
   margin-bottom: 16px;
   font-size: 1.5rem;
-  font-weight: bold;
   color: #333;
 }
 
+.subtitle {
+  text-align: center;
+  color: #909090;
+}
+
 .search {
-  width: 100%;
-  margin-bottom: 16px;
+  margin: auto;
 }
 
 .member-list {
@@ -23,7 +26,7 @@
 
 .member-card {
   width: 95%;
-  background: #f1f1f1;
+  background: #f8f8f8;
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
@@ -31,29 +34,49 @@
 }
 
 .member-card:hover {
-  transform: scale(1.02);
+  transform: scale(1.06);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 
 
 .avatar {
-  font-size: 40px;
-  background: #f3f3f3;
-  padding: 10px;
+  width: 40px;
+  height: 40px;
+  background-color: #53cd55;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
-  color: #666;
+  text-transform: uppercase;
 }
 
 
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+}
+
 .name {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: bold;
   color: #333;
+  margin-bottom: 2px;
 }
 
 .email {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #666;
 }
 
@@ -71,13 +94,14 @@
 }
 
 .footer {
-  background: #f9f9f9;
+  background: #ededed;
   font-size: 0.9rem;
-  color: #0095ff;
+  color: #969696;
   border-top: 1px solid #eee;
-  border-radius: 9px;
+  border-radius: 0 0 9px 9px;
 }
 
-.footer:hover {
-  color: #0056b3;
+.member-card:hover .footer {
+  color: #ffffff;
+  background-color: #53cd55;
 }

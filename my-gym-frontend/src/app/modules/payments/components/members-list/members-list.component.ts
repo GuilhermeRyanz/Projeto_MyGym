@@ -68,19 +68,28 @@ export class MembersListComponent implements OnInit {
     if (this.searchTerm) {
       searchParam = `&search=${this.searchTerm}`;
     }
-    this.httpMethods.get(`${this.pathUrlMemberPlan}?expand=aluno&expand=plano&active=true${searchParam}&academia=${this.gym_id}`)
+    this.httpMethods.get(`${this.pathUrlMemberPlan}?expand=aluno&expand=plano${searchParam}&academia=${this.gym_id}`)
       .subscribe((response: any) => {
         this.members = response;
       });
   }
 
+
+
   trackById(index: number, member: MemberPlan) {
     return member.aluno.id;
   }
 
+  getInitials(name: string): string {
+    if (!name) return '';
+    const nameParts = name.trim().split(' ');
+    const initials = nameParts.map(part => part.charAt(0).toUpperCase()).join('');
+    return initials.length > 2 ? initials.substring(0, 2) : initials;
+  }
+
   public selectMember(member: MemberPlan): void {
     this.dialog.open(MemberPaymentsComponent, {
-      width: '60rem',
+      width: '40rem',
       maxWidth: 'none',
       data: { memberInfo: member }
     });
