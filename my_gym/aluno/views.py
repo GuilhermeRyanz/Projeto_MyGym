@@ -23,7 +23,7 @@ class AlunoPlanoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return models.AlunoPlano.objects.filter(
             plano__academia__usuarioacademia__usuario=self.request.user
-        )
+        ).distinct("aluno__id")
 
 
     @action(detail=False, methods=['POST'])
