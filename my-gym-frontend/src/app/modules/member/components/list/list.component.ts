@@ -14,6 +14,7 @@ import {FormsModule} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-list',
@@ -32,7 +33,8 @@ import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confi
     MatLabel,
     MatFormField,
     MatInput,
-    FormsModule
+    FormsModule,
+    NgForOf
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
@@ -79,6 +81,17 @@ export class ListComponent implements OnInit {
   public edit(member: Member) {
     this.router.navigate([`/member/form/${member.id}`]).then();
   };
+
+  trackById(index: number, member: MemberPlan) {
+    return member.aluno.id;
+  }
+
+  getInitials(name: string): string {
+    if (!name) return '';
+    const nameParts = name.trim().split(' ');
+    const initials = nameParts.map(part => part.charAt(0).toUpperCase()).join('');
+    return initials.length > 2 ? initials.substring(0, 2) : initials;
+  }
 
   public disable(member: Member): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponentComponent)
