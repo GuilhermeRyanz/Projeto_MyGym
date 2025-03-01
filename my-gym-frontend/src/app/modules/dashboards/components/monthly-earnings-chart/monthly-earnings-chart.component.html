@@ -8,7 +8,7 @@
     </mat-card-title>
   </mat-card-header>
   <mat-form-field appearance="outline">
-    <mat-label>Selecione ano e mês</mat-label>
+    <mat-label>Data</mat-label>
     <input matInput [matDatepicker]="pickerBegin" [value]="data | date: 'yyyy-MM'" readonly>
     <mat-datepicker-toggle matSuffix [for]="pickerBegin"></mat-datepicker-toggle>
     <mat-datepicker #pickerBegin startView="multi-year" (monthSelected)="setMonthAndYear($event, pickerBegin)" panelClass="month-picker"></mat-datepicker>
