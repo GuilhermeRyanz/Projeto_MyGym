@@ -1,28 +1,110 @@
-.member-cad {
+.container {
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
   margin-bottom: 16px;
-  margin-left: 1%;
-  width: 98%;
-
+  font-size: 1.5rem;
+  color: #333;
 }
 
-.search{
-  width: 98%;
-  margin-left: 1%;
+.subtitle {
+  text-align: center;
+  color: #909090;
 }
+
+.search {
+  margin: auto;
+}
+
+.member-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.member-card {
+  width: 95%;
+  background: #f8f8f8;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.member-card:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #53cd55;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-transform: uppercase;
+}
+
 
 .member-info {
-  justify-content: space-between;
-  align-items: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-
-h2{
+.details {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
-  text-align: center;
+  line-height: 1.2;
 }
 
+.name {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2px;
+}
 
+.email {
+  font-size: 0.85rem;
+  color: #666;
+}
 
+.extra-info {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.footer {
+  background: #ededed;
+  font-size: 0.9rem;
+  color: #969696;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 9px 9px;
+}
+
+.icon-edit:hover{
+  color: #5a87e6;
+}
+
+.icon-delete:hover{
+  color: #e65a5a;
+}
