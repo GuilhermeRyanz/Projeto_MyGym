@@ -1,4 +1,7 @@
 @import "primeflex/primeflex.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 .mat-mdc-dialog-container {
   border-radius: 4px !important;

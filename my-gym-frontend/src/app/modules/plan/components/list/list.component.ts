@@ -51,6 +51,7 @@ export class ListComponent implements OnInit {
 
   public seach(): void {
     this.httpMethods.get(this.pathUrlPlan + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
+      console.log(response);
       if (response.length <= 0) {
         const errosMensager = "Não há planos ativos cadastrados!"
         this.snackBar.open(errosMensager, 'fechar', {

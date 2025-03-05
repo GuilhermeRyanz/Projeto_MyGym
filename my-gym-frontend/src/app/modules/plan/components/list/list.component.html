@@ -1,32 +1,27 @@
-<div class="Plan-list">
+<div class="container">
   <h2 mat-subheader>Planos</h2>
-  @for (plan of plans; track plan.id) {
-    <mat-card class="plan-card" appearance="outlined">
-      <mat-card-header>
-        <mat-card-title> <strong> Nome: {{ plan.nome }} </strong></mat-card-title>
-        <mat-card-subtitle> <strong> ID: {{ plan.id }} </strong></mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="plan-details">
-          <div class="plan-info">
-            <div> <strong> Preço:</strong> R${{plan.preco}} </div>
-            <div> <strong>Duração:</strong> {{plan.duracao}} meses</div>
+  <p class="subtitle flex justify-content-center">Crie e edite os planos fornecidos pela academia</p>
+
+  <div class="flex flex-wrap justify-content-center gap-3">
+    @for (plan of plans; track plan.id) {
+      <mat-card class="plan-card w-30rem" >
+        <mat-card-content>
+          <div class="flex flex-column align-content-start">
+            <div class="flex align-items-center justify-content-between">
+              <div class="text-2xl font-bold">{{plan.nome}}</div>
+              <div class="text-2xl font-bold">{{plan.preco}}</div>
+            </div>
+            <div class="text-gray-900">
+              {{plan.descricao}}
+            </div>
+            <div class="text-2xl font-bold">Beneficios</div>
+
           </div>
-          <p class="plan-description">
-            <strong> Descrição: </strong>{{ plan.descricao }}
-          </p>
-        </div>
-      </mat-card-content>
-      <mat-card-actions>
-        <button [disabled]="typeUser == 'A'" mat-icon-button color="primary" (click)="edit(plan)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button [disabled]="typeUser == 'A'" mat-icon-button color="warn" (click)="disable(plan)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-card-actions>
-    </mat-card>
-  }
+
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
   <button mat-raised-button class="add_button" [disabled]="typeUser == 'A'" mat-button color="warn" (click)="create()">Novo Plano</button>
 </div>
 

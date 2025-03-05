@@ -1,3 +1,5 @@
+import {Benefits} from "./benefits";
+
 export interface Plan {
 
   id: number;
@@ -6,6 +8,7 @@ export interface Plan {
   descricao: string;
   duracao: number;
   academia: number;
+  beneficia?: Benefits;
 
 
 }

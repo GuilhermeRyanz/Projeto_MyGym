@@ -31,14 +31,12 @@ import {MatCard} from "@angular/material/card";
     MatCellDef,
     MatRowDef,
     MatHeaderRowDef,
-    NgIf,
     MatIcon,
     MatCard,
     NgSwitch,
     NgSwitchCase,
     NgSwitchDefault,
     DecimalPipe,
-    NgClass
   ],
   templateUrl: './member-payments.component.html',
   styleUrl: './member-payments.component.css'
