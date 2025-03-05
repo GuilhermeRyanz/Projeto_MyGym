@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatButton,} from "@angular/material/button";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {URLS} from "../../../../app.urls";
@@ -15,8 +14,6 @@ import {Plan} from "../../interfaces/plan";
   imports: [
     MatButton,
     MatFormField,
-    MatIcon,
-    MatIconButton,
     MatInput,
     MatLabel,
     ReactiveFormsModule,
@@ -47,16 +44,15 @@ export class FormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-
     this.formGroup = this.formBuilder.group({
       id: [],
       nome: ['', [Validators.required, Validators.maxLength(20)]],
       preco: ['', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,2})?$')]],
       duracao: ['', Validators.required],
       descricao: ['', [Validators.required, Validators.maxLength(120)]],
+      beneficios: [[]],  // Aqui os benefícios já vêm preenchidos diretamente
       academia: ['']
     });
-
   }
 
   ngOnInit() {
@@ -79,14 +75,15 @@ export class FormComponent implements OnInit {
             duracao: response.duracao,
             descricao: response.descricao,
             academia: this.gymId,
+            beneficios: response.beneficios ?? [],
           });
-        })
+        });
       }
     });
   }
 
   public saveOrUpdate(plan: Plan): void {
-    if (this.created){
+    if (this.created) {
       this.httpMethods.post(this.pathUrlPlan, plan).subscribe(() => {
         this.router.navigate(['/plan/list']).then();
       })
@@ -96,10 +93,4 @@ export class FormComponent implements OnInit {
       })
     }
   }
-
-
-
 }
-
-
-

@@ -3,10 +3,8 @@ import {URLS} from "../../../../app.urls";
 import {Member} from "../../interfaces/member";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatCard, MatCardActions, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
-import {MatList, MatListItem, MatListItemLine, MatListSubheaderCssMatStyler} from "@angular/material/list";
 import {MemberPlan} from "../../interfaces/member-plan";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
@@ -20,16 +18,9 @@ import {NgForOf} from "@angular/common";
   selector: 'app-list',
   standalone: true,
   imports: [
-    MatButton,
     MatCard,
     MatIcon,
-    MatIconButton,
-    MatList,
-    MatListItem,
-    MatListItemLine,
-    MatListSubheaderCssMatStyler,
     MatCardContent,
-    MatCardActions,
     MatLabel,
     MatFormField,
     MatInput,

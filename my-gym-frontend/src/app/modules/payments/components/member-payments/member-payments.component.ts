@@ -3,7 +3,7 @@ import {MemberPlan} from "../../../member/interfaces/member-plan";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {URLS} from "../../../../app.urls";
-import {DatePipe, DecimalPipe, NgClass, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
+import {DatePipe, DecimalPipe, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
 import {
   MatCell, MatCellDef,
   MatColumnDef,

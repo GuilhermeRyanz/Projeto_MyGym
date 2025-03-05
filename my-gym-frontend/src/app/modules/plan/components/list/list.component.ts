@@ -3,19 +3,22 @@ import {URLS} from "../../../../app.urls";
 import {Plan} from "../../interfaces/plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatIcon} from "@angular/material/icon";
+import {MatButton} from "@angular/material/button";
 import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatIconModule} from "@angular/material/icon";
+import {
+  ConfirmDialogComponentComponent
+} from "../../../member/components/confirm-dialog-component/confirm-dialog-component.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-list',
   standalone: true,
   imports: [
+    MatIconModule,
     MatButton,
-    MatIcon,
-    MatIconButton,
     MatListModule,
     MatCardModule
   ],
@@ -28,15 +31,16 @@ export class ListComponent implements OnInit {
   protected plans: Plan[] | undefined;
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
-
   private getIdGym(): void {
     this.gym_id = localStorage.getItem("academia")
   }
 
+
   constructor(private httpMethods: HttpMethodsService,
               private router: Router,
               private snackBar: MatSnackBar,
-              ) {
+              private dialog: MatDialog,
+  ) {
   }
 
   ngOnInit() {
@@ -72,8 +76,18 @@ export class ListComponent implements OnInit {
   }
 
   public disable(plan: Plan): void {
-    this.httpMethods.disable(this.pathUrlPlan, plan, 'desativar').subscribe(() => {
-      this.seach()
+    const dialogRef = this.dialog.open(ConfirmDialogComponentComponent)
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.httpMethods.disable(this.pathUrlPlan, plan, 'desativar').subscribe(() => {
+          this.seach()
+          let sucessMensage =  "Plano desativado"
+          this.snackBar.open(  sucessMensage, 'Fechar', {
+            duration: 5000,
+            verticalPosition: 'top',
+          });
+        })
+      }
     });
   }
 

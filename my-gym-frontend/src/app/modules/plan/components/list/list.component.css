@@ -1,0 +1,16 @@
+.plan-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 30rem;
+}
+
+.edit-button {
+  color: #4768ff;
+  border-radius: 5px;
+}
+
+.delete-button {
+  color: #ff4747;
+  border-radius: 5px;
+}

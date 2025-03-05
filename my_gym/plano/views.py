@@ -23,8 +23,55 @@ class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         return models.Plano.objects.filter(
-            academia__usuarioacademia__usuario=self.request.user
+            academia__usuarioacademia__usuario=self.request.user,
+            active=True
         )
+
+    def dias_str(self, dias):
+
+        if not dias:
+            return "Todos os dias"
+
+        dias_semana = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
+        dias_count = len(dias)
+
+        if dias_count == 7:
+            return "Todos os dias"
+
+        dias.sort()
+
+        intervalos = []
+        intervalo_atual = [dias[0]]
+
+        for i in range(1, dias_count):
+            if dias[i] == dias[i - 1] + 1:
+                intervalo_atual.append(dias[i])
+            else:
+                if len(intervalo_atual) > 1:
+                    intervalos.append(f"{dias_semana[intervalo_atual[0] - 1]} a {dias_semana[intervalo_atual[-1] - 1]}")
+                else:
+                    intervalos.append(dias_semana[intervalo_atual[0] - 1])
+                intervalo_atual = [dias[i]]
+
+        if len(intervalo_atual) > 1:
+            intervalos.append(f"{dias_semana[intervalo_atual[0] - 1]} a {dias_semana[intervalo_atual[-1] - 1]}")
+        else:
+            intervalos.append(dias_semana[intervalo_atual[0] - 1])
+
+        return ", ".join(intervalos)
+
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        planos = self.get_serializer(queryset, many=True).data
+
+        for plano in planos:
+            dias_permitidos = plano.get('dias_permitidos', [])
+            dias_str = self.dias_str(dias_permitidos)
+            plano['dias_permitidos_str'] =  {dias_str}
+
+        return Response(planos)
+
 
     @action(detail=True, methods=['post'])
     def desativar(self, request, pk=None):

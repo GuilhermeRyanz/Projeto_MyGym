@@ -11,7 +11,7 @@ import {MatButtonModule} from "@angular/material/button";
   ],
   template:`
     <h1 mat-dialog-title>Confirmação</h1>
-    <div mat-dialog-content>Voce tem certeza de que deseja excluir esse funcionario? Ele não podera acessar novamente o sistema da academia</div>
+    <div mat-dialog-content>Voce tem certeza de que deseja excluir esse plano?</div>
     <div mat-dialog-actions>
       <button mat-button [mat-dialog-close]="false">Cancelar</button>
       <button mat-button color="warn" [mat-dialog-close]="true">Confirmar</button>

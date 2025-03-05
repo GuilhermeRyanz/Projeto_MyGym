@@ -4,24 +4,54 @@
 
   <div class="flex flex-wrap justify-content-center gap-3">
     @for (plan of plans; track plan.id) {
-      <mat-card class="plan-card w-30rem" >
+      <mat-card class="plan-card w-30rem p-3">
         <mat-card-content>
-          <div class="flex flex-column align-content-start">
+          <div class="flex flex-column gap-2">
             <div class="flex align-items-center justify-content-between">
-              <div class="text-2xl font-bold">{{plan.nome}}</div>
-              <div class="text-2xl font-bold">{{plan.preco}}</div>
+              <div class="text-2xl font-bold">{{ plan.nome }}</div>
+              <div class="text-2xl font-bold text-green-500">R$ {{ plan.preco }}</div>
             </div>
-            <div class="text-gray-900">
-              {{plan.descricao}}
+
+            <div class="text-gray-700 text-sm mb-2">
+              {{ plan.descricao }}
             </div>
-            <div class="text-2xl font-bold">Beneficios</div>
+
+            <div class="text-lg font-bold">Benefícios:</div>
+            <ul class="pl-3">
+              @for (benefit of plan.beneficios; track benefit) {
+                <li class="text-sm"> {{benefit}}</li>
+              }
+            </ul>
+
+            <div class="flex justify-content-between text-sm font-medium mt-2">
+              <div>Duração:</div>
+              <div class="text-primary font-bold">{{ plan.duracao }} meses</div>
+            </div>
+            <div class="flex justify-content-between text-sm font-medium">
+              <div>Dias disponíveis:</div>
+              <div class="text-sm"> {{plan.dias_permitidos_str}}</div>
+            </div>
+
+            <div class="plan-actions flex justify-content-between">
+              <button mat-stroked-button class="edit-button" (click)="edit(plan)">
+                <mat-icon>edit_square</mat-icon>
+                Editar
+              </button>
+              <button mat-stroked-button class="delete-button" (click)="disable(plan)">
+                <mat-icon>delete</mat-icon>
+                Excluir</button>
+            </div>
 
           </div>
-
         </mat-card-content>
       </mat-card>
     }
   </div>
-  <button mat-raised-button class="add_button" [disabled]="typeUser == 'A'" mat-button color="warn" (click)="create()">Novo Plano</button>
-</div>
 
+  <button mat-raised-button class="add_button mt-3"
+          [disabled]="typeUser == 'A'"
+          mat-button color="warn"
+          (click)="create()">
+    Novo Plano
+  </button>
+</div>

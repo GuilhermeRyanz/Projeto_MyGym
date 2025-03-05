@@ -7,45 +7,14 @@ from academia.models import Academia
 from core.models import ModelBase
 
 
-class DiasSemana(models.TextChoices):
-    SEGUNDA = "segunda", "Segunda-feira"
-    TERCA = "terca", "Terça-feira"
-    QUARTA = "quarta", "Quarta-feira"
-    QUINTA = "quinta", "Quinta-feira"
-    SEXTA = "sexta", "Sexta-feira"
-    SABADO = "sabado", "Sábado"
-    DOMINGO = "domingo", "Domingo"
-
-
-class TipoBeneficio(models.TextChoices):
-    DESCONTO = "desconto", "Desconto em produtos"
-    OUTROS = "outros", "Outros"
-    NENHUM = "nenhum", "Nenhum"
-
-
-class Beneficio(ModelBase, models.Model):
-    tipo_beneficio = models.CharField(
-        choices=TipoBeneficio.choices,
-        default=TipoBeneficio.NENHUM
-    )
-
-    descricao = models.CharField(
-        blank=True,
-        null=True,
-        help_text="Descricao detalhada dobeneficio",
-    )
-
-    desconto_percentual = models.DecimalField(
-        max_digits=5, decimal_places=2,
-        blank=True, null=True,
-        help_text="Percentual de desconto",
-    )
-
-    class Meta:
-        db_table = "beneficio"
-
-    def __str__(self):
-        return f"{self.tipo_beneficio} - {self.descricao or 'Sem descrição'}"
+class DiasSemana(models.IntegerChoices):
+    SEGUNDA = 1, "Segunda-feira"
+    TERCA = 2, "Terça-feira"
+    QUARTA = 3, "Quarta-feira"
+    QUINTA = 4, "Quinta-feira"
+    SEXTA = 5, "Sexta-feira"
+    SABADO = 6, "Sábado"
+    DOMINGO = 7, "Domingo"
 
 
 class Plano(ModelBase):
@@ -71,11 +40,11 @@ class Plano(ModelBase):
         db_column='duracao'
     )
 
-    beneficios = models.ManyToManyField(
-        Beneficio,
-        related_name='planos',
-        blank=True,
-    )
+    beneficios = models.JSONField(null=True, blank=True)
+
+    desconto = models.DecimalField(
+        max_digits=5, decimal_places=2,
+        null=True, blank=True)
 
     academia = models.ForeignKey(
         Academia,
