@@ -3,8 +3,7 @@ import {URLS} from "../../../../app.urls";
 import {Plan} from "../../interfaces/plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatIcon} from "@angular/material/icon";
+import {MatButton} from "@angular/material/button";
 import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -14,8 +13,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   standalone: true,
   imports: [
     MatButton,
-    MatIcon,
-    MatIconButton,
     MatListModule,
     MatCardModule
   ],
