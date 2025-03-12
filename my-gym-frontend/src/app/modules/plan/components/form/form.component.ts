@@ -1,42 +1,52 @@
-import {Component, OnInit} from '@angular/core';
-import {MatButton,} from "@angular/material/button";
-import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {URLS} from "../../../../app.urls";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
-import {Plan} from "../../interfaces/plan";
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { URLS } from "../../../../app.urls";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { HttpMethodsService } from "../../../../shared/services/httpMethods/http-methods.service";
+import { Plan } from "../../interfaces/plan";
+import { NgForOf } from "@angular/common";
+import { MatIcon } from "@angular/material/icon";
+import { MatButton } from "@angular/material/button";
+import { MatError, MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatInput } from "@angular/material/input";
+import { MatOption, MatSelect } from "@angular/material/select";
 
 @Component({
   selector: 'app-form',
   standalone: true,
   imports: [
+    ReactiveFormsModule,
+    NgForOf,
+    MatLabel,
+    MatError,
     MatButton,
     MatFormField,
     MatInput,
-    MatLabel,
-    ReactiveFormsModule,
-    MatError
+    MatIcon,
+    MatSelect,
+    MatOption,
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css'
 })
 export class FormComponent implements OnInit {
 
-  public action: String = "";
+  public action: string = "";
   private pathUrlPlan: string = URLS.PLAN;
   formGroup: FormGroup;
-  private created: boolean = true
+  private created: boolean = true;
   private gymId: string | null = "";
   public title: string = "Criação de Plano";
 
-  getPlan(): void {
-    this.gymId = localStorage.getItem("academia");
-    if (this.gymId) {
-      this.formGroup.patchValue({academia: this.gymId});
-    }
-  }
+  diasSemana = [
+    { label: 'Domingo', valor: 1 },
+    { label: 'Segunda', valor: 2 },
+    { label: 'Terça', valor: 3 },
+    { label: 'Quarta', valor: 4 },
+    { label: 'Quinta', valor: 5 },
+    { label: 'Sexta', valor: 6 },
+    { label: 'Sábado', valor: 7 }
+  ];
 
   constructor(
     private httpMethods: HttpMethodsService,
@@ -49,48 +59,100 @@ export class FormComponent implements OnInit {
       nome: ['', [Validators.required, Validators.maxLength(20)]],
       preco: ['', [Validators.required, Validators.pattern('^[0-9]+(\.[0-9]{1,2})?$')]],
       duracao: ['', Validators.required],
-      descricao: ['', [Validators.required, Validators.maxLength(120)]],
-      beneficios: [[]],  // Aqui os benefícios já vêm preenchidos diretamente
+      descricao: ['', [Validators.required, Validators.maxLength(250)]],
+      beneficios: this.formBuilder.array([]),
+      desconto: [0, [Validators.min(0), Validators.max(100)]],
+      dias_permitidos: [[]],
       academia: ['']
     });
   }
 
+  get benefits() {
+    return this.formGroup.get("beneficios") as FormArray<FormGroup>;
+  }
+
+  addBeneficio(): void {
+    const item = this.formBuilder.group({
+      beneficio: ['', [Validators.maxLength(50)]],
+    });
+
+    this.benefits.push(item);
+  }
+
+  removeBeneficio(index: number): void {
+    this.benefits.removeAt(index);
+  }
+
   ngOnInit() {
-    this.getPlan()
+    this.getPlan();
     this.retriveCallBack();
   }
 
-  public retriveCallBack() {
+  getPlan(): void {
+    this.gymId = localStorage.getItem("academia");
+    if (this.gymId) {
+      this.formGroup.patchValue({ academia: this.gymId });
+    }
+  }
+
+  retriveCallBack() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.action = <string>params.get('action');
       this.created = !(this.action && this.action !== 'create');
 
       if (!this.created) {
         this.title = "Edição de Plano";
-        this.httpMethods.get(this.pathUrlPlan + this.action + '/').subscribe((response: any) => {
-          this.formGroup.setValue({
+        this.httpMethods.get(`${this.pathUrlPlan}${this.action}/`).subscribe((response: any) => {
+          this.benefits.clear();
+
+          if (Array.isArray(response.beneficios)) {
+            response.beneficios.forEach((beneficio: string) => {
+              this.benefits.push(this.formBuilder.group({
+                beneficio: [beneficio, [Validators.maxLength(50)]]
+              }));
+            });
+          } else {
+            console.warn("Benefícios recebidos não são um array:", response.beneficios);
+          }
+
+          this.formGroup.patchValue({
             id: response.id,
             nome: response.nome,
             preco: response.preco,
             duracao: response.duracao,
             descricao: response.descricao,
+            desconto: response.desconto,
             academia: this.gymId,
-            beneficios: response.beneficios ?? [],
+            dias_permitidos: Array.isArray(response.dias_permitidos)
+              ? response.dias_permitidos.map(Number)
+              : []
           });
         });
       }
     });
   }
 
-  public saveOrUpdate(plan: Plan): void {
+  saveOrUpdate(plan: Plan): void {
+    plan.beneficios = this.benefits.value
+      .map((b: any) => b.beneficio)
+      .filter((beneficio: string) => beneficio.trim() !== "");
+
+    const payload = {
+      ...plan,
+      academia: Number(this.gymId),
+      preco: parseFloat(plan.preco.toString()),
+      desconto: parseFloat(plan.desconto.toString()),
+      dias_permitidos: plan.dias_permitidos?.map(Number)
+    };
+
     if (this.created) {
-      this.httpMethods.post(this.pathUrlPlan, plan).subscribe(() => {
+      this.httpMethods.post(this.pathUrlPlan, payload).subscribe(() => {
         this.router.navigate(['/plan/list']).then();
-      })
+      });
     } else {
-      this.httpMethods.patch(this.pathUrlPlan, plan).subscribe(() => {
+      this.httpMethods.patch(`${this.pathUrlPlan}`, payload).subscribe(() => {
         this.router.navigate(['/plan/list']).then();
-      })
+      });
     }
   }
 }

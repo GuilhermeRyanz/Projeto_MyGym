@@ -12,12 +12,14 @@ class PlanoSerializer(serializers.ModelSerializer):
     preco = serializers.DecimalField(max_digits=10, decimal_places=2)
     descricao = serializers.CharField(default="Acesso total à academia por um mês")
     duracao = serializers.IntegerField(default=1)
+    beneficios = serializers.ListField(
+        child= serializers.CharField(), required=False
+    )
     academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all())
     desconto = serializers.DecimalField(max_digits=10, decimal_places=2)
     dias_permitidos = serializers.ListField(
         child=serializers.IntegerField(
-            min_value=1, max_value=7,
-        ),
+            min_value=1, max_value=7,        ),
         required=False
     )
 

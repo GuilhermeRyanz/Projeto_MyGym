@@ -7,7 +7,7 @@ export interface Plan {
   descricao: string;
   duracao: number;
   academia: number;
-  beneficios: string[];
+  beneficios: any[];
   dias_permitidos?: number[];
   desconto: number;
   dias_permitidos_str?: string;

@@ -2,48 +2,56 @@
   <h2 mat-subheader>Planos</h2>
   <p class="subtitle flex justify-content-center">Crie e edite os planos fornecidos pela academia</p>
 
-  <div class="flex flex-wrap justify-content-center gap-3">
+  <div class="flex flex-wrap justify-content-center gap-3 p-2">
     @for (plan of plans; track plan.id) {
-      <mat-card class="plan-card w-30rem p-3">
-        <mat-card-content>
+      <mat-card class="plan-card w-30rem p-3 flex flex-column justify-content-between">
+        <mat-card-content class="flex-grow-1">
           <div class="flex flex-column gap-2">
             <div class="flex align-items-center justify-content-between">
               <div class="text-2xl font-bold">{{ plan.nome }}</div>
               <div class="text-2xl font-bold text-green-500">R$ {{ plan.preco }}</div>
             </div>
 
-            <div class="text-gray-700 text-sm mb-2">
+            <div class="line-clamp-3 text-gray-700 text-sm mb-2 overflow-hidden text-overflow-ellipsis line-clamp-3">
               {{ plan.descricao }}
             </div>
 
-            <div class="text-lg font-bold">Benefícios:</div>
-            <ul class="pl-3">
+            <div class="text-lg font-bold overflow-hidden text-overflow-ellipsis">Benefícios:</div>
+            <ul class="pl-3 line-clamp-5 overflow-hidden">
               @for (benefit of plan.beneficios; track benefit) {
                 <li class="text-sm"> {{benefit}}</li>
               }
             </ul>
 
-            <div class="flex justify-content-between text-sm font-medium mt-2">
-              <div>Duração:</div>
-              <div class="text-primary font-bold">{{ plan.duracao }} meses</div>
-            </div>
-            <div class="flex justify-content-between text-sm font-medium">
-              <div>Dias disponíveis:</div>
-              <div class="text-sm"> {{plan.dias_permitidos_str}}</div>
-            </div>
-
-            <div class="plan-actions flex justify-content-between">
-              <button mat-stroked-button class="edit-button" (click)="edit(plan)">
-                <mat-icon>edit_square</mat-icon>
-                Editar
-              </button>
-              <button mat-stroked-button class="delete-button" (click)="disable(plan)">
-                <mat-icon>delete</mat-icon>
-                Excluir</button>
-            </div>
-
           </div>
         </mat-card-content>
+
+        <div class="p-3">
+          <div class="flex justify-content-between text-sm font-medium mt-2">
+            <div>Duração:</div>
+            <div class="text-primary font-bold">{{ plan.duracao }} meses</div>
+          </div>
+          <div class="flex justify-content-between text-sm font-medium">
+            <div>Dias disponíveis:</div>
+            <div class="text-sm"> {{plan.dias_permitidos_str}}</div>
+          </div>
+        </div>
+
+        <div class="plan-actions flex justify-content-between mt-auto p-3">
+          <button mat-stroked-button class="edit-button" (click)="edit(plan)">
+            <mat-icon>edit_square</mat-icon>
+            Editar
+          </button>
+          <button mat-stroked-button class="delete-button" (click)="disable(plan)">
+            <mat-icon>delete</mat-icon>
+            Excluir
+          </button>
+        </div>
+
+        <button mat-stroked-button class="view-details-button mt-2 w-full" (click)="viewDetail(plan)">
+          <mat-icon>info</mat-icon>
+          Ver Detalhes
+        </button>
       </mat-card>
     }
   </div>

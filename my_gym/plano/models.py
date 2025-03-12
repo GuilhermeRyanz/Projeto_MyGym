@@ -40,7 +40,7 @@ class Plano(ModelBase):
         db_column='duracao'
     )
 
-    beneficios = models.JSONField(null=True, blank=True)
+    beneficios = models.JSONField(default=list , blank=True)
 
     desconto = models.DecimalField(
         max_digits=5, decimal_places=2,

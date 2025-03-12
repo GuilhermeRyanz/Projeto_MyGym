@@ -2,34 +2,31 @@ import {Component, OnInit} from '@angular/core';
 import {MatCard, MatCardActions, MatCardContent} from "@angular/material/card";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {MatListSubheaderCssMatStyler} from "@angular/material/list";
-import {MatRadioButton} from "@angular/material/radio";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {PaymentConfirmComponent} from "../../../payment/components/payment-confirm/payment-confirm.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MemberPlan} from "../../../member/interfaces/member-plan";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {CheckInConfirmComponent} from "../check-in-confirm/check-in-confirm.component";
+import {NgForOf} from "@angular/common";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-check-in-registration',
   standalone: true,
   imports: [
     MatCard,
-    MatCardActions,
     MatCardContent,
     MatFormField,
     MatInput,
     MatLabel,
-    MatListSubheaderCssMatStyler,
-    MatRadioButton,
     MatTab,
     MatTabGroup,
-    PaymentConfirmComponent,
     ReactiveFormsModule,
     FormsModule,
-    CheckInConfirmComponent
+    CheckInConfirmComponent,
+    NgForOf,
+    MatIcon
   ],
   templateUrl: './check-in-registration.component.html',
   styleUrl: './check-in-registration.component.css'
@@ -68,10 +65,21 @@ export class CheckInRegistrationComponent implements OnInit {
     });
   };
 
+  trackById(index: number, member: MemberPlan) {
+    return member.aluno.id;
+  }
+
   makePayment(member: MemberPlan): void {
     this.obj = member;
     this.selectedIndex = 1;
 
+  }
+
+  getInitials(name: string): string {
+    if (!name) return '';
+    const nameParts = name.trim().split(' ');
+    const initials = nameParts.map(part => part.charAt(0).toUpperCase()).join('');
+    return initials.length > 2 ? initials.substring(0, 2) : initials;
   }
 
   public searchMember(): void {

@@ -1,56 +1,117 @@
-<div class="container">
+<div class="container p-3">
   <form [formGroup]="formGroup" (ngSubmit)="saveOrUpdate(formGroup.value)" class="mat-elevation-z2 form">
-    <h2>{{this.title}}</h2>
+    <h2>{{ this.title }}</h2>
     <mat-form-field appearance="fill" class="nome">
       <mat-label>Nome</mat-label>
-      <input matInput formControlName="nome" placeholder="Digite o nome do plano" />
-      @if(formGroup.get('nome')?.hasError('required')){<mat-error>
-        Campo Obrigatorio
-      </mat-error>}
+      <input matInput formControlName="nome" placeholder="Digite o nome do plano"/>
+      @if (formGroup.get('nome')?.hasError('required')) {
+        <mat-error>
+          Campo Obrigatorio
+        </mat-error>
+      }
 
-      @if(formGroup.get('nome')?.hasError('maxlength')){<mat-error>
-        Nome tem limite de 20 caracteres
-      </mat-error>}
+      @if (formGroup.get('nome')?.hasError('maxlength')) {
+        <mat-error>
+          Nome tem limite de 20 caracteres
+        </mat-error>
+      }
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+
+  <div class="flex align-items-center justify-content-between gap-2">
+    <mat-form-field appearance="fill" style="width: 50%">
       <mat-label>Preço</mat-label>
-      <input matInput type="number" formControlName="preco" placeholder="Digite o preço" />
-      @if(formGroup.get('preco')?.hasError('required')){<mat-error>
-        Campo Obrigatório
-      </mat-error>}
-      @if(formGroup.get('preco')?.hasError('pattern')){<mat-error>
-        Preço inválido (deve ser um número com até 2 casas decimais)
-      </mat-error>}
+      <input matInput type="number" formControlName="preco" placeholder="Digite o preço"/>
+      @if (formGroup.get('preco')?.hasError('required')) {
+        <mat-error>
+          Campo Obrigatório
+        </mat-error>
+      }
+      @if (formGroup.get('preco')?.hasError('pattern')) {
+        <mat-error>
+          Preço inválido (deve ser um número com até 2 casas decimais)
+        </mat-error>
+      }
     </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 50%">
+      <mat-label>
+        Duração
+      </mat-label>
+      <input matInput type="number" formControlName="duracao" placeholder="Duração em meses" [min]="1"/>
+      @if (formGroup.get('duracao')?.hasError('required')) {
+        <mat-error>
+          Campo Obrigatório
+        </mat-error>
+      }
+
+      @if (formGroup.get('duracao')?.hasError('required')) {
+        <mat-error>
+          Campo Obrigatório
+        </mat-error>
+      }
+
+    </mat-form-field>
+
+  </div>
+
 
     <mat-form-field appearance="fill">
       <mat-label>Descrição</mat-label>
       <textarea matInput formControlName="descricao" placeholder="Digite uma descrição" rows="4"></textarea>
-      @if(formGroup.get('descricao')?.hasError('required')){<mat-error>
-        Campo Obrigatório
-      </mat-error>}
+      @if (formGroup.get('descricao')?.hasError('required')) {
+        <mat-error>
+          Campo Obrigatório
+        </mat-error>
+      }
 
-      @if(formGroup.get('descricao')?.hasError('maxlength')){<mat-error>
-        Nome tem limite de 120 caracteres
-      </mat-error>}
+      @if (formGroup.get('descricao')?.hasError('maxlength')) {
+        <mat-error>
+          limite de 120 caracteres
+        </mat-error>
+      }
 
+    </mat-form-field>
+
+
+    <mat-form-field appearance="fill">
+      <mat-label>Dias Permitidos</mat-label>
+      <mat-select formControlName="dias_permitidos" multiple>
+        <mat-option *ngFor="let dia of diasSemana" [value]="dia.valor">
+          {{ dia.label }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Duração</mat-label>
-      <input matInput type="number" formControlName="duracao" placeholder="Duração em meses" [min]="1" />
-      @if(formGroup.get('duracao')?.hasError('required')){<mat-error>
-        Campo Obrigatório
-      </mat-error>}
-
-      @if(formGroup.get('duracao')?.hasError('required')){<mat-error>
-        Campo Obrigatório
-      </mat-error>}
-
+      <mat-label>Desconto em prudutos (%)</mat-label>
+      <input matInput type="number" formControlName="desconto" placeholder="Digite o desconto" [min]="0" [max]="100"/>
+      @if (formGroup.get('desconto')?.hasError('min')) {
+        <mat-error> O desconto não pode ser negativo. </mat-error>
+      }
+      @if (formGroup.get('desconto')?.hasError('max')) {
+        <mat-error> O desconto não pode ser maior que 100%. </mat-error>
+      }
     </mat-form-field>
 
-    <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit" class="save">Salvar</button>
+    <div class="flex justify-content-between ">
+      <h3>Beneficios</h3>
+      <button style="width: 20%;" type="button" mat-button (click)="addBeneficio()">Adicionar Benefício</button>
+    </div>
 
+    <div formArrayName="beneficios">
+      <div *ngFor="let benefit of benefits.controls; let i = index" [formGroupName]="i">
+        <div class="flex align-items-center justify-content-between flex-wrap">
+          <mat-form-field appearance="outline" style="width: 50%; margin-bottom: 1px">
+            <input matInput formControlName="beneficio" placeholder="">
+          </mat-form-field>
+          <mat-icon style="color: red; cursor: pointer" (click)="removeBeneficio(i)" aria-label="Remover benefício">
+            backspace
+          </mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit" class="save">Salvar</button>
   </form>
 </div>

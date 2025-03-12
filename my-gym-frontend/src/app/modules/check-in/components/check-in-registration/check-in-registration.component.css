@@ -1,15 +1,109 @@
-.member-cad {
+.title {
+  text-align: center;
   margin-bottom: 16px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.subtitle {
+  text-align: center;
+  color: #909090;
 }
 
 .search{
-  width: 100%;
   margin-top: 16px;
 }
 
+.member-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.member-card {
+  width: 95%;
+  background: #f8f8f8;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.member-card:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.member-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #53cd55;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-transform: uppercase;
+}
+
+
 .member-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.name {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.email {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.extra-info {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.info-row {
+  display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.footer {
+  background: #ededed;
+  font-size: 0.9rem;
+  color: #969696;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 9px 9px;
+}
+
+.member-card:hover .footer {
+  color: #ffffff;
+  background-color: #53cd55;
 }
 
 .mat-tab-group {

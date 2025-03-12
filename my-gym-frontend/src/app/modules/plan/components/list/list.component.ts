@@ -12,6 +12,7 @@ import {
   ConfirmDialogComponentComponent
 } from "../../../member/components/confirm-dialog-component/confirm-dialog-component.component";
 import {MatDialog} from "@angular/material/dialog";
+import {PlanDetailComponent} from "../plan-detail/plan-detail.component";
 
 @Component({
   selector: 'app-list',
@@ -73,6 +74,14 @@ export class ListComponent implements OnInit {
 
   public edit(plan: Plan): void {
     this.router.navigate([`/plan/form/${plan.id}`]).then();
+  }
+
+  public viewDetail(plano:  Plan): void {
+    this.dialog.open(PlanDetailComponent, {
+      width: '40rem',
+      maxWidth: 'none',
+      data: plano
+    });
   }
 
   public disable(plan: Plan): void {

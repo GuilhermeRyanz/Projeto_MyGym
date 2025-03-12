@@ -1,0 +1,30 @@
+.dialog-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.dialog-content {
+  max-width: 850px;
+  min-width: 650px;
+}
+
+
+
+.text-green-500 {
+  color: #0f9d58;
+}
+
+.text-primary {
+  color: #007bff;
+}
+
+
+.dialog-actions {
+  border-top: 1px solid #ddd;
+}
+
+.close-button {
+  color: #d32f2f;
+  font-weight: bold;
+}
