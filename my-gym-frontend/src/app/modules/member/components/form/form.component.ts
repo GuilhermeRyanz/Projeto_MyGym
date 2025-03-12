@@ -7,7 +7,6 @@ import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {Plan} from "../../../plan/interfaces/plan";
-import {MatOption, MatSelect} from "@angular/material/select";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {MemberPlanComponent} from "../member-plan/member-plan.component";
 import {Member} from "../../interfaces/member";
@@ -25,8 +24,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     MatInput,
     MatLabel,
     ReactiveFormsModule,
-    MatSelect,
-    MatOption,
     MatTabGroup,
     MatTab,
     MemberPlanComponent,
