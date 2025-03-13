@@ -7,7 +7,6 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {MatButton} from "@angular/material/button";
-import {DatePipe, NgForOf} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
 import {MatCard, MatCardContent} from "@angular/material/card";
 
@@ -19,8 +18,6 @@ import {MatCard, MatCardContent} from "@angular/material/card";
     MatDialogActions,
     MatDialogTitle,
     MatButton,
-    NgForOf,
-    DatePipe,
     MatIcon,
     MatCardContent,
     MatCard
