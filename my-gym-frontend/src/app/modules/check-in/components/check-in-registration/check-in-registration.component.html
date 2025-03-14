@@ -6,28 +6,31 @@
     <div class="flex align-items-center justify-content-center">
       <mat-form-field appearance="outline" class="search w-30rem">
         <mat-label>Busca Aluno</mat-label>
-        <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm" (input)="searchMember()"/>
+        <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
+               (input)="searchMember()"/>
       </mat-form-field>
     </div>
 
     <div class="member-list p-3 gap-2">
       @for (member of membersPlan; track member.aluno.id) {
-        <mat-card class="member-card" *ngFor="let member of membersPlan; trackBy: trackById " (click)="makePayment(member)">
+        <mat-card class="member-card" *ngFor="let member of membersPlan; trackBy: trackById "
+                  (click)="makePayment(member)">
           <mat-card-content>
             <div class="member-info flex align-items-center">
               <div class="avatar align-items-center">
                 {{ getInitials(member.aluno.nome) }}
-              </div>          <div class="details flex-column">
-              <h3 class="name">{{ member.aluno.nome }}</h3>
-              <p class="email">{{ member.aluno.email }}</p>
-            </div>
+              </div>
+              <div class="details flex-column">
+                <h3 class="name">{{ member.aluno.nome }}</h3>
+                <p class="email">{{ member.aluno.email }}</p>
+              </div>
             </div>
             <div class="extra-info">
               <div class="info-row">
                 <span>Plano Atual:</span> <strong>{{ member.plano.nome }}</strong>
               </div>
               <div class="info-row">
-                <span>Matrícula:</span> <strong>{{(member.aluno.matricula) }}</strong>
+                <span>Matrícula:</span> <strong>{{ (member.aluno.matricula) }}</strong>
               </div>
             </div>
           </mat-card-content>
@@ -40,7 +43,7 @@
     </div>
   </mat-tab>
   <mat-tab label="Confirmação" [disabled]="!obj">
-    <app-check-in-confirm [member]="obj" ></app-check-in-confirm>
+    <app-check-in-confirm [member]="obj"></app-check-in-confirm>
   </mat-tab>
 </mat-tab-group>
 

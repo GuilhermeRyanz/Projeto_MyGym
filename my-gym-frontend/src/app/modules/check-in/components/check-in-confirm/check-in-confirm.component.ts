@@ -2,12 +2,12 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MemberPlan} from "../../../member/interfaces/member-plan";
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from "@angular/material/card";
-import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-check-in-confirm',
@@ -17,10 +17,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     MatCard,
     MatCardActions,
     MatCardContent,
-    MatCardHeader,
-    MatRadioButton,
-    MatRadioGroup,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIcon,
+    MatCardHeader
   ],
   templateUrl: './check-in-confirm.component.html',
   styleUrl: './check-in-confirm.component.css'
@@ -31,6 +30,8 @@ export class CheckInConfirmComponent implements OnInit{
   private gymId: string | null = "";
   protected formGroup: FormGroup;
   private pathUrlFrequncy: string = URLS.FREQUENCY;
+  currentTime: string = '';
+
 
 
   getGym(): void {
@@ -46,7 +47,9 @@ export class CheckInConfirmComponent implements OnInit{
     private router: Router,
     private snackBar: MatSnackBar
 
+
   ) {
+    this.updateTime();
     this.formGroup = this.formBuilder.group({
       aluno: [""],
       academia: [this.gymId]
@@ -55,6 +58,20 @@ export class CheckInConfirmComponent implements OnInit{
 
   ngOnInit() {
     this.getGym()
+  }
+
+  getInitials(name: string): string {
+    if (!name) return '';
+    const nameParts = name.trim().split(' ');
+    const initials = nameParts.map(part => part.charAt(0).toUpperCase()).join('');
+    return initials.length > 2 ? initials.substring(0, 2) : initials;
+  }
+
+  updateTime() {
+    setInterval(() => {
+      const now = new Date();
+      this.currentTime = now.toLocaleString();
+    }, 1000);
   }
 
 
