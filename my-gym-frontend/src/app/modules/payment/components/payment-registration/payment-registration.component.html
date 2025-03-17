@@ -1,26 +1,44 @@
-<h2 mat-subheader>Pagamento</h2>
+<h2 class="title">Pagamento</h2>
+<div class="subtitle flex justify-content-center">Registre pagamentos realizados por alunos</div>
+
 <mat-tab-group [(selectedIndex)]="selectedIndex">
   <mat-tab label="Seleção Aluno">
-  <div class="employer-list">
-    <mat-form-field appearance="outline" class="search">
-      <mat-label>Busca Aluno</mat-label>
-      <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm" (input)="searchMember()"/>
-    </mat-form-field>
-    @for (member of membersPlan; track member.aluno.id) {
-      <mat-card class="member-cad" appearance="outlined">
-        <mat-card-content>
-          <div class="member-info">
-            <div><strong>Matricula:</strong> {{ member.aluno.matricula }}</div>
-            <div><strong>Nome:</strong> {{ member.aluno.nome }}</div>
-            <div><strong>Plano:</strong>  {{ member.plano.nome }}</div>
+    <div class="flex align-items-center justify-content-center">
+      <mat-form-field appearance="outline" class="search w-30rem">
+        <mat-label>Busca Aluno</mat-label>
+        <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
+               (input)="searchMember()"/>
+      </mat-form-field>
+    </div>
+
+    <div class="member-list p-3 gap-2">
+        <mat-card class="member-card" *ngFor="let member of membersPlan; trackBy: trackById "
+                  (click)="makePayment(member)">
+          <mat-card-content>
+            <div class="member-info flex align-items-center">
+              <div class="avatar align-items-center">
+                {{ getInitials(member.aluno.nome) }}
+              </div>
+              <div class="details flex-column">
+                <h3 class="name">{{ member.aluno.nome }}</h3>
+                <p class="email">{{ member.aluno.email }}</p>
+              </div>
+            </div>
+            <div class="extra-info">
+              <div class="info-row">
+                <span>Plano Atual:</span> <strong>{{ member.plano.nome }}</strong>
+              </div>
+              <div class="info-row">
+                <span>Matrícula:</span> <strong>{{ (member.aluno.matricula) }}</strong>
+              </div>
+            </div>
+          </mat-card-content>
+          <div class="footer p-2 flex justify-content-center">
+            <mat-icon>attach_money</mat-icon>
+            <span class="Realizar check-in">Registrar Pagamento</span>
           </div>
-        </mat-card-content>
-        <mat-card-actions>
-          <mat-radio-button (click)="makePayment(member)"></mat-radio-button>
-        </mat-card-actions>
-      </mat-card>
-    }
-  </div>
+        </mat-card>
+    </div>
   </mat-tab>
   <mat-tab label="Confirmação" [disabled]="!obj">
   <app-payment-confirm [member]="obj" ></app-payment-confirm>

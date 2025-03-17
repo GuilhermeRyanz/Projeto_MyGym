@@ -12,7 +12,6 @@
     </div>
 
     <div class="member-list p-3 gap-2">
-      @for (member of membersPlan; track member.aluno.id) {
         <mat-card class="member-card" *ngFor="let member of membersPlan; trackBy: trackById "
                   (click)="makePayment(member)">
           <mat-card-content>
@@ -39,7 +38,6 @@
             <span class="Realizar check-in">Registrar Check-in</span>
           </div>
         </mat-card>
-      }
     </div>
   </mat-tab>
   <mat-tab label="Confirmação" [disabled]="!obj">
