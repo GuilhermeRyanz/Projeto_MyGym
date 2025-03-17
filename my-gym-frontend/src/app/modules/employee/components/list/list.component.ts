@@ -12,21 +12,24 @@ import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatToolbar} from "@angular/material/toolbar";
+import {NgForOf} from "@angular/common";
+import {MemberPlan} from "../../../member/interfaces/member-plan";
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-    MatLine,
-    MatCard,
-    MatCardContent,
-    MatCardSubtitle,
-    MatCardActions,
-    MatToolbar
-  ],
+    imports: [
+        MatListModule,
+        MatIconModule,
+        MatButtonModule,
+        MatLine,
+        MatCard,
+        MatCardContent,
+        MatCardSubtitle,
+        MatCardActions,
+        MatToolbar,
+        NgForOf
+    ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
@@ -51,6 +54,12 @@ export class ListComponent implements OnInit {
   ) {
   }
 
+  getInitials(name: string): string {
+    if (!name) return '';
+    const nameParts = name.trim().split(' ');
+    const initials = nameParts.map(part => part.charAt(0).toUpperCase()).join('');
+    return initials.length > 2 ? initials.substring(0, 2) : initials;
+  }
 
   ngOnInit() {
     this.getIdGym()
@@ -74,6 +83,10 @@ export class ListComponent implements OnInit {
 
   public create(): void {
     this.router.navigate(['/employee/form/create']).then();
+  }
+
+  trackById(index: number, employee: Employee) {
+    return employee;
   }
 
   public edit(employee: Employee) {

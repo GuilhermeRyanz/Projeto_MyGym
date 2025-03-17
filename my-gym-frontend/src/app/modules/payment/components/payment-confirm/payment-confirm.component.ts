@@ -10,6 +10,8 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatIcon} from "@angular/material/icon";
+import {CurrencyPipe} from "@angular/common";
 
 @Component({
   selector: 'app-payment-confirm',
@@ -26,7 +28,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     MatCardContent,
     MatCardActions,
     MatRadioButton,
-    MatRadioGroup
+    MatRadioGroup,
+    MatIcon,
+    CurrencyPipe
   ],
   templateUrl: './payment-confirm.component.html',
   styleUrl: './payment-confirm.component.css'
@@ -57,6 +61,13 @@ export class PaymentConfirmComponent implements OnInit {
       tipo_pagamento: [''],
       academia: [this.gymId]
     })
+  }
+
+  getInitials(name: string): string {
+    if (!name) return '';
+    const nameParts = name.trim().split(' ');
+    const initials = nameParts.map(part => part.charAt(0).toUpperCase()).join('');
+    return initials.length > 2 ? initials.substring(0, 2) : initials;
   }
 
   ngOnInit() {

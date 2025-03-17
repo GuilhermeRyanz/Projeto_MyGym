@@ -7,15 +7,15 @@
     <input matInput placeholder="Digite o nome ou matrícula" [(ngModel)]="searchTerm" (input)="searchMember()">
   </mat-form-field>
 
-  <div class="member-list">
+  <div class="member-list ml-4">
     <mat-card class="member-card" *ngFor="let member of members; trackBy: trackById" (click)="selectMember(member)">
       <mat-card-content>
         <div class="member-info flex align-items-center">
           <div class="avatar align-items-center">
             {{ getInitials(member.aluno.nome) }}
           </div>          <div class="details flex-column">
-            <h3 class="name">{{ member.aluno.nome }}</h3>
-            <p class="email">{{ member.aluno.email }}</p>
+            <div class="name">{{ member.aluno.nome }}</div>
+            <div class="email">{{ member.aluno.email }}</div>
           </div>
         </div>
         <div class="extra-info">

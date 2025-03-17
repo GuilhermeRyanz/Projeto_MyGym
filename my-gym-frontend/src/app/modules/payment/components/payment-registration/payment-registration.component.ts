@@ -1,38 +1,32 @@
 import {Component, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatCard, MatCardActions, MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {MatListSubheaderCssMatStyler} from "@angular/material/list";
 import {URLS} from "../../../../app.urls";
 import {MemberPlan} from "../../../member/interfaces/member-plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {PaymentConfirmComponent} from "../payment-confirm/payment-confirm.component";
-import {MatRadioButton} from "@angular/material/radio";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-payment-registration',
   standalone: true,
-  imports: [
-    FormsModule,
-    MatButton,
-    MatCard,
-    MatCardActions,
-    MatCardContent,
-    MatFormField,
-    MatIcon,
-    MatIconButton,
-    MatInput,
-    MatLabel,
-    MatListSubheaderCssMatStyler,
-    MatTabGroup,
-    MatTab,
-    PaymentConfirmComponent,
-    MatRadioButton
-  ],
+    imports: [
+        FormsModule,
+        MatCard,
+        MatCardContent,
+        MatFormField,
+        MatIcon,
+        MatInput,
+        MatLabel,
+        MatTabGroup,
+        MatTab,
+        PaymentConfirmComponent,
+        NgForOf
+    ],
   templateUrl: './payment-registration.component.html',
   styleUrl: './payment-registration.component.css'
 })
@@ -74,6 +68,17 @@ export class PaymentRegistrationComponent implements OnInit {
       this.obj = member;
       this.selectedIndex = 1;
 
+  }
+
+  getInitials(name: string): string {
+    if (!name) return '';
+    const nameParts = name.trim().split(' ');
+    const initials = nameParts.map(part => part.charAt(0).toUpperCase()).join('');
+    return initials.length > 2 ? initials.substring(0, 2) : initials;
+  }
+
+  trackById(index: number, member: MemberPlan) {
+    return member.aluno.id;
   }
 
   public searchMember(): void {

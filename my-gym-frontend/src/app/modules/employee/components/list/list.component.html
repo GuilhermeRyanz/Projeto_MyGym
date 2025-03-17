@@ -1,24 +1,52 @@
 <div class="employer-list">
   <h2>Funcionários</h2>
-  @for (employee of employers; track employee.id) {
-    <mat-card class="employer-card" appearance="outlined">
+<!--  @for (employee of employers; track employee.id) {-->
+<!--    <mat-card class="employer-card" appearance="outlined">-->
+<!--      <mat-card-content>-->
+<!--        <div class="employee-info">-->
+<!--          <div><strong>ID:</strong> {{ employee.id }}</div>-->
+<!--          <div><strong>Nome:</strong> {{ employee.nome }}</div>-->
+<!--          <div><strong>Email:</strong> {{ employee.username }}</div>-->
+<!--          <div><strong>Cargo:</strong> {{ employee.tipo_usuario }}</div>-->
+<!--        </div>-->
+<!--      </mat-card-content>-->
+<!--      <mat-card-actions>-->
+<!--        <button [disabled]="employee.tipo_usuario == 'D' || (typeUser == 'A' )" mat-icon-button color="primary" (click)="edit(employee)">-->
+<!--          <mat-icon>edit</mat-icon>-->
+<!--        </button>-->
+<!--        <button [disabled]="employee.tipo_usuario == 'D' || (typeUser == 'A' )" mat-icon-button color="warn" (click)="disable(employee)">-->
+<!--          <mat-icon>delete</mat-icon>-->
+<!--        </button>-->
+<!--      </mat-card-actions>-->
+<!--    </mat-card>-->
+<!--  }-->
+
+  <div class="member-list ml-4">
+    <mat-card class="member-card" *ngFor="let employee of employers; trackBy: trackById">
       <mat-card-content>
-        <div class="employee-info">
-          <div><strong>ID:</strong> {{ employee.id }}</div>
-          <div><strong>Nome:</strong> {{ employee.nome }}</div>
-          <div><strong>Email:</strong> {{ employee.username }}</div>
-          <div><strong>Cargo:</strong> {{ employee.tipo_usuario }}</div>
+        <div class="member-info flex align-items-center">
+          <div class="avatar align-items-center">
+            {{ getInitials(employee.nome) }}
+          </div>
+          <div class=" flex-column">
+            <div class="name font-bold">{{ employee.nome }}</div>
+            <div class="email">{{ employee.username }}</div>
+          </div>
         </div>
+
       </mat-card-content>
-      <mat-card-actions>
-        <button [disabled]="employee.tipo_usuario == 'D' || (typeUser == 'A' )" mat-icon-button color="primary" (click)="edit(employee)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button [disabled]="employee.tipo_usuario == 'D' || (typeUser == 'A' )" mat-icon-button color="warn" (click)="disable(employee)">
+      <div class="footer p-2 flex justify-content-between align-items-center">
+        <div class=" icon-edit flex items-center gap-2" (click)="edit(employee)" >
+          <mat-icon >edit</mat-icon>
+          <span>Editar</span>
+        </div>
+        <div class=" icon-delete flex items-center gap-2" (click)="disable(employee)">
           <mat-icon>delete</mat-icon>
-        </button>
-      </mat-card-actions>
+          <span>Apagar</span>
+        </div>
+      </div>
     </mat-card>
-  }
+  </div>
+
   <button mat-raised-button color="primary" class="add_button" (click)="create()">Novo funcionario</button>
 </div>

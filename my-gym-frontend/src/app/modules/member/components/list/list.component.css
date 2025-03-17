@@ -2,13 +2,6 @@
   padding: 20px;
 }
 
-.title {
-  text-align: center;
-  margin-bottom: 16px;
-  font-size: 1.5rem;
-  color: #333;
-}
-
 .subtitle {
   text-align: center;
   color: #909090;
@@ -59,20 +52,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.details {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  line-height: 1.2;
-}
-
-.name {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 2px;
 }
 
 .email {

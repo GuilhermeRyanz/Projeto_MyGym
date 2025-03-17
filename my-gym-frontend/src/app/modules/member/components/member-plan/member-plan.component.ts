@@ -23,17 +23,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   standalone: true,
   imports: [
     MatCardContent,
-    MatCardTitle,
     MatCard,
-    MatList,
     MatIcon,
     MatButton,
-    MatRadioButton,
-    MatListSubheaderCssMatStyler,
-    MatCardActions,
-    MatCardHeader,
-    MatCardSubtitle,
-    MatIconButton
+
   ],
   templateUrl: './member-plan.component.html',
   styleUrl: './member-plan.component.css'
