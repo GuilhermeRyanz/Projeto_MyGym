@@ -1,6 +1,27 @@
 <div class="employer-list">
   <h2>Funcionários</h2>
-<!--  @for (employee of employers; track employee.id) {-->
+  <p class="subtitle flex justify-content-center">Gerencie os funcionarios com acesso ao sistema</p>
+
+  <div class="flex justify-content-between">
+
+    <mat-form-field appearance="outline" class="search w-30rem flex align-content-center">
+      <mat-label>Buscar funcionario</mat-label>
+      <input matInput placeholder="Digite o nome ou email" [(ngModel)]="searchTerm" (input)="searchEmployee()">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" class="add_button bg-black-alpha-70 text-color-white-90" (click)="create()">
+      <mat-icon>
+        add
+      </mat-icon>
+      Novo funcionario
+    </button>
+
+
+  </div>
+
+
+<!--  @for (employee of employers; t
+rack employee.id) {-->
 <!--    <mat-card class="employer-card" appearance="outlined">-->
 <!--      <mat-card-content>-->
 <!--        <div class="employee-info">-->
@@ -42,7 +63,7 @@
         </div>
         <div class=" icon-delete flex items-center gap-2" (click)="disable(employee)">
           <mat-icon>delete</mat-icon>
-          <span>Apagar</span>
+          <span>Remover</span>
         </div>
       </div>
     </mat-card>
