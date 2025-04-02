@@ -1,3 +1,5 @@
+from datetime import timezone
+
 from django.db import models
 from aluno.models import Aluno
 from core.models import ModelBase
@@ -79,6 +81,25 @@ class UsuarioAcademia(ModelBase):
         choices=Usuario.TipoUsuario.choices,
         db_column='tipo_usuario'
     )
+
+    data_contratacao = models.DateTimeField(
+        db_column='data_contratacao',
+        auto_now_add=True,
+        blank=True,
+
+    )
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            usuario_academia_anterior = UsuarioAcademia.objects.filter(pk=self.pk).first()
+            if usuario_academia_anterior:
+                if not usuario_academia_anterior.cs_active and self.cs_active:
+                    self.data_contratacao = timezone.now()
+        else:
+            if self.cs_active:
+                self.data_contratacao = timezone.now()
+
+        super().save(*args, **kwargs)
 
     class Meta:
         db_table = 'usuario_academia'
