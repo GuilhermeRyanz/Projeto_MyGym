@@ -13,20 +13,22 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
 import {NgForOf} from "@angular/common";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [
-    MatCard,
-    MatIcon,
-    MatCardContent,
-    MatLabel,
-    MatFormField,
-    MatInput,
-    FormsModule,
-    NgForOf
-  ],
+    imports: [
+        MatCard,
+        MatIcon,
+        MatCardContent,
+        MatLabel,
+        MatFormField,
+        MatInput,
+        FormsModule,
+        NgForOf,
+        MatButton
+    ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })

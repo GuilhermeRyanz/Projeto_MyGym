@@ -28,7 +28,7 @@ import {FormsModule} from "@angular/forms";
     MatFormField,
     MatInput,
     FormsModule,
-    MatLabel
+    MatLabel,
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
@@ -101,6 +101,24 @@ export class ListComponent implements OnInit {
         console.log(response);
       })
 
+  }
+
+  getTipoUsuarioClass(tipo: string): string {
+    switch (tipo) {
+      case 'A': return '#ea62e8';
+      case 'G': return '#3787e6';
+      case 'D': return '#2dd853';
+      default: return 'bg-gray-200 text-gray-800';
+    }
+  }
+
+  getTypeUserClass(type: string): string {
+    switch (type) {
+      case 'A': return 'Atendente';
+      case 'G': return 'Gerente';
+      case 'D': return 'Dono';
+      default: return '';
+    }
   }
 
   public edit(employee: Employee) {

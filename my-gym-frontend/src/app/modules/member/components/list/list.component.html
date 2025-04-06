@@ -3,11 +3,27 @@
   <p class="subtitle flex justify-content-center">Edite ou desative alunos vinculados a academia</p>
 
 
-  <div class="flex justify-content-between">
-      <mat-form-field appearance="outline" class="search w-30rem flex align-content-center">
-        <mat-label>Busca Aluno</mat-label>
-        <input matInput placeholder="Digite o nome ou matrícula" [(ngModel)]="searchTerm" (input)="searchMember()">
-      </mat-form-field>
+  <div class="flex align-items-center justify-content-between  w-full mb-4">
+
+    <div class="w-10rem"></div>
+
+    <mat-form-field appearance="outline" class="w-30rem text-center ml-5">
+      <mat-label>Buscar Aluno</mat-label>
+      <input matInput placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm" (input)="searchMember()">
+    </mat-form-field>
+
+    <div class="align-self-start mr-2">
+      <button
+        mat-raised-button
+        color="primary"
+        class="add_button bg-black-alpha-70 mt-2"
+        style="color: white"
+        (click)="create()">
+        <mat-icon>add</mat-icon>
+        Novo Aluno
+      </button>
+    </div>
+
   </div>
 
 

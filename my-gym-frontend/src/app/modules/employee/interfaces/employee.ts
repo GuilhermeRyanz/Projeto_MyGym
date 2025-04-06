@@ -4,5 +4,6 @@ export interface Employee {
   nome: string;
   username: string;
   tipo_usuario: string;
+  data_de_contratacao?: string;
 
 }

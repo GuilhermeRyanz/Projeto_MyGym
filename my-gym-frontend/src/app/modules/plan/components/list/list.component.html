@@ -2,6 +2,19 @@
   <h2 mat-subheader>Planos</h2>
   <p class="subtitle flex justify-content-center">Crie e edite os planos fornecidos pela academia</p>
 
+  <div class="flex justify-content-end">
+    <button
+      mat-raised-button
+      color="primary"
+      class="add_button bg-black-alpha-70 mr-3"
+      style="color: white"
+      [disabled]="typeUser == 'A'"
+      (click)="create()">
+      <mat-icon>add</mat-icon>
+      Novo Plano
+    </button>
+  </div>
+
   <div class="flex flex-wrap justify-content-center gap-3 p-2">
     @for (plan of plans; track plan.id) {
       <mat-card class="plan-card w-30rem p-3 flex flex-column justify-content-between">
@@ -56,10 +69,4 @@
     }
   </div>
 
-  <button mat-raised-button class="add_button mt-3"
-          [disabled]="typeUser == 'A'"
-          mat-button color="warn"
-          (click)="create()">
-    Novo Plano
-  </button>
 </div>
