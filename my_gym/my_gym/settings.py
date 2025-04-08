@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
+import cloudinary
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,7 +51,10 @@ INSTALLED_APPS = [
     'plano',
     'usuario',
     'pagamento',
-    'corsheaders'
+    'produto',
+    'corsheaders',
+    'cloudinary',
+    'cloudinary_storage'
 
 ]
 
@@ -153,6 +158,14 @@ REST_FRAMEWORK = {
     ],
 }
 
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'du9txmxf9',
+    'API_KEY': '238788455169986',
+    'API_SECRET': 'YcO9gVbV67karpYplRaIV6xpEj4',
+}
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
     'REFRESH_TOKEN_LIFETIME': timedelta(hours=24),
@@ -162,3 +175,10 @@ SIMPLE_JWT = {
     'SIGNING_KEY': SECRET_KEY,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+cloudinary.config(
+  cloud_name = CLOUDINARY_STORAGE['CLOUD_NAME'],
+  api_key = CLOUDINARY_STORAGE['API_KEY'],
+  api_secret = CLOUDINARY_STORAGE['API_SECRET'],
+  secure = True
+)

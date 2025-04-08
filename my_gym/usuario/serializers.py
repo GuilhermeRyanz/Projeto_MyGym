@@ -8,12 +8,26 @@ class UsuarioSerializer(serializers.ModelSerializer):
     academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(), write_only=True, required=False)
     username = serializers.EmailField(max_length=100, )
     nome = serializers.CharField(max_length=100)
+    data_de_contratacao = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Usuario
-        fields = ['id', 'nome', 'username', 'password', 'tipo_usuario', 'academia']
+        fields = ['id', 'nome', 'username', 'password', 'tipo_usuario', 'academia', 'data_de_contratacao']
 
         extra_kwargs = {'password': {'write_only': True}}
+
+    def get_data_de_contratacao(self, obj):
+        request = self.context.get('request')
+        if not request:
+            return None
+
+        try:
+            usuario_academia = UsuarioAcademia.objects.get(usuario=obj, active=True)
+            data = usuario_academia.data_contratacao
+            return data.strftime("%d/%m/%Y")
+        except UsuarioAcademia.DoesNotExist:
+            return None
 
     def validate_academia(self, value):
         request_user = self.context['request'].user

@@ -1,4 +1,4 @@
-from datetime import timezone
+from datetime import datetime
 
 from django.db import models
 from aluno.models import Aluno
@@ -93,11 +93,11 @@ class UsuarioAcademia(ModelBase):
         if self.pk:
             usuario_academia_anterior = UsuarioAcademia.objects.filter(pk=self.pk).first()
             if usuario_academia_anterior:
-                if not usuario_academia_anterior.cs_active and self.cs_active:
-                    self.data_contratacao = timezone.now()
+                if not usuario_academia_anterior.active and self.active:
+                    self.data_contratacao = datetime.now()
         else:
-            if self.cs_active:
-                self.data_contratacao = timezone.now()
+            if self.active:
+                self.data_contratacao = datetime.now()
 
         super().save(*args, **kwargs)
 

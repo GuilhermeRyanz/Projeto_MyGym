@@ -15,6 +15,7 @@ class AcademiaSerializer(serializers.ModelSerializer,):
     email = serializers.EmailField(allow_blank=True)
 
 
+
     class Meta:
         model = Academia
         fields = ['id', 'nome', 'endereco', 'telefone', 'email',]

@@ -1,0 +1,40 @@
+from django.db import models
+from academia.models import Academia
+from core.models import ModelBase
+from cloudinary.models import CloudinaryField
+
+
+class Produto(ModelBase):
+    CATEGORIA = [
+        ('SUPLEMENTO', 'suplemento'),
+        ('Acessorio', 'acessorio'),
+        ('ROUPA', 'roupa'),
+        ('BEBIDA', 'bebida'),
+        ('ALIMENTO', 'alimento'),
+        ('OUTROS', 'outros'),
+    ]
+
+
+    nome = models.CharField(max_length=100)
+    descricao = models.TextField(blank=True)
+    preco = models.DecimalField(max_digits=10, decimal_places=2)
+    foto = CloudinaryField('foto', blank=True, null=True)
+    academia = models.ForeignKey( Academia , on_delete=models.CASCADE, null=True, blank=True)
+    data_cadastro = models.DateField(auto_now_add=True)
+
+    categoria = models.CharField(
+        max_length=100,
+        choices=CATEGORIA,
+        default="outros")
+
+    def __str__(self):
+        return self.nome, self.categoria
+
+class LoteProduto(ModelBase):
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name="lote_produto")
+    quantidade = models.PositiveIntegerField()
+    data_validade = models.DateField()
+    data_entrada = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Lote de {self.produto.nome} - Validade {self.data_validade}"
