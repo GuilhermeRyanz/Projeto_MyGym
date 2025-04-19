@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {URLS} from "../../../../app.urls";
-import {Member} from "../../interfaces/member";
+import {Member} from "../../../../shared/interfaces/member";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
-import {MemberPlan} from "../../interfaces/member-plan";
+import {MemberPlan} from "../../../../shared/interfaces/member-plan";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";

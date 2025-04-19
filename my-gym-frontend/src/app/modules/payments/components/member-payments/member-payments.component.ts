@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MemberPlan} from "../../../member/interfaces/member-plan";
+import {MemberPlan} from "../../../../shared/interfaces/member-plan";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {URLS} from "../../../../app.urls";

@@ -4,7 +4,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MemberPlan} from "../../../member/interfaces/member-plan";
+import {MemberPlan} from "../../../../shared/interfaces/member-plan";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {CheckInConfirmComponent} from "../check-in-confirm/check-in-confirm.component";

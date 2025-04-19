@@ -6,7 +6,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {URLS} from "../../../../app.urls";
-import {Gym} from "../interfaces/gym";
+import {Gym} from "../../../../shared/interfaces/gym";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
 import {MatIcon} from "@angular/material/icon";

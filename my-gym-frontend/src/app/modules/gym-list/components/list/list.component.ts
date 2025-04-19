@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Gym} from "../../interfaces/gym";
+import {Gym} from "../../../../shared/interfaces/gym";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";

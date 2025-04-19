@@ -6,10 +6,10 @@ import {MatInput} from "@angular/material/input";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {Plan} from "../../../plan/interfaces/plan";
+import {Plan} from "../../../../shared/interfaces/plan";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {MemberPlanComponent} from "../member-plan/member-plan.component";
-import {Member} from "../../interfaces/member";
+import {Member} from "../../../../shared/interfaces/member";
 import {map, of} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
 

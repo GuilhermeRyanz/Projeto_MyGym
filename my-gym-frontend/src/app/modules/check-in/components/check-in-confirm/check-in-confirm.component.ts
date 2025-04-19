@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MemberPlan} from "../../../member/interfaces/member-plan";
+import {MemberPlan} from "../../../../shared/interfaces/member-plan";
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from "@angular/material/card";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";

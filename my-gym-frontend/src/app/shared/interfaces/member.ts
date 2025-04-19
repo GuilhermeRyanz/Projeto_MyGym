@@ -1,4 +1,4 @@
-import {Plan} from "../../plan/interfaces/plan";
+import {Plan} from "./plan";
 
 export interface Member {
 

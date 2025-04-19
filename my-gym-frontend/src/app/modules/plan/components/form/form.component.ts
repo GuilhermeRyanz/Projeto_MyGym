@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
 import { URLS } from "../../../../app.urls";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { HttpMethodsService } from "../../../../shared/services/httpMethods/http-methods.service";
-import { Plan } from "../../interfaces/plan";
+import { Plan } from "../../../../shared/interfaces/plan";
 import { NgForOf } from "@angular/common";
 import { MatIcon } from "@angular/material/icon";
 import { MatButton } from "@angular/material/button";

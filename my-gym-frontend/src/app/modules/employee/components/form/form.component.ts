@@ -7,7 +7,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {URLS} from "../../../../app.urls";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
-import {Employee} from "../../interfaces/employee";
+import {Employee} from "../../../../shared/interfaces/employee";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";

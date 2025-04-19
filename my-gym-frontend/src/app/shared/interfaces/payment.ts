@@ -1,4 +1,4 @@
-import {MemberPlan} from "../../member/interfaces/member-plan";
+import {MemberPlan} from "./member-plan";
 
 export interface Payment {
   "id": number;

@@ -5,7 +5,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {URLS} from "../../../../app.urls";
-import {MemberPlan} from "../../../member/interfaces/member-plan";
+import {MemberPlan} from "../../../../shared/interfaces/member-plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {PaymentConfirmComponent} from "../payment-confirm/payment-confirm.component";

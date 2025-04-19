@@ -1,7 +1,7 @@
 import {Component, Input, OnInit,} from '@angular/core';
-import {Member} from "../../interfaces/member";
+import {Member} from "../../../../shared/interfaces/member";
 import {URLS} from "../../../../app.urls";
-import {Plan} from "../../../plan/interfaces/plan";
+import {Plan} from "../../../../shared/interfaces/plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
 import {

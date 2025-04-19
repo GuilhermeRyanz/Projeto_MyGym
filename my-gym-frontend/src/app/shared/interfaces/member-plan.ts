@@ -1,5 +1,5 @@
 import {Member} from "./member";
-import {Plan} from "../../plan/interfaces/plan";
+import {Plan} from "./plan";
 
 export interface MemberPlan {
 

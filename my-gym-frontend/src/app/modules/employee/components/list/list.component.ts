@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
-import {Employee} from "../../interfaces/employee";
+import {Employee} from "../../../../shared/interfaces/employee";
 import {MatListModule} from "@angular/material/list";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
