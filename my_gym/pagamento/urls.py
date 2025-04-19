@@ -1,10 +1,10 @@
 from rest_framework import routers
-from pagamento import views
+from pagamento import viewsets
 
 router = routers.DefaultRouter()
 
-router.register('pagamentos', views.PagamentoViewSet)
+router.register('pagamentos', viewsets.PagamentoViewSet)
 
-router.register( 'pagamentosPlano', views.PagamentosMensaisPorPlano, basename='Pagamento_Planos')
+router.register( 'pagamentosPlano', viewsets.PagamentosMensaisPorPlano, basename='Pagamento_Planos')
 
 urlpatterns = router.urls

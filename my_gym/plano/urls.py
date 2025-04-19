@@ -1,10 +1,10 @@
 from rest_framework import routers
-from plano import views
+from plano import viewsets
 
 router = routers.DefaultRouter()
 
-router.register('planos', views.PlanoViewSet)
+router.register('planos', viewsets.PlanoViewSet)
 
-router.register('planosAlunosAtivos', views.PlanosAlunosAtivosViewSet)
+router.register('planosAlunosAtivos', viewsets.PlanosAlunosAtivosViewSet)
 
 urlpatterns = router.urls

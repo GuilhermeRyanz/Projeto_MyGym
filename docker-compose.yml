@@ -13,41 +13,41 @@ services:
     command: >
       postgres -c listen_addresses='*'
 
-  backend:
-    image: python:3.11-slim
-    container_name: django-backend
-    working_dir: /app
-    volumes:
-      - ./my_gym:/app
-      - ./wait-for-it.sh:/app/wait-for-it.sh
-    ports:
-      - "8000:8080"
-    environment:
-      - DJANGO_SETTINGS_MODULE=my_gym.settings
-      - PYTHONUNBUFFERED=1
-    depends_on:
-      - postgres
-    command: >
-      sh -c "
-        . /app/.venv/Scripts/activate &&
-        pip install -r /app/requirements.txt &&
-        /app/wait-for-it.sh postgres:5432 -- &&
-        python /app/manage.py migrate &&
-        pip install cherrypy &&
-        python run_with_cherrypy.py
-      "
+#  backend:
+#    image: python:3.11-slim
+#    container_name: django-backend
+#    working_dir: /app
+#    volumes:
+#      - ./my_gym:/app
+#      - ./wait-for-it.sh:/app/wait-for-it.sh
+#    ports:
+#      - "8000:8080"
+#    environment:
+#      - DJANGO_SETTINGS_MODULE=my_gym.settings
+#      - PYTHONUNBUFFERED=1
+#    depends_on:
+#      - postgres
+#    command: >
+#      sh -c "
+#        . /app/.venv/Scripts/activate &&
+#        pip install -r /app/requirements.txt &&
+#        /app/wait-for-it.sh postgres:5432 -- &&
+#        python /app/manage.py migrate &&
+#        pip install cherrypy &&
+#        python run_with_cherrypy.py
+#      "
 
-  nginx:
-    image: nginx:alpine
-    container_name: my-gym-nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./my-gym-frontend/dist/my-gym-frontend/browser:/usr/share/nginx/html
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./mime.types:/etc/nginx/mime.types:ro
-    depends_on:
-      - postgres
+#  nginx:
+#    image: nginx:alpine
+#    container_name: my-gym-nginx
+#    ports:
+#      - "80:80"
+#    volumes:
+#      - ./my-gym-frontend/dist/my-gym-frontend/browser:/usr/share/nginx/html
+#      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#      - ./mime.types:/etc/nginx/mime.types:ro
+#    depends_on:
+#      - postgres
 
 volumes:
   postgres-data:

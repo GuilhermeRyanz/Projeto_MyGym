@@ -1,10 +1,10 @@
 from rest_framework import routers
-from aluno import views
+from aluno import viewsets
 
 router = routers.DefaultRouter()
 
-router.register('alunos', views.AlunoViewSet)
+router.register('alunos', viewsets.AlunoViewSet)
 
-router.register('alunoPlano', views.AlunoPlanoViewSet)
+router.register('alunoPlano', viewsets.AlunoPlanoViewSet)
 
 urlpatterns = router.urls

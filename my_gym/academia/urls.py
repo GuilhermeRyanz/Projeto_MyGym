@@ -1,12 +1,12 @@
 from rest_framework import routers
-from academia import views
+from academia import viewsets
 
 router = routers.DefaultRouter()
 
-router.register('academias', views.AcademiaViewSet)
-router.register('frequencias', views.FrequenciaViewSet)
+router.register('academias', viewsets.AcademiaViewSet)
+router.register('frequencias', viewsets.FrequenciaViewSet)
 
-router.register('frequenciaDiaHora', views.FrequenciaDiaHoraViewSet, basename='frequencia_dia_hora')
+router.register('frequenciaDiaHora', viewsets.FrequenciaDiaHoraViewSet, basename='frequencia_dia_hora')
 
 
 

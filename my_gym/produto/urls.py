@@ -1,9 +1,11 @@
 from rest_framework import routers
 
-from produto import views
+from produto import viewsets
 
 router = routers.DefaultRouter()
 
-router.register('produtos', views.ProdutoViewSet)
+router.register('produtos', viewsets.ProdutoViewSet)
+
+router.register('lotes', viewsets.LoteViewSet, basename='lotes')
 
 urlpatterns = router.urls
