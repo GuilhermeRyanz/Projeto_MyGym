@@ -10,7 +10,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {MemberPaymentsComponent} from "../member-payments/member-payments.component";
-import {MatIcon} from "@angular/material/icon";
 import {NgForOf} from "@angular/common";
 
 @Component({
@@ -23,7 +22,6 @@ import {NgForOf} from "@angular/common";
     MatLabel,
     MatCard,
     MatCardContent,
-    MatIcon,
     NgForOf,
   ],
   templateUrl: './members-list.component.html',

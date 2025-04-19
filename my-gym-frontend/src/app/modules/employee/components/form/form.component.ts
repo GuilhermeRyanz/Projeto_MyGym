@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatButton} from "@angular/material/button";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {URLS} from "../../../../app.urls";
@@ -19,8 +18,6 @@ import {UserRelinkConfirmationComponent} from "../user-relink-confirmation/user-
   imports: [
     MatButton,
     MatFormField,
-    MatIcon,
-    MatIconButton,
     MatInput,
     MatLabel,
     ReactiveFormsModule,

@@ -4,18 +4,9 @@ import {URLS} from "../../../../app.urls";
 import {Plan} from "../../../../shared/interfaces/plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
-import {
-  MatCard,
-  MatCardActions,
-  MatCardContent,
-  MatCardHeader,
-  MatCardSubtitle,
-  MatCardTitle
-} from "@angular/material/card";
-import {MatList, MatListSubheaderCssMatStyler} from "@angular/material/list";
+import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatRadioButton} from "@angular/material/radio";
+import {MatButton} from "@angular/material/button";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({

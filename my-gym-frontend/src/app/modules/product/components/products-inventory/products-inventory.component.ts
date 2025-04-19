@@ -16,7 +16,6 @@ export class ProductsInventoryComponent {
     private router: Router,
   ) {
 
-    S
 
 
   }

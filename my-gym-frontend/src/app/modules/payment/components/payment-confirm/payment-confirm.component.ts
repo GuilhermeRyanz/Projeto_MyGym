@@ -2,15 +2,12 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MemberPlan} from "../../../../shared/interfaces/member-plan";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from "@angular/material/card";
 import {URLS} from "../../../../app.urls";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatIcon} from "@angular/material/icon";
 import {CurrencyPipe} from "@angular/common";
 
 @Component({
@@ -19,9 +16,6 @@ import {CurrencyPipe} from "@angular/common";
   imports: [
     FormsModule,
     MatButton,
-    MatFormField,
-    MatInput,
-    MatLabel,
     ReactiveFormsModule,
     MatCard,
     MatCardHeader,
@@ -29,7 +23,6 @@ import {CurrencyPipe} from "@angular/common";
     MatCardActions,
     MatRadioButton,
     MatRadioGroup,
-    MatIcon,
     CurrencyPipe
   ],
   templateUrl: './payment-confirm.component.html',
