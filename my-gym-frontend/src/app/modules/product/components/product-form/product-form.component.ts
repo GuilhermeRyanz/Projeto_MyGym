@@ -82,17 +82,56 @@ export class ProductFormComponent implements OnInit {
     }
   }
 
-  onImageSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.selectedImage = file;
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreviewUrl = reader.result as string;
-      };
-      reader.readAsDataURL(file);
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+
+    if (file && file.type.startsWith('image/')) {
+      this.resizeImage(file, 500, 500).then(resizedFile => {
+        this.selectedImage = resizedFile;
+      });
     }
   }
+
+  resizeImage(file: File, maxWidth: number, maxHeight: number): Promise<File> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (event: any) => {
+        const img = new Image();
+        img.src = event.target.result;
+
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          let width = img.width;
+          let height = img.height;
+          const ratio = Math.min(maxWidth / width, maxHeight / height);
+
+          canvas.width = width * ratio;
+          canvas.height = height * ratio;
+
+          ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          canvas.toBlob(blob => {
+            if (blob) {
+              const resizedFile = new File([blob], file.name, {
+                type: file.type,
+                lastModified: Date.now(),
+              });
+              resolve(resizedFile);
+            } else {
+              reject('Erro ao redimensionar imagem.');
+            }
+          }, file.type);
+        };
+      };
+
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(file);
+    });
+  }
+
 
   public retriveCallBack() {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -128,6 +167,10 @@ export class ProductFormComponent implements OnInit {
         formData.append(key, product[key]);
       }
     });
+
+    if (this.selectedImage) {
+      formData.append('foto', this.selectedImage);
+    }
 
     const request = this.created
       ? this.httpMethods.post(`${this.pathUrlProd}`, formData)

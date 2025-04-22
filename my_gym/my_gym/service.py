@@ -18,13 +18,6 @@ def upload_data_to_minio(file_obj, nome_original, bucket=None):
     extension = nome_original.split('.')[-1].lower()
     name_archive = f"media/{uuid.uuid4()}.{extension}"
 
-    extension_allow = ['jpg', 'jpeg', 'png']
-    if extension not in extension_allow:
-        raise serializers.ValidationError(
-            f"Extension '{extension}' is not allowed, only {extension_allow}"
-        )
-
-
     try:
         s3.upload_fileobj(
             file_obj,

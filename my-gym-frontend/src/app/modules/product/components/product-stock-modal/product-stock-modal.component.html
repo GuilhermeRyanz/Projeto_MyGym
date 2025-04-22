@@ -1,20 +1,26 @@
-<h2>Abastecer Produto</h2>
+<main class=" flex flex-column align-items-center justify-content-center p-4">
+  <h2 class="text-2xl font-bold mb-4">Abastecer Produto</h2>
 
-<form [formGroup]="formGroup">
-  <mat-form-field appearance="fill" class="w-full">
-    <mat-label>Quantidade</mat-label>
-    <input matInput type="number" formControlName="quantidade" />
-  </mat-form-field>
+  <form [formGroup]="formGroup" class="flex flex-column gap-3">
+    <div class="field w-full">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Quantidade</mat-label>
+        <input matInput type="number" formControlName="quantidade" />
+      </mat-form-field>
+    </div>
 
-  <mat-form-field appearance="fill" class="w-full">
-    <mat-label>Data de Validade</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="data_validade" />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+    <div class="field w-full">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Data de validade</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="data_validade" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
 
-  <div class="flex justify-end gap-2 mt-4">
-    <button mat-button type="button" (click)="dialogRef.close()">Cancelar</button>
-    <button mat-raised-button color="primary" (click)="submit()">Salvar</button>
-  </div>
-</form>
+    <div class="flex justify-content-end gap-2 mt-2">
+      <button mat-button type="button" (click)="dialogRef.close()">Cancelar</button>
+      <button mat-raised-button color="primary" (click)="submit()">Salvar</button>
+    </div>
+  </form>
+</main>

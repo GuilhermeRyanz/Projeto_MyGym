@@ -43,6 +43,12 @@ export class ProductStockModalComponent {
 
   submit() {
     if (this.formGroup.valid) {
+
+      let rawDate = this.formGroup.get('data_validade')?.value;
+      let formattedDate = new Date(rawDate).toISOString().split('T')[0]; // <-- agora sim!
+
+      this.formGroup.patchValue({ data_validade: formattedDate });
+
       this.httpMethods.post('api/produto/lotes/', this.formGroup.value).subscribe({
         next: () => this.dialogRef.close(true),
         error: (err) => console.error('Erro ao abastecer produto:', err)

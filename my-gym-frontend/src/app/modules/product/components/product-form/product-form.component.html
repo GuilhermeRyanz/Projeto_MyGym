@@ -39,8 +39,7 @@
     </mat-form-field>
 
     <div class="form-group">
-      <label for="fileInput">Imagem do Produto</label>
-      <input id="fileInput" type="file" (change)="onImageSelected($event)" />
+      <input type="file" (change)="onFileSelected($event)" />
     </div>
 
     <div *ngIf="imagePreviewUrl" class="image-preview">
