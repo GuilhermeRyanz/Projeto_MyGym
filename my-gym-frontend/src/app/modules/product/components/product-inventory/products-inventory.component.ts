@@ -10,6 +10,9 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {ProductItemComponent} from "../../../../shared/components/product-item/product-item.component";
+import { MatDialog } from '@angular/material/dialog';
+import { ProductStockModalComponent } from '../product-stock-modal/product-stock-modal.component';
+
 
 @Component({
   selector: 'app-product-inventory',
@@ -35,12 +38,27 @@ export class ProductInventoryComponent implements OnInit {
   constructor(
     private readonly httpMethods: HttpMethodsService,
     private router: Router,
+    private dialog: MatDialog
+
 
   ) {
   }
 
   public ngOnInit() {
     this.getInventory();
+  }
+
+  public abastecer(prod: Product) {
+    const dialogRef = this.dialog.open(ProductStockModalComponent, {
+      width: '400px',
+      data: { produtoId: prod.id },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.getInventory();
+      }
+    });
   }
 
   public getInventory() {

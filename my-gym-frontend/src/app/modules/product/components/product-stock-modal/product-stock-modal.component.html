@@ -1,0 +1,20 @@
+<h2>Abastecer Produto</h2>
+
+<form [formGroup]="formGroup">
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Quantidade</mat-label>
+    <input matInput type="number" formControlName="quantidade" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Data de Validade</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="data_validade" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <div class="flex justify-end gap-2 mt-4">
+    <button mat-button type="button" (click)="dialogRef.close()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="submit()">Salvar</button>
+  </div>
+</form>

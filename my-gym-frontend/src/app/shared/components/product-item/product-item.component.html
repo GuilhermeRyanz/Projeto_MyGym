@@ -18,6 +18,10 @@
       <strong>Marca:</strong> {{ prod.marca || 'Desconhecida' }}
     </div>
 
+    <div class="text-xl" style="color: #666666">
+      Em estoque: {{ prod.quantidade_estoque }} unidade{{ prod.quantidade_estoque === 1 ? '' : 's' }}
+    </div>
+
     <p class="text-sm font-gray ">{{ prod.descricao }}</p>
 
   </mat-card-content>

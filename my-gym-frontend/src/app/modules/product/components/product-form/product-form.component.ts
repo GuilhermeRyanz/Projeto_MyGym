@@ -9,6 +9,7 @@ import { MatButton } from '@angular/material/button';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import {NgIf} from "@angular/common";
+import {MatOption, MatSelect} from "@angular/material/select";
 
 @Component({
   selector: 'app-product-form',
@@ -21,11 +22,23 @@ import {NgIf} from "@angular/common";
     MatInput,
     MatLabel,
     NgIf,
+    MatSelect,
+    MatOption,
   ],
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.css']
 })
 export class ProductFormComponent implements OnInit {
+
+  public categorias = [
+    { value: 'SUPLEMENTO', label: 'Suplemento' },
+    { value: 'Acessorio', label: 'Acessório' },
+    { value: 'ROUPA', label: 'Roupa' },
+    { value: 'BEBIDA', label: 'Bebida' },
+    { value: 'ALIMENTO', label: 'Alimento' },
+    { value: 'OUTROS', label: 'Outros' },
+  ];
+
 
   public action: String = "";
   private created: boolean = true;
@@ -50,7 +63,7 @@ export class ProductFormComponent implements OnInit {
       preco: ['', Validators.required],
       descricao: ['', Validators.required],
       academia: [''],
-      quantidade_estoque: ['', Validators.required],
+      categoria: ['', Validators.required],
       created_at: [''],
       modified_at: [''],
       marca: ['', Validators.required],
@@ -96,7 +109,7 @@ export class ProductFormComponent implements OnInit {
             nome: response.nome,
             preco: response.preco,
             descricao: response.descricao,
-            quantidade_estoque: response.quantidade_estoque,
+            categoria: response.categoria,
             created_at: response.created_at,
             modified_at: response.modified_at,
             marca: response.marca,

@@ -21,9 +21,15 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Estoque</mat-label>
-      <input matInput formControlName="quantidade_estoque" type="number" placeholder="Quantidade em estoque" />
-      <mat-error *ngIf="formGroup.get('quantidade_estoque')?.hasError('required')">Campo obrigatório</mat-error>
+      <mat-label>Categoria</mat-label>
+      <mat-select formControlName="categoria">
+        @for (cat of categorias; track cat.value) {
+          <mat-option [value]="cat.value">{{ cat.label }}</mat-option>
+        }
+      </mat-select>
+      <mat-error *ngIf="formGroup.get('categoria')?.hasError('required')">
+        Campo obrigatório
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
