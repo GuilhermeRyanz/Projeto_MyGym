@@ -5,7 +5,7 @@ import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-m
 import {Product} from "../../../../shared/interfaces/product";
 import {FormsModule} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
-import {MatCard, MatCardContent} from "@angular/material/card";
+import {MatCard} from "@angular/material/card";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
