@@ -9,9 +9,7 @@ import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {DatePipe, NgForOf} from "@angular/common";
 import {ProductItemComponent} from "../../../../shared/components/product-item/product-item.component";
-import {Employee} from "../../../../shared/interfaces/employee";
 
 @Component({
   selector: 'app-product-inventory',
@@ -20,10 +18,8 @@ import {Employee} from "../../../../shared/interfaces/employee";
     FormsModule,
     MatButton,
     MatCard,
-
     MatIcon,
     ProductItemComponent,
-    MatCardContent,
     MatFormField,
     MatInput,
     MatLabel
