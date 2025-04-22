@@ -9,7 +9,7 @@ export const URLS = {
   MEMBERSFLOWBYTIME: 'api/academia/frequenciaDiaHora/',
   MEMBERPLANOVERVIEW: 'api/plano/planosAlunosAtivos/',
   MONTHLYEARNINGSCHARTS: 'api/pagamento/pagamentosPlano/',
-  PLANSWITHNEWMEMBERS: 'api/plano/planos/novosAlunosPorPlano/'
-
+  PLANSWITHNEWMEMBERS: 'api/plano/planos/novosAlunosPorPlano/',
+  PRODUCT: 'api/produto/produtos/',
 
 }

@@ -1,16 +1,22 @@
 import {Routes} from "@angular/router";
-import {ProductsInventoryComponent} from "./components/products-inventory/products-inventory.component";
 import {SellPageComponent} from "./components/sell-page/sell-page.component";
+import {ProductInventoryComponent} from "./components/product-inventory/products-inventory.component";
+import {ProductFormComponent} from "./components/product-form/product-form.component";
 
 export const routes: Routes = [
   {
-    path: "productsInventory",
-    component: ProductsInventoryComponent
+    path: "productInventory",
+    component: ProductInventoryComponent
   },
 
   {
     path: "sellPage",
     component: SellPageComponent
+  },
+
+  {
+    path:  "form/:action",
+    component: ProductFormComponent
   }
 
 ]

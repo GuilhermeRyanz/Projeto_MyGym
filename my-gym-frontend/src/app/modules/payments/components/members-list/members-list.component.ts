@@ -34,6 +34,13 @@ export class MembersListComponent implements OnInit {
   protected typeUser: string | null = "";
   public searchTerm: string = "";
 
+  constructor(private httpMethods: HttpMethodsService,
+              private router: Router,
+              private snackBar: MatSnackBar,
+              private dialog: MatDialog,
+  ) {
+  }
+
   private getIdGym(): void {
     this.gym_id = localStorage.getItem("academia");
   }
@@ -42,12 +49,6 @@ export class MembersListComponent implements OnInit {
     this.typeUser = localStorage.getItem("tipo_usuario");
   }
 
-  constructor(private httpMethods: HttpMethodsService,
-              private router: Router,
-              private snackBar: MatSnackBar,
-              private dialog: MatDialog,
-  ) {
-  }
 
   ngOnInit() {
     this.getIdGym();

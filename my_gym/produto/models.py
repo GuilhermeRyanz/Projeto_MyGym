@@ -14,11 +14,11 @@ class Produto(ModelBase):
         ('OUTROS', 'outros'),
     ]
 
-
+    marca = models.CharField(max_length=200, null=True, blank=True)
     nome = models.CharField(max_length=100)
     descricao = models.TextField(blank=True)
     preco = models.DecimalField(max_digits=10, decimal_places=2)
-    foto = CloudinaryField('foto', blank=True, null=True)
+    foto = models.URLField('foto', blank=True, null=True)
     academia = models.ForeignKey( Academia , on_delete=models.CASCADE, null=True, blank=True)
     data_cadastro = models.DateField(auto_now_add=True)
 

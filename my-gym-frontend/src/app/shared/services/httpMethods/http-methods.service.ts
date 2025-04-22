@@ -115,6 +115,17 @@ export class HttpMethodsService {
     );
   }
 
+
+  noIdPatch(path: string, body: any): Observable<HttpResponse<any>> {
+    return this.getHeaders().pipe(
+      switchMap((headers) =>
+        this.http.patch(this.baseUrl + path, body, { headers }).pipe(
+          tap((response: any) => response),
+          catchError((error) => this.handleError(error))
+        )
+      )
+    );
+  }
   delete(path: string, id: number): Observable<HttpResponse<any>> {
     return this.getHeaders().pipe(
       switchMap((headers) =>

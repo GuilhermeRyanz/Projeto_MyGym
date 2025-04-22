@@ -13,6 +13,19 @@ services:
     command: >
       postgres -c listen_addresses='*'
 
+  minio:
+      image: minio/minio
+      container_name: minio_mygym
+      ports:
+        - "9000:9000"
+        - "9001:9001"
+      environment:
+        MINIO_ROOT_USER: minioadmin
+        MINIO_ROOT_PASSWORD: minioadmin
+      command: server /data --console-address ":9001"
+      volumes:
+        - minio-data:/data
+
 #  backend:
 #    image: python:3.11-slim
 #    container_name: django-backend
@@ -51,3 +64,4 @@ services:
 
 volumes:
   postgres-data:
+  minio-data:
