@@ -9,24 +9,28 @@ import {MemberPlan} from "../../../../shared/interfaces/member-plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {PaymentConfirmComponent} from "../payment-confirm/payment-confirm.component";
-import {NgForOf} from "@angular/common";
+import {DecimalPipe, NgForOf} from "@angular/common";
+import {debounceTime, Subject} from "rxjs";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-payment-registration',
   standalone: true,
-    imports: [
-        FormsModule,
-        MatCard,
-        MatCardContent,
-        MatFormField,
-        MatIcon,
-        MatInput,
-        MatLabel,
-        MatTabGroup,
-        MatTab,
-        PaymentConfirmComponent,
-        NgForOf
-    ],
+  imports: [
+    FormsModule,
+    MatCard,
+    MatCardContent,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    MatLabel,
+    MatTabGroup,
+    MatTab,
+    PaymentConfirmComponent,
+    NgForOf,
+    DecimalPipe,
+    MatButton
+  ],
   templateUrl: './payment-registration.component.html',
   styleUrl: './payment-registration.component.css'
 })
@@ -38,7 +42,12 @@ export class PaymentRegistrationComponent implements OnInit {
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
   public searchTerm: string = "";
+  public currentPage: number = 0;
+  public limit: number = 30;
+  public totalResults: number = 0;
+
   selectedIndex: number = 0;
+  searchChanged = new Subject<string>();
 
 
   private getIdGym(): void {
@@ -54,15 +63,18 @@ export class PaymentRegistrationComponent implements OnInit {
 
   ngOnInit() {
     this.getIdGym();
-    this.seach();
     this.getTypeUser()
+    this.search()
+
+    this.searchChanged.pipe(debounceTime(300)).subscribe((term) => {
+      this.searchMember(term, 0);
+    });
+
   }
 
-  public seach(): void {
-    this.httpMethods.get(this.pathUrlMemberPlan + `?expand=aluno&expand=plano&active=true&academia=${this.gym_id}`).subscribe((response: any) => {
-      this.membersPlan = response;
-    });
-  };
+  public search(): void {
+    this.searchMember(this.searchTerm, 0);
+  }
 
   makePayment(member: MemberPlan): void {
       this.obj = member;
@@ -81,16 +93,45 @@ export class PaymentRegistrationComponent implements OnInit {
     return member.aluno.id;
   }
 
-  public searchMember(): void {
-    let searchParam = '';
-    if (this.searchTerm) {
-      searchParam = `&search=${this.searchTerm}`;
+  public searchMember(term: string = '', offset: number = 0, limit: number = this.limit): void {
+    const params: any = {
+      expand: ['aluno', 'plano'],
+      active: true,
+      academia: this.gym_id,
+      limit,
+      offset,
+    };
+
+    if (term) {
+      params.search = term;
     }
-    this.httpMethods.get(`${this.pathUrlMemberPlan}?expand=aluno&expand=plano&active=true${searchParam}&academia=${this.gym_id}`)
+
+    this.httpMethods.getPaginated(this.pathUrlMemberPlan, params)
       .subscribe((response: any) => {
-        this.membersPlan = response;
-        console.log(response);
+        this.membersPlan = response.results;
+        this.totalResults = response.count;
+        this.currentPage = offset / limit;
       });
+  }
+
+  public nextPage(): void {
+    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
+    if (this.currentPage < maxPage) {
+      const nextOffset = (this.currentPage + 1) * this.limit;
+      this.searchMember(this.searchTerm, nextOffset);
+    }
+  }
+
+  public prevPage(): void {
+    if (this.currentPage > 0) {
+      const prevOffset = (this.currentPage - 1) * this.limit;
+      this.searchMember(this.searchTerm, prevOffset);
+    }
+  }
+
+  onSearchChange(term: string): void {
+    this.searchTerm = term;
+    this.searchChanged.next(term);
   }
 
 }

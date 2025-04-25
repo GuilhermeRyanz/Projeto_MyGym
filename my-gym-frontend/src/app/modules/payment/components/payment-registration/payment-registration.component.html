@@ -6,8 +6,8 @@
     <div class="flex align-items-center justify-content-center">
       <mat-form-field appearance="outline" class="search w-30rem">
         <mat-label>Busca Aluno</mat-label>
-        <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
-               (input)="searchMember()"/>
+        <input matInput="text" placeholder="Digite o nome ou matrícula" [(ngModel)]="searchTerm"
+               (input)="onSearchChange(searchTerm)" />
       </mat-form-field>
     </div>
 
@@ -39,6 +39,12 @@
           </div>
         </mat-card>
     </div>
+    <div class="pagination flex justify-content-center gap-2">
+      <button mat-raised-button (click)="prevPage()" [disabled]="currentPage === 0">Anterior</button>
+      <span>Página {{ currentPage + 1 }} de {{ totalResults / limit | number: '1.0-0' }}</span>
+      <button mat-raised-button (click)="nextPage()" [disabled]="currentPage >= (totalResults / limit) - 1">Próxima</button>
+    </div>
+
   </mat-tab>
   <mat-tab label="Confirmação" [disabled]="!obj">
   <app-payment-confirm [member]="obj" ></app-payment-confirm>

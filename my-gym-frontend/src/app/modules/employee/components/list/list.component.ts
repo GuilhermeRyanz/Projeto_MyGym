@@ -10,10 +10,11 @@ import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {NgForOf} from "@angular/common";
+import {DecimalPipe, NgForOf} from "@angular/common";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
+import {debounceTime, Subject} from "rxjs";
 
 @Component({
   selector: 'app-list',
@@ -29,6 +30,7 @@ import {FormsModule} from "@angular/forms";
     MatInput,
     FormsModule,
     MatLabel,
+    DecimalPipe,
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
@@ -40,12 +42,13 @@ export class ListComponent implements OnInit {
   public gym_id: string | null = "";
   public typeUser: string | null = "";
   public searchTerm: string = "";
+  public limit: number = 30;
+  public totalResults: number = 0;
+  public currentPage: number = 0;
 
+  selectedIndex: number = 0;
+  searchChange = new Subject<string>();
 
-  private getIdGym(): void {
-    this.gym_id = localStorage.getItem("academia");
-
-  }
 
   constructor(
     private httpMethods: HttpMethodsService,
@@ -55,6 +58,33 @@ export class ListComponent implements OnInit {
   ) {
   }
 
+
+  ngOnInit() {
+    this.getIdGym()
+    this.search();
+    this.getTypeUser()
+
+    this.searchChange.pipe(debounceTime(150)).subscribe((term )=> {
+      this.searchEmployee(term,0)
+    });
+
+  }
+
+  private getIdGym(): void {
+    this.gym_id = localStorage.getItem("academia");
+
+  }
+
+  getTypeUser() {
+    this.typeUser = localStorage.getItem("tipo_usuario");
+  }
+
+  public search(): void {
+    this.searchEmployee(this.searchTerm, 0);
+  }
+
+
+
   getInitials(name: string): string {
     if (!name) return '';
     const nameParts = name.trim().split(' ');
@@ -62,25 +92,6 @@ export class ListComponent implements OnInit {
     return initials.length > 2 ? initials.substring(0, 2) : initials;
   }
 
-  ngOnInit() {
-    this.getIdGym()
-    this.seach();
-    this.getTypeUser()
-  }
-
-  getTypeUser() {
-    this.typeUser = localStorage.getItem("tipo_usuario");
-  }
-
-
-  public seach(): void {
-    this.httpMethods.get(this.pathUrlEmployee + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
-      this.employers = response;
-    },
-      (error) => {
-        console.error("Erro ao carregar os dados do funcionarios:", error);
-      });
-  }
 
   public create(): void {
     this.router.navigate(['/employee/form/create']).then();
@@ -90,18 +101,47 @@ export class ListComponent implements OnInit {
     return employee;
   }
 
-  public searchEmployee(): void {
-    let searchParam ="";
-    if (this.searchTerm){
-      searchParam = `&search=${this.searchTerm}`;
-    }
-    this.httpMethods.get(`${this.pathUrlEmployee}?academia=${(this.gym_id)}&active=true` + searchParam)
-      .subscribe((response: any) => {
-        this.employers = response;
-        console.log(response);
-      })
+  public searchEmployee(term: string = ``, offset: number = 0, limit: number = this.limit): void {
+    const params: any = {
+      expand: ['aluno', 'plano'],
+      active: true,
+      academia: this.gym_id,
+      limit,
+      offset,
+    };
 
+    if (term) {
+      params.search = term;
+    }
+
+    this.httpMethods.getPaginated(this.pathUrlEmployee, params)
+      .subscribe((response: any) => {
+        this.employers = response.results;
+        this.totalResults = response.count;
+        this.currentPage = offset / limit;
+      });
   }
+
+  public nextPage(): void {
+    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
+    if (this.currentPage < maxPage) {
+      const nextOffset = (this.currentPage + 1) * this.limit;
+      this.searchEmployee(this.searchTerm, nextOffset)
+    }
+  }
+
+  public prevPage(): void {
+    if (this.currentPage > 0) {
+      const prevOffset = (this.currentPage - 1) * this.limit;
+      this.searchEmployee(this.searchTerm, prevOffset);
+    }
+  }
+
+  onSearchChange(term: string): void {
+    this.searchTerm = term;
+    this.searchChange.next(term);
+  }
+
 
   getTipoUsuarioClass(tipo: string): string {
     switch (tipo) {
@@ -133,7 +173,7 @@ export class ListComponent implements OnInit {
       if (result) {
         let sucessMensage = "Funcionario apagado"
         this.httpMethods.disable(this.pathUrlEmployee, employee, path).subscribe(() => {
-          this.seach()
+          this.search()
         })
         this.snackBar.open(sucessMensage, "fechar", {
           duration: 5000,

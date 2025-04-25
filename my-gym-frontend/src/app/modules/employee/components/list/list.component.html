@@ -5,9 +5,10 @@
 
     <div class="w-10rem"></div>
 
-    <mat-form-field appearance="outline" class="w-30rem text-center ml-5">
-      <mat-label>Buscar funcionário</mat-label>
-      <input matInput placeholder="Digite o nome ou email" [(ngModel)]="searchTerm" (input)="searchEmployee()">
+    <mat-form-field appearance="outline" class="search w-30rem">
+      <mat-label>Busca Funcionario</mat-label>
+      <input matInput="text" placeholder="Digite o nome ou email" [(ngModel)]="searchTerm"
+             (input)="onSearchChange(searchTerm)" />
     </mat-form-field>
 
     <div class="align-self-start mr-2">
@@ -23,29 +24,6 @@
     </div>
 
   </div>
-
-
-<!--  @for (employee of employers; t
-rack employee.id) {-->
-<!--    <mat-card class="employer-card" appearance="outlined">-->
-<!--      <mat-card-content>-->
-<!--        <div class="employee-info">-->
-<!--          <div><strong>ID:</strong> {{ employee.id }}</div>-->
-<!--          <div><strong>Nome:</strong> {{ employee.nome }}</div>-->
-<!--          <div><strong>Email:</strong> {{ employee.username }}</div>-->
-<!--          <div><strong>Cargo:</strong> {{ employee.tipo_usuario }}</div>-->
-<!--        </div>-->
-<!--      </mat-card-content>-->
-<!--      <mat-card-actions>-->
-<!--        <button [disabled]="employee.tipo_usuario == 'D' || (typeUser == 'A' )" mat-icon-button color="primary" (click)="edit(employee)">-->
-<!--          <mat-icon>edit</mat-icon>-->
-<!--        </button>-->
-<!--        <button [disabled]="employee.tipo_usuario == 'D' || (typeUser == 'A' )" mat-icon-button color="warn" (click)="disable(employee)">-->
-<!--          <mat-icon>delete</mat-icon>-->
-<!--        </button>-->
-<!--      </mat-card-actions>-->
-<!--    </mat-card>-->
-<!--  }-->
 
   <div class="member-list ml-4">
     <mat-card class="member-card gap-3" *ngFor="let employee of employers; trackBy: trackById">
@@ -88,4 +66,11 @@ rack employee.id) {-->
       </div>
     </mat-card>
   </div>
+
+    <div class="pagination flex justify-content-center gap-2 mt-5">
+      <button mat-raised-button (click)="prevPage()" [disabled]="currentPage === 0">Anterior</button>
+      <span>Página {{ currentPage + 1 }} de {{ totalResults / limit | number: '1.0-0' }}</span>
+      <button mat-raised-button (click)="nextPage()" [disabled]="currentPage >= (totalResults / limit) - 1">Próxima</button>
+    </div>
+
 </div>

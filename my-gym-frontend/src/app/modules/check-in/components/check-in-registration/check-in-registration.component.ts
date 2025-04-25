@@ -8,8 +8,10 @@ import {MemberPlan} from "../../../../shared/interfaces/member-plan";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {CheckInConfirmComponent} from "../check-in-confirm/check-in-confirm.component";
-import {NgForOf} from "@angular/common";
+import {DecimalPipe, NgForOf} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
+import {debounceTime, Subject} from "rxjs";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-check-in-registration',
@@ -26,7 +28,9 @@ import {MatIcon} from "@angular/material/icon";
     FormsModule,
     CheckInConfirmComponent,
     NgForOf,
-    MatIcon
+    MatIcon,
+    MatButton,
+    DecimalPipe
   ],
   templateUrl: './check-in-registration.component.html',
   styleUrl: './check-in-registration.component.css'
@@ -34,45 +38,85 @@ import {MatIcon} from "@angular/material/icon";
 export class CheckInRegistrationComponent implements OnInit {
 
   public obj?: MemberPlan = undefined;
-  private pathUrlMemberPlan: string = URLS.MEMBERPLAN
-  public membersPlan: MemberPlan [] | undefined;
+  private pathUrlMemberPlan: string = URLS.MEMBERPLAN;
+  public membersPlan: MemberPlan[] | undefined;
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
   public searchTerm: string = "";
-  selectedIndex: number = 0;
+  public currentPage: number = 0;
+  public limit: number = 30;
+  public totalResults: number = 0;
 
+  selectedIndex: number = 0;
+  searchChanged = new Subject<string>();
+
+  constructor(private httpMethods: HttpMethodsService) {}
+
+  ngOnInit() {
+    this.getIdGym();
+    this.getTypeUser();
+    this.search();
+
+    this.searchChanged.pipe(debounceTime(300)).subscribe((term) => {
+      this.searchMember(term, 0); // volta pra primeira página a cada nova busca
+    });
+  }
 
   private getIdGym(): void {
     this.gym_id = localStorage.getItem("academia");
   }
 
-  getTypeUser() {
+  private getTypeUser(): void {
     this.typeUser = localStorage.getItem("tipo_usuario");
   }
 
-  constructor(private httpMethods: HttpMethodsService,) {
+  public search(): void {
+    this.searchMember(this.searchTerm, 0);
   }
 
-  ngOnInit() {
-    this.getIdGym();
-    this.seach();
-    this.getTypeUser()
+  public searchMember(term: string = '', offset: number = 0, limit: number = this.limit): void {
+    const params: any = {
+      expand: ['aluno', 'plano'],
+      active: true,
+      academia: this.gym_id,
+      limit,
+      offset,
+    };
+
+    if (term) {
+      params.search = term;
+    }
+
+    this.httpMethods.getPaginated(this.pathUrlMemberPlan, params)
+      .subscribe((response: any) => {
+        this.membersPlan = response.results;
+        this.totalResults = response.count;
+        this.currentPage = offset / limit;
+      });
   }
 
-  public seach(): void {
-    this.httpMethods.get(this.pathUrlMemberPlan + `?expand=aluno&expand=plano&active=true&academia=${this.gym_id}`).subscribe((response: any) => {
-      this.membersPlan = response;
-    });
-  };
+  public nextPage(): void {
+    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
+    if (this.currentPage < maxPage) {
+      const nextOffset = (this.currentPage + 1) * this.limit;
+      this.searchMember(this.searchTerm, nextOffset);
+    }
+  }
 
-  trackById(index: number, member: MemberPlan) {
+  public prevPage(): void {
+    if (this.currentPage > 0) {
+      const prevOffset = (this.currentPage - 1) * this.limit;
+      this.searchMember(this.searchTerm, prevOffset);
+    }
+  }
+
+  trackById(index: number, member: MemberPlan): number {
     return member.aluno.id;
   }
 
   makePayment(member: MemberPlan): void {
     this.obj = member;
     this.selectedIndex = 1;
-
   }
 
   getInitials(name: string): string {
@@ -82,15 +126,8 @@ export class CheckInRegistrationComponent implements OnInit {
     return initials.length > 2 ? initials.substring(0, 2) : initials;
   }
 
-  public searchMember(): void {
-    let searchParam = '';
-    if (this.searchTerm) {
-      searchParam = `&search=${this.searchTerm}`;
-    }
-    this.httpMethods.get(`${this.pathUrlMemberPlan}?expand=aluno&expand=plano&active=true${searchParam}&academia=${this.gym_id}`)
-      .subscribe((response: any) => {
-        this.membersPlan = response;
-      });
+  onSearchChange(term: string): void {
+    this.searchTerm = term;
+    this.searchChanged.next(term);
   }
-
 }

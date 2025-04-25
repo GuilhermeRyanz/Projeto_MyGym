@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import {environment} from '../../../../environments/environments';
 import {catchError, Observable, of, switchMap, throwError} from 'rxjs';
 import {tap} from 'rxjs/operators';
@@ -104,6 +104,19 @@ export class HttpMethodsService {
       )
     );
   }
+
+  getPaginated(path: string, queryParams: { [key: string]: any }): Observable<any> {
+    return this.getHeaders().pipe(
+      switchMap((headers) => {
+        const params = new HttpParams({ fromObject: queryParams });
+        return this.http.get(this.baseUrl + path, { headers, params }).pipe(
+          catchError((error) => this.handleError(error))
+        );
+      })
+    );
+  }
+
+
   patch(path: string, body: any): Observable<HttpResponse<any>> {
     return this.getHeaders().pipe(
       switchMap((headers) =>

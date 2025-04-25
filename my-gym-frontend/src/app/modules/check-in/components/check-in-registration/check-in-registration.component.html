@@ -6,42 +6,49 @@
     <div class="flex align-items-center justify-content-center">
       <mat-form-field appearance="outline" class="search w-30rem">
         <mat-label>Busca Aluno</mat-label>
-        <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
-               (input)="searchMember()"/>
+        <input matInput="text" placeholder="Digite o nome ou matrícula" [(ngModel)]="searchTerm"
+               (input)="onSearchChange(searchTerm)" />
       </mat-form-field>
     </div>
 
     <div class="member-list p-3 gap-2 ml-4">
-        <mat-card class="member-card" *ngFor="let member of membersPlan; trackBy: trackById "
-                  (click)="makePayment(member)">
-          <mat-card-content>
-            <div class="member-info flex align-items-center">
-              <div class="avatar align-items-center">
-                {{ getInitials(member.aluno.nome) }}
-              </div>
-              <div class="details flex-column">
-                <div class="name">{{ member.aluno.nome }}</div>
-                <div class="email">{{ member.aluno.email }}</div>
-              </div>
+      <mat-card class="member-card" *ngFor="let member of membersPlan; trackBy: trackById"
+                (click)="makePayment(member)">
+        <mat-card-content>
+          <div class="member-info flex align-items-center">
+            <div class="avatar align-items-center">
+              {{ getInitials(member.aluno.nome) }}
             </div>
-            <div class="extra-info">
-              <div class="info-row">
-                <span>Plano Atual:</span> <strong>{{ member.plano.nome }}</strong>
-              </div>
-              <div class="info-row">
-                <span>Matrícula:</span> <strong>{{ (member.aluno.matricula) }}</strong>
-              </div>
+            <div class="details flex-column">
+              <div class="name">{{ member.aluno.nome }}</div>
+              <div class="email">{{ member.aluno.email }}</div>
             </div>
-          </mat-card-content>
-          <div class="footer p-2 flex justify-content-center">
-            <mat-icon>how_to_reg</mat-icon>
-            <span class="Realizar check-in">Registrar Check-in</span>
           </div>
-        </mat-card>
+          <div class="extra-info">
+            <div class="info-row">
+              <span>Plano Atual:</span> <strong>{{ member.plano.nome }}</strong>
+            </div>
+            <div class="info-row">
+              <span>Matrícula:</span> <strong>{{ (member.aluno.matricula) }}</strong>
+            </div>
+          </div>
+        </mat-card-content>
+        <div class="footer p-2 flex justify-content-center">
+          <mat-icon>how_to_reg</mat-icon>
+          <span class="Realizar check-in">Registrar Check-in</span>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Paginação -->
+    <div class="pagination flex justify-content-center gap-2">
+      <button mat-raised-button (click)="prevPage()" [disabled]="currentPage === 0">Anterior</button>
+      <span>Página {{ currentPage + 1 }} de {{ totalResults / limit | number: '1.0-0' }}</span>
+      <button mat-raised-button (click)="nextPage()" [disabled]="currentPage >= (totalResults / limit) - 1">Próxima</button>
     </div>
   </mat-tab>
+
   <mat-tab label="Confirmação" [disabled]="!obj">
     <app-check-in-confirm [member]="obj"></app-check-in-confirm>
   </mat-tab>
 </mat-tab-group>
-
