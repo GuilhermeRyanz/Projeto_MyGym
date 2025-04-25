@@ -5,6 +5,7 @@ import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-m
 import {Router} from "@angular/router";
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {MatButton} from "@angular/material/button";
+import {DecimalPipe} from "@angular/common";
 
 @Component({
   selector: 'app-list',
@@ -15,6 +16,7 @@ import {MatButton} from "@angular/material/button";
     MatCardContent,
     MatCardModule,
     MatButton,
+    DecimalPipe,
 
 
   ],
@@ -25,19 +27,47 @@ export class ListComponent implements OnInit {
 
   private pathUrlClient: string = URLS.GYM;
   public gyms: Gym[] | undefined;
+  public limit: number = 12;
+  public totalResults: number = 0;
+  public currentPage: number = 1;
 
-  constructor(private httpMethods: HttpMethodsService, private router: Router) {
+  constructor(
+    private httpMethods: HttpMethodsService,
+    private router: Router) {
   }
 
 
   ngOnInit() {
-    this.seach();
+    this.search();
   }
 
-  public seach(): void {
-    this.httpMethods.get(this.pathUrlClient).subscribe((response: any) => {
-      this.gyms = response;
+  public search(offset: number= 0, limit: number = this.limit): void {
+    const params: any = {
+      active: true,
+      limit,
+      offset,
+    };
+
+    this.httpMethods.getPaginated(this.pathUrlClient, params).subscribe((response: any) => {
+      this.gyms = response.results;
+      this.totalResults = response.count;
+      this.currentPage = offset / limit;
     });
+  }
+
+  public nextPage(): void {
+    const maxPage = Math.ceil(this.currentPage / this.limit) - 1;
+    if (this.currentPage < maxPage) {
+      const nextOffset = (this.currentPage - 1) * this.limit;
+      this.search(nextOffset);
+    }
+  }
+
+  public prevPage(): void {
+    if (this.currentPage > 0) {
+      const prevOffset = (this.currentPage - 1) * this.limit;
+      this.search(prevOffset);
+    }
   }
 
   public create(): void {

@@ -46,7 +46,6 @@ export class ListComponent implements OnInit {
   public totalResults: number = 0;
   public currentPage: number = 0;
 
-  selectedIndex: number = 0;
   searchChange = new Subject<string>();
 
 
@@ -75,14 +74,13 @@ export class ListComponent implements OnInit {
 
   }
 
-  getTypeUser() {
+  private getTypeUser() {
     this.typeUser = localStorage.getItem("tipo_usuario");
   }
 
   public search(): void {
     this.searchEmployee(this.searchTerm, 0);
   }
-
 
 
   getInitials(name: string): string {

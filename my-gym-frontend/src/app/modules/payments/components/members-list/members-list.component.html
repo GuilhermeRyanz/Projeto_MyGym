@@ -2,10 +2,12 @@
   <h2 class="title">Pagamentos por Aluno</h2>
   <p class="subtitle flex justify-content-center">Selecione um aluno para ver seu histórico de pagamentos</p>
 
-  <mat-form-field appearance="outline" class="search w-30rem flex align-content-center">
-    <mat-label>Busca Aluno</mat-label>
-    <input matInput placeholder="Digite o nome ou matrícula" [(ngModel)]="searchTerm" (input)="searchMember()">
+  <mat-form-field appearance="outline" class="search w-30rem flex align-items-center">
+    <mat-label>Busca aluno</mat-label>
+    <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
+           (input)="onSearchChange(searchTerm)" />
   </mat-form-field>
+
 
   <div class="member-list ml-4">
     <mat-card class="member-card" *ngFor="let member of members; trackBy: trackById" (click)="selectMember(member)">
@@ -32,4 +34,11 @@
       </div>
     </mat-card>
   </div>
+
+  <div class="pagination flex justify-content-center gap-2 mt-4">
+    <button mat-raised-button (click)="prevPage()" [disabled]="currentPage === 0">Anterior</button>
+    <span>Página {{ currentPage + 1 }} de {{ totalResults / limit | number: '1.0-0' }}</span>
+    <button mat-raised-button (click)="nextPage()" [disabled]="currentPage >= (totalResults / limit) - 1">Próxima</button>
+  </div>
+
 </div>

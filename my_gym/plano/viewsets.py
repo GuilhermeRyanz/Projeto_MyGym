@@ -18,14 +18,9 @@ from plano import models, serializers, filters
 class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = models.Plano.objects.all()
     serializer_class = serializers.PlanoSerializer
-    filter_backends = [DjangoFilterBackend, ]
     filterset_class = filters.PlanoFilter
 
-    def get_queryset(self):
-        return models.Plano.objects.filter(
-            academia__usuarioacademia__usuario=self.request.user,
-            active=True
-        )
+
 
     def dias_str(self, dias):
 
@@ -60,15 +55,22 @@ class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
 
         return ", ".join(intervalos)
 
-
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        planos = self.get_serializer(queryset, many=True).data
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            planos = self.get_serializer(page, many=True).data
+        else:
+            planos = self.get_serializer(queryset, many=True).data
 
         for plano in planos:
             dias_permitidos = plano.get('dias_permitidos', [])
             dias_str = self.dias_str(dias_permitidos)
-            plano['dias_permitidos_str'] =  {dias_str}
+            plano['dias_permitidos_str'] = {dias_str}
+
+        if page is not None:
+            return self.get_paginated_response(planos)
 
         return Response(planos)
 

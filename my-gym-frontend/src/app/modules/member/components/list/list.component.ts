@@ -12,23 +12,25 @@ import {FormsModule} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
-import {NgForOf} from "@angular/common";
+import {DecimalPipe, NgForOf} from "@angular/common";
 import {MatButton} from "@angular/material/button";
+import {debounceTime, Subject} from "rxjs";
 
 @Component({
   selector: 'app-list',
   standalone: true,
-    imports: [
-        MatCard,
-        MatIcon,
-        MatCardContent,
-        MatLabel,
-        MatFormField,
-        MatInput,
-        FormsModule,
-        NgForOf,
-        MatButton
-    ],
+  imports: [
+    MatCard,
+    MatIcon,
+    MatCardContent,
+    MatLabel,
+    MatFormField,
+    MatInput,
+    FormsModule,
+    NgForOf,
+    MatButton,
+    DecimalPipe
+  ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
@@ -39,14 +41,12 @@ export class ListComponent implements OnInit {
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
   public searchTerm: string = "";
+  public limit: number = 12;
+  public totalResults: number = 0;
+  public currentPage: number = 0;
 
-  private getIdGym(): void {
-    this.gym_id = localStorage.getItem("academia");
-  }
+  searchChange = new Subject<string>();
 
-  getTypeUser() {
-    this.typeUser = localStorage.getItem("tipo_usuario");
-  }
 
   constructor(private httpMethods: HttpMethodsService,
               private router: Router,
@@ -57,14 +57,25 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.getIdGym();
-    this.seach();
+    this.search();
     this.getTypeUser()
+
+    this.searchChange.pipe(debounceTime(100)).subscribe((term) => {
+      this.searchMember(term, 0)
+    })
+
   }
 
-  public seach(): void {
-    this.httpMethods.get(this.pathUrlMemberPlan + `?expand=aluno&expand=plano&active=true&academia=${this.gym_id}`).subscribe((response: any) => {
-      this.members = response;
-    });
+  private getIdGym(): void {
+    this.gym_id = localStorage.getItem("academia");
+  }
+
+  private getTypeUser() {
+    this.typeUser = localStorage.getItem("tipo_usuario");
+  }
+
+  public search(): void {
+    this.searchMember(this.searchTerm, 0)
   };
 
   public create(): void {
@@ -98,7 +109,7 @@ export class ListComponent implements OnInit {
           return;
         }
         this.httpMethods.disable(this.pathUrlMemberPlan, member, 'desativar_aluno').subscribe(() => {
-          this.seach();
+          this.searchMember();
           let sucessMensage =  "Aluno desativado"
           this.snackBar.open(  sucessMensage, 'Fechar', {
             duration: 5000,
@@ -109,17 +120,45 @@ export class ListComponent implements OnInit {
     })
   };
 
-  public searchMember(): void {
-    let searchParam = '';
-    if (this.searchTerm) {
-      searchParam = `&search=${this.searchTerm}`;
+  public searchMember(term: string = "", offset: number = 0, limit: number = this.limit): void {
+    const params: any = {
+      expand: ['aluno', 'plano'],
+      active: true,
+      academia: this.gym_id,
+      limit,
+      offset,
+    };
+
+    if (term){
+      params.search = term
     }
-    this.httpMethods.get(`${this.pathUrlMemberPlan}?expand=aluno&expand=plano&active=true${searchParam}&academia=${this.gym_id}`)
+
+    this.httpMethods.getPaginated(this.pathUrlMemberPlan, params)
       .subscribe((response: any) => {
-        this.members = response;
-        console.log(response);
-      });
+        this.members = response.results;
+        this.totalResults = response.count;
+        this.currentPage = offset / limit;
+      })
   }
 
+  public nextPage(): void {
+    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
+    if (this.currentPage < maxPage) {
+      const nextOffset = (this.currentPage + 1) * this.limit;
+      this.searchMember(this.searchTerm, nextOffset)
+    }
+  }
+
+  public prevPage(): void {
+    if (this.currentPage > 0) {
+      const prevOffset = (this.currentPage - 1) * this.limit;
+      this.searchMember(this.searchTerm, prevOffset);
+    }
+  }
+
+  onSearchChange(term: string): void {
+    this.searchTerm = term;
+    this.searchChange.next(term);
+  }
 
 }

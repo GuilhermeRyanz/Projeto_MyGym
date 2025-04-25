@@ -7,9 +7,10 @@
 
     <div class="w-10rem"></div>
 
-    <mat-form-field appearance="outline" class="w-30rem text-center ml-5">
-      <mat-label>Buscar Aluno</mat-label>
-      <input matInput placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm" (input)="searchMember()">
+    <mat-form-field appearance="outline" class="search w-30rem">
+      <mat-label>Busca aluno</mat-label>
+      <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
+             (input)="onSearchChange(searchTerm)" />
     </mat-form-field>
 
     <div class="align-self-start mr-2">
@@ -60,4 +61,11 @@
       </div>
     </mat-card>
   </div>
+
+  <div class="pagination flex justify-content-center gap-2 mt-5">
+    <button mat-raised-button (click)="prevPage()" [disabled]="currentPage === 0">Anterior</button>
+    <span>Página {{ currentPage + 1 }} de {{ totalResults / limit | number: '1.0-0' }}</span>
+    <button mat-raised-button (click)="nextPage()" [disabled]="currentPage >= (totalResults / limit) - 1">Próxima</button>
+  </div>
+
 </div>

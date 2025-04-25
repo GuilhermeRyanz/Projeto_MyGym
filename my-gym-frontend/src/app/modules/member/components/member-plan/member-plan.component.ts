@@ -8,6 +8,8 @@ import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton} from "@angular/material/button";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {DecimalPipe} from "@angular/common";
+import {response} from "express";
 
 @Component({
   selector: 'app-member-plan',
@@ -17,6 +19,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     MatCard,
     MatIcon,
     MatButton,
+    DecimalPipe,
 
   ],
   templateUrl: './member-plan.component.html',
@@ -31,10 +34,10 @@ export class MemberPlanComponent implements OnInit {
   protected plans: Plan[] | undefined;
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
+  public limit: number = 6;
+  public currentPage: number = 0;
+  public totalResults: number = 0;
 
-  private getIdGym(): void {
-    this.gym_id = localStorage.getItem("academia")
-  }
 
   constructor(private httpMethods: HttpMethodsService,
               private router: Router,
@@ -44,25 +47,55 @@ export class MemberPlanComponent implements OnInit {
 
   ngOnInit() {
     this.getIdGym()
-    this.seach()
+    this.search()
     this.getTypeUser()
+  }
+
+  private getIdGym(): void {
+    this.gym_id = localStorage.getItem("academia")
   }
 
   getTypeUser() {
     this.typeUser = localStorage.getItem("usuario_tipo")
   }
 
-  public seach(): void {
-    this.httpMethods.get(this.pathUrlPlan + `?academia=${(this.gym_id)}&active=true`).subscribe((response: any) => {
-      if (response.length <= 0) {
-        const errosMensager = "Não há planos ativos cadastrados!"
-        this.snackBar.open(errosMensager, 'fechar', {
-          duration: 2000,
-          verticalPosition: 'top',
-        });
-      }
-      this.plans = response
-    });
+  public search(offset: number = 0, limit: number = this.limit): void {
+    const params: any = {
+      academia: this.gym_id,
+      active: true,
+      limit,
+      offset,
+    }
+
+    this.httpMethods.getPaginated(this.pathUrlPlan, params)
+      .subscribe((response) => {
+        if (response.results.length <= 0) {
+          const errorMensager = "Não há planos ativos cadastrados!"
+          this.snackBar.open(errorMensager, `fechar`,{
+            duration: 2000,
+            verticalPosition: "top",
+          });
+        }
+
+        this.plans = response.results;
+        this.totalResults = response.count;
+        this.currentPage = offset / limit;
+      });
+  }
+
+  public nextPage() {
+    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
+    if (this.currentPage < maxPage) {
+      const nextOffset = (this.currentPage + 1) * this.limit;
+      this.search(nextOffset)
+    }
+  }
+
+  public prevPage(): void {
+    if (this.currentPage > 0) {
+      const prevOffset = (this.currentPage - 1) * this.limit;
+      this.search(prevOffset);
+    }
   }
 
   public editPlan(plan: Plan): void {
