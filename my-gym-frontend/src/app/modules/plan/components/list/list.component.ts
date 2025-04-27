@@ -13,7 +13,6 @@ import {
 } from "../../../member/components/confirm-dialog-component/confirm-dialog-component.component";
 import {MatDialog} from "@angular/material/dialog";
 import {PlanDetailComponent} from "../plan-detail/plan-detail.component";
-import {Subject} from "rxjs";
 import {DecimalPipe} from "@angular/common";
 
 @Component({
