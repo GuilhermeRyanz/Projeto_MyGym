@@ -4,14 +4,7 @@
     Gerencie os produtos oferecios pelo estabelecimento
   </p>
   <div class="flex align-items-center justify-content-between  w-full mb-4">
-
     <div class="w-10rem"></div>
-
-    <mat-form-field appearance="outline" class="w-30rem text-center ml-5">
-      <mat-label>Buscar funcionário</mat-label>
-      <input matInput placeholder="Digite o nome ou email">
-    </mat-form-field>
-
     <div class="align-self-start mr-2">
       <button
         mat-raised-button
@@ -23,34 +16,32 @@
         Adicionar produto
       </button>
     </div>
-
   </div>
 
-  <div class="flex overflow-x-auto w-10 h-[30rem] gap-4 p-2 scroll-smooth justify-content-start">
-    @for (prod of products; track prod.id) {
-      <mat-card class="min-w-[20rem] flex-shrink-0 overflow-hidden border bg-white flex flex-col">
-
-        <app-product-item [prod]="prod"></app-product-item>
-
-        <div class="flex justify-content-between align-items-center p-3">
-
-          <button
-            mat-button
-            type="button"
-            class="p-button-text text-xl p-0 m-0 flex align-items-center"
-            (click)="abastecer(prod)">
-            <mat-icon fontIcon="add_circle" class="mr-1 text-sm"></mat-icon>
-            Abastecer
-          </button>
-
-          <button mat-button type="button" class="p-button-text text-xl p-0 m-0 flex align-items-center" (click)="edit(prod)">
-            <mat-icon fontIcon="edit" class="mr-1 text-sm"></mat-icon>
-            Editar
-          </button>
-        </div>
-
-
-      </mat-card>
+  <section class="flex-wrap">
+    @for(category of categories; track category) {
+      @if(categoryPanation[category].products.length > 0) {
+        <section class="flex flex-column">
+          <div>{{ category }}</div>
+          <div class="flex flex-col gap-4 mb-6" id="category-{{ category }}">
+            <div class="flex overflow-x-auto gap-4 styled-scroll" (scroll)="onScroll(category)">
+              @for(prod of categoryPanation[category].products; track prod.id) {
+                <mat-card class="min-w-[20rem] flex-shrink-0 overflow-hidden border bg-white flex flex-col">
+                  <app-product-item [prod]="prod"></app-product-item>
+                  <div class="flex justify-between items-center p-3">
+                    <button mat-button type="button" (click)="restock(prod)">
+                      <mat-icon>add_circle</mat-icon> Abastecer
+                    </button>
+                    <button mat-button type="button" (click)="edit(prod)">
+                      <mat-icon>edit</mat-icon> Editar
+                    </button>
+                  </div>
+                </mat-card>
+              }
+            </div>
+          </div>
+        </section>
+      }
     }
-  </div>
+  </section>
 </div>
