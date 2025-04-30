@@ -1,9 +1,8 @@
-import {Component, DoCheck, ViewChild} from '@angular/core';
-import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
-import {AuthService} from "./auth/services/auth.service";
+import {Component} from '@angular/core';
+import {RouterLink, RouterOutlet} from '@angular/router';
 import {MatAnchor, MatButton, MatIconButton} from "@angular/material/button";
 import {MatToolbar} from "@angular/material/toolbar";
-import {MatSidenav, MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
+import {MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
 import {MatIcon} from "@angular/material/icon";
 import {MatListItem, MatNavList} from "@angular/material/list";
 import {DataRowOutlet} from "@angular/cdk/table";
