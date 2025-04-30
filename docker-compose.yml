@@ -3,7 +3,7 @@ services:
     image: postgres
     container_name: postgres
     ports:
-      - "5432:5432"
+      - "5438:5432"
     environment:
       - POSTGRES_USER=my_gym
       - POSTGRES_PASSWORD=123

@@ -1,0 +1,92 @@
+@if (showBanner) {
+  <mat-toolbar color="primary" class="header">
+    <button mat-icon-button aria-label="Menu icon" (click)="opened=!opened">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="user-info">
+      <span>Usuário: {{ user }}</span>
+      @if (gym_name) { <span>Academia: {{ gym_name }}</span> }
+    </div>
+
+    <div class="logo-container">
+      <img src="img/MyGymLogoOnlyWhite_0001.png" width="50px" alt="teste">
+      <h1>MyGym</h1>
+    </div>
+
+    <span class="spacer"></span>
+    <button mat-raised-button class="add_button" color="warn" (click)="logout()">Sair</button>
+  </mat-toolbar>
+}
+<mat-sidenav-container autosize>
+  @if(showNav) {
+    <mat-sidenav [(opened)]="opened" mode="side">
+      <nav class="side-nav">
+        <a mat-button routerLink="my_gym/home">
+          <mat-icon>home</mat-icon>
+          Home
+        </a>
+
+        @if(tipo_usuario === "D" || tipo_usuario === "G") {
+          <ng-container>
+            <a mat-button routerLink="employee/list">
+              <mat-icon>badge</mat-icon>
+              Funcionários
+            </a>
+            <a mat-button routerLink="dashboards/dashboard">
+              <mat-icon>bar_chart</mat-icon>
+              DashBoards
+            </a>
+          </ng-container>
+        }
+
+        <ng-container>
+          <a mat-button routerLink="member/list">
+            <mat-icon>people</mat-icon>
+            Alunos
+          </a>
+          <a mat-button routerLink="plan/list">
+            <mat-icon>view_list</mat-icon>
+            Planos
+          </a>
+          <a mat-button routerLink="check-in/register">
+            <mat-icon>check_circle</mat-icon>
+            Check-in
+          </a>
+          <a mat-button routerLink="payment/paymentRegistration">
+            <mat-icon>payment</mat-icon>
+            Pagamento
+          </a>
+          <a mat-button routerLink="member/form/create">
+            <mat-icon>person_add</mat-icon>
+            Cadastro
+          </a>
+
+          <a mat-button routerLink="product/productInventory">
+            <mat-icon>inventory</mat-icon>
+            Inventario
+          </a>
+
+          <a mat-button routerLink="payments/membersListPayments">
+            <mat-icon>attach_money</mat-icon>
+            Pagamentos
+          </a>
+        </ng-container>
+
+        @if(tipo_usuario === "D") {
+          <ng-container>
+            <a mat-button routerLink="adm/gym/list">
+              <mat-icon>corporate_fare</mat-icon>
+              Academias
+            </a>
+          </ng-container>
+
+        }
+
+      </nav>
+    </mat-sidenav>
+  }
+  <mat-sidenav-content class="main-container">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
