@@ -1,28 +1,30 @@
-<div class="w-full aspect-square flex items-center justify-center overflow-hidden">
-  <img [src]="prod.foto_url" alt="Imagem do produto"
-       class="w-full h-full object-contain p-2"/>
-</div>
+<main>
+  <div class="h-15rem w-25rem w-full aspect-square flex items-center justify-center overflow-hidden">
+    <img [src]="prod.foto_url" alt="Imagem do produto"
+         class="w-full h-full object-contain p-2"/>
+  </div>
 
-  <mat-card-content class="p-4 space-y-1">
-    <div class="flex justify-content-between">
-      <div class=" font-semibold text-2xl ">{{ prod.nome }}</div>
-      <div class="text-2xl font-bold whitespace-nowrap">R$ {{ prod.preco }}</div>
-    </div>
+    <mat-card-content class="p-4">
+      <div class="flex justify-content-between">
+        <div class=" font-semibold text-2xl ">{{ prod.nome }}</div>
+        <div class="text-2xl font-bold whitespace-nowrap">R$ {{ prod.preco }}</div>
+      </div>
 
-    <div class="flex items-center text-xl gap-1 font-gray">
-      <mat-icon fontIcon="local_offer" class="text-xl text-gray-400"></mat-icon>
-      {{ prod.categoria || 'Produto' }}
-    </div>
+      <div class="flex items-center text-1xl gap-1 font-gray">
+        <mat-icon fontIcon="local_offer" class="text-1xl text-gray-400"></mat-icon>
+        {{ prod.categoria || 'Produto' }}
+      </div>
 
-    <div class="text-xl font-gray"  >
-      <strong>Marca:</strong> {{ prod.marca || 'Desconhecida' }}
-    </div>
+      <div class="text-xl font-gray"  >
+        <strong>Marca:</strong> {{ prod.marca || 'Desconhecida' }}
+      </div>
 
-    <p class="text-sl font-gray ">{{ prod.descricao }}</p>
+      <p class="text-sl font-gray ">{{ prod.descricao }}</p>
 
-    <div class="text-xl" style="color: #666666">
-      Em estoque: {{ prod.quantidade_estoque }} unidade{{ prod.quantidade_estoque === 1 ? '' : 's' }}
-    </div>
+      <div class="text-xl" style="color: #666666">
+        Em estoque: {{ prod.quantidade_estoque }} unidade{{ prod.quantidade_estoque === 1 ? '' : 's' }}
+      </div>
 
 
-  </mat-card-content>
+    </mat-card-content>
+</main>
