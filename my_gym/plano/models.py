@@ -16,6 +16,18 @@ class DiasSemana(models.IntegerChoices):
     SABADO = 6, "Sábado"
     DOMINGO = 7, "Domingo"
 
+def dias_semana_default():
+    return [
+        DiasSemana.SEGUNDA,
+        DiasSemana.TERCA,
+        DiasSemana.QUARTA,
+        DiasSemana.QUINTA,
+        DiasSemana.SEXTA,
+        DiasSemana.SABADO,
+        DiasSemana.DOMINGO,
+    ]
+
+
 
 class Plano(ModelBase):
     nome = models.CharField(
@@ -54,13 +66,7 @@ class Plano(ModelBase):
     )
 
     dias_permitidos = models.JSONField(
-        default=[DiasSemana.SEGUNDA,
-                 DiasSemana.TERCA,
-                 DiasSemana.QUARTA,
-                 DiasSemana.QUINTA,
-                 DiasSemana.SEXTA,
-                 DiasSemana.SABADO,
-                 DiasSemana.DOMINGO],
+        default=dias_semana_default,
         db_column="dias_permitidos",
         help_text="Lista de dias da semana em que o plano pode ser usado"
     )
