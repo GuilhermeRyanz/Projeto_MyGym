@@ -1,0 +1,107 @@
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import serializers
+from rest_flex_fields import FlexFieldsModelSerializer
+
+
+from academia.models import UsuarioAcademia
+from aluno.models import AlunoPlano
+from aluno.serializers import AlunoSerializer
+from produto.models import LoteProduto
+from produto.serializers import ProdutoSerializer
+from usuario.serializers import UsuarioSerializer
+from venda.models import ItemVenda, Venda
+
+
+class ItemVendaSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = ItemVenda
+        fields = ['produto', 'quantidade', 'preco_unitario']
+        expandable_fields = {
+            'produto': (ProdutoSerializer, {'source': 'produto'}),
+        }
+
+    def validate(self, data):
+        produto = data['produto']
+        quantidade = data['quantidade']
+
+        estoque_total = sum(
+            lote.quantidade
+            for lote in LoteProduto.objects.filter(produto=produto, quantidade__gt=0)
+        )
+
+        if quantidade > estoque_total:
+            raise serializers.ValidationError(f"Estoque insuficiente para o produto '{produto.nome}'.")
+
+        return data
+
+
+class VendaSerializer(serializers.ModelSerializer):
+    items = ItemVendaSerializer(many=True)
+
+    def create(self, validated_data):
+        items_data = validated_data.pop('items')
+        academia = validated_data['academia']
+        vendedor = validated_data['vendedor']
+        cliente = validated_data.get('cliente')
+
+        try:
+            if not UsuarioAcademia.objects.get(active=True, academia=academia, usuario=vendedor):
+                raise serializers.ValidationError("Usuário não possui credenciais para a academia.")
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError("Usuário não possui vínculo com a academia.")
+
+        venda = Venda.objects.create(**validated_data)
+        total = 0
+
+        for item_data in items_data:
+            produto = item_data['produto']
+            quantidade = item_data['quantidade']
+            preco_unitario = item_data.get('preco_unitario') or produto.preco
+            subtotal = preco_unitario * quantidade
+            total += subtotal
+
+            self._descontar_estoque(produto, quantidade)
+
+            ItemVenda.objects.create(
+                venda=venda,
+                produto=produto,
+                quantidade=quantidade,
+                preco_unitario=preco_unitario,
+            )
+
+        if cliente:
+            alunoPlano = AlunoPlano.objects.filter(aluno=cliente).select_related('plano').first()
+            if alunoPlano and alunoPlano.plano and alunoPlano.plano.desconto:
+                desconto = alunoPlano.plano.desconto or 0
+                total -= total * (desconto / 100)
+
+        venda.valor_total = round(total, 2)
+        venda.save()
+        return venda
+
+    def _descontar_estoque(self, produto, quantidade):
+        lotes = LoteProduto.objects.filter(produto=produto, quantidade__gt=0).order_by('data_validade')
+        restante = quantidade
+
+        for lote in lotes:
+            if restante == 0:
+                break
+            if lote.quantidade <= restante:
+                restante -= lote.quantidade
+                lote.quantidade = 0
+            else:
+                lote.quantidade -= restante
+                restante = 0
+            lote.save()
+
+        if restante > 0:
+            raise serializers.ValidationError(f"Estoque insuficiente para o produto '{produto.nome}'.")
+
+    class Meta:
+        model = Venda
+        fields = ['id', 'academia', 'vendedor', 'cliente', 'valor_total', 'data_venda', 'items']
+        expandable_fields = {
+            'cliente': (AlunoSerializer, {'source': 'cliente'}),
+            'vendedor': (UsuarioSerializer, {'source': 'usuario'}),
+            'items': (ItemVendaSerializer, {'many': True}),
+        }

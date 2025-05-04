@@ -6,9 +6,9 @@ class ProdutoFilter(filters.FilterSet):
     nome = filters.CharFilter(field_name='nome', lookup_expr='icontains')
     categoria = filters.CharFilter(field_name='categoria', lookup_expr='icontains')
 
-    search = filters.CharFilter(method='filter_busca', label='search')
+    search = filters.CharFilter(method='search_filter', label='search')
 
-    def filter_busca(self, queryset, name, value):
+    def search_filter(self, queryset, name, value):
         if value:
             return queryset.filter(
                 Q(nome__icontains=value) | Q(categoria__icontains=value)

@@ -1,6 +1,7 @@
 from django.db import models
 
 from academia.models import Academia
+from aluno.models import Aluno
 from core.models import ModelBase
 from produto.models import Produto
 from usuario.models import Usuario
@@ -14,6 +15,13 @@ class Venda(ModelBase):
         max_digits=10,
         decimal_places=2,
     )
+
+    cliente = models.ForeignKey(
+        Aluno,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='compras')
 
     vendedor = models.ForeignKey(
         Usuario, on_delete=models.SET_NULL, null=True,)
