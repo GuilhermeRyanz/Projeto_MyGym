@@ -53,9 +53,7 @@ INSTALLED_APPS = [
     'pagamento',
     'produto',
     'corsheaders',
-    'cloudinary',
-    'cloudinary_storage'
-
+    'venda'
 ]
 
 MIDDLEWARE = [
@@ -100,7 +98,7 @@ DATABASES = {
         'USER': 'my_gym',
         'PASSWORD': '123',
         'HOST' : '127.0.0.1',
-        'PORT' : '5438',
+        'PORT' : '5432',
     }
 }
 

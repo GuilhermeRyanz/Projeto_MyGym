@@ -4,10 +4,11 @@ from rest_flex_fields import FlexFieldsModelSerializer
 
 
 from academia.models import UsuarioAcademia
-from aluno.models import AlunoPlano
+from aluno.models import AlunoPlano, Aluno
 from aluno.serializers import AlunoSerializer
 from produto.models import LoteProduto
 from produto.serializers import ProdutoSerializer
+from usuario.models import Usuario
 from usuario.serializers import UsuarioSerializer
 from venda.models import ItemVenda, Venda
 
@@ -35,13 +36,16 @@ class ItemVendaSerializer(FlexFieldsModelSerializer):
         return data
 
 
-class VendaSerializer(serializers.ModelSerializer):
+class VendaSerializer(FlexFieldsModelSerializer):
     items = ItemVendaSerializer(many=True)
+    cliente = serializers.PrimaryKeyRelatedField(queryset=Aluno.objects.all(), allow_null=True)
 
     def create(self, validated_data):
+        request = self.context.get('request')
         items_data = validated_data.pop('items')
         academia = validated_data['academia']
-        vendedor = validated_data['vendedor']
+        vendedor = request.user.usuario
+
         cliente = validated_data.get('cliente')
 
         try:
@@ -50,7 +54,10 @@ class VendaSerializer(serializers.ModelSerializer):
         except ObjectDoesNotExist:
             raise serializers.ValidationError("Usuário não possui vínculo com a academia.")
 
-        venda = Venda.objects.create(**validated_data)
+        venda = Venda.objects.create(
+            **validated_data,
+            vendedor=vendedor,
+        )
         total = 0
 
         for item_data in items_data:
@@ -101,7 +108,7 @@ class VendaSerializer(serializers.ModelSerializer):
         model = Venda
         fields = ['id', 'academia', 'vendedor', 'cliente', 'valor_total', 'data_venda', 'items']
         expandable_fields = {
-            'cliente': (AlunoSerializer, {'source': 'cliente'}),
-            'vendedor': (UsuarioSerializer, {'source': 'usuario'}),
+            'cliente': AlunoSerializer,
+            'vendedor': UsuarioSerializer,
             'items': (ItemVendaSerializer, {'many': True}),
         }
