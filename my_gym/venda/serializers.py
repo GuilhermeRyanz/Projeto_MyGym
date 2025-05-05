@@ -18,7 +18,7 @@ class ItemVendaSerializer(FlexFieldsModelSerializer):
         model = ItemVenda
         fields = ['produto', 'quantidade', 'preco_unitario']
         expandable_fields = {
-            'produto': (ProdutoSerializer, {'source': 'produto'}),
+            'produto': ProdutoSerializer,
         }
 
     def validate(self, data):
