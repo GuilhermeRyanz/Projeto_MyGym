@@ -74,7 +74,6 @@ export class SalesComponent implements OnInit, AfterViewInit {
   constructor(
     private httpMethos: HttpMethodsService,
     private authService: AuthService,
-    private changeDetectorRef: ChangeDetectionRef
   ) {}
 
   ngOnInit(): void {
@@ -133,9 +132,6 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
     this.limit = newLimit;
     this.currentPage = newPageIndex;
-
-    console.log('Página atual DEPOIS:', this.currentPage);
-
     this.searchRegisters(this.searchTerm, newOffset);
   }
 
