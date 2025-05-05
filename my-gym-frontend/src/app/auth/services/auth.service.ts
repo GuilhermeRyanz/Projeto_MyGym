@@ -53,6 +53,11 @@ export class AuthService {
     );
   }
 
+  public get_gym(): string | null {
+    return localStorage.getItem("academia");
+  }
+
+
   public refreshToken(): Observable<string> {
     const refreshToken = this.getTokenRefresh();
     if (!refreshToken) {

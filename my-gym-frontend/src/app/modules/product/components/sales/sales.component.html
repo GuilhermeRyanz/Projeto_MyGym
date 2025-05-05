@@ -1,1 +1,69 @@
-<p>sales works!</p>
+<h2 class="title">Vendas</h2>
+<div class="subtitle flex justify-content-center flex mb-4">Verifique as vendas realizada e regisstre novas vendas</div>
+
+<main class="ml-8 mr-8">
+  <div class="flex align-items-center justify-content-start">
+    <mat-form-field appearance="outline" class="search w-30rem">
+      <mat-label>Buscar registro</mat-label>
+      <input matInput="text" placeholder="Digite o nome ou matrícula" [(ngModel)]="searchTerm"
+             (input)="onSearchChange(searchTerm)" />
+    </mat-form-field>
+
+    <div class="flex align-items-center justify-content-between  w-full mb-4">
+      <div class="w-10rem"></div>
+      <div class="align-self-start mr-2">
+        <button
+          mat-raised-button
+          color="primary"
+          class="add_button bg-black-alpha-70 mt-2"
+          style="color: white"
+          (click)="create()">
+          <mat-icon>add</mat-icon>
+          Registrar nova venda
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+
+        <ng-container matColumnDef="cliente">
+          <th mat-header-cell *matHeaderCellDef> Cliente </th>
+          <td mat-cell *matCellDef="let element"> {{element.cliente?.nome}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vendedor">
+          <th mat-header-cell *matHeaderCellDef> Vendedor </th>
+          <td mat-cell *matCellDef="let element"> {{element.vendedor?.nome}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valor_total">
+          <th mat-header-cell *matHeaderCellDef> Valor Total </th>
+          <td mat-cell *matCellDef="let element"> {{ element.valor_total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="data_venda">
+          <th mat-header-cell *matHeaderCellDef> Data da Venda </th>
+          <td mat-cell *matCellDef="let element"> {{ element.data_venda | date:'dd/MM/yyyy' : 'pt-BR' }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator
+        [length]="totalResults"
+        [pageSize]="limit"
+        [pageSizeOptions]="[2,5]"
+        (page)="onPaginateChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+
+
+    </div>
+  </div>
+</main>
