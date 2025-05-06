@@ -4,8 +4,6 @@ import { URLS } from "../../../../app.urls";
 import { Subject } from "rxjs";
 import { HttpMethodsService } from "../../../../shared/services/httpMethods/http-methods.service";
 import { AuthService } from "../../../../auth/services/auth.service";
-import { CurrencyPipe, DatePipe } from "@angular/common";
-import { MatIconModule } from "@angular/material/icon";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import {
   MatCell,
@@ -27,34 +25,34 @@ import {
 } from "@angular/material/input";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButton } from "@angular/material/button";
+import {CurrencyPipe, DatePipe} from "@angular/common";
+import {MatIcon, MatIconModule} from "@angular/material/icon";
 
 @Component({
   selector: 'app-sales',
-  standalone: true,
+  templateUrl: './sales.component.html',
+  styleUrls: ['./sales.component.css'],
   imports: [
-    DatePipe,
-    CurrencyPipe,
-    MatPaginator,
+    MatFormField,
+    MatInput,
+    FormsModule,
+    MatButton,
     MatTable,
-    MatHeaderCell,
     MatColumnDef,
-    MatCellDef,
+    MatHeaderCell,
     MatCell,
+    MatCellDef,
     MatHeaderCellDef,
+    CurrencyPipe,
+    DatePipe,
     MatHeaderRowDef,
     MatHeaderRow,
     MatRowDef,
     MatRow,
-    MatInput,
-    MatFormField,
-    MatLabel,
-    ReactiveFormsModule,
-    FormsModule,
-    MatButton,
-    MatIconModule
+    MatIconModule,
+    MatLabel
   ],
-  templateUrl: './sales.component.html',
-  styleUrls: ['./sales.component.css']
+  standalone: true
 })
 export class SalesComponent implements OnInit, AfterViewInit {
 
@@ -65,7 +63,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
   private pathUrlSales: string = URLS.SALE;
   public searchTerm: string = "";
   public currentPage: number = 0;
-  public limit: number = 5;
+  public limit: number = 10;
   public totalResults: number = 0;
   public searchChanged = new Subject<string>();
 
@@ -96,11 +94,10 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   public searchRegisters(term: string = '', offset: number = 0, limit: number = this.limit): void {
-    console.log('Buscando registros com termo:', term, 'offset:', offset, 'limit:', limit);
     const params: any = {
       expand: ['cliente', 'vendedor', 'itens.produto'],
       active: true,
-      academia: this.authService.get_gym,
+      academia: this.authService.get_gym(),
       limit,
       offset,
     };
@@ -117,22 +114,6 @@ export class SalesComponent implements OnInit, AfterViewInit {
         this.currentPage = offset / limit;
       }
     );
-  }
-
-  public onPaginateChange(event: PageEvent): void {
-    const newLimit = event.pageSize;
-    const newPageIndex = event.pageIndex;
-    const newOffset = newPageIndex * newLimit;
-
-    console.log('Evento de paginação:', event);
-    console.log('Novo limite:', newLimit);
-    console.log('Novo índice da página:', newPageIndex);
-    console.log('Novo offset:', newOffset);
-    console.log('Página atual ANTES:', this.currentPage);
-
-    this.limit = newLimit;
-    this.currentPage = newPageIndex;
-    this.searchRegisters(this.searchTerm, newOffset);
   }
 
   public nextPage(): void {
@@ -158,5 +139,4 @@ export class SalesComponent implements OnInit, AfterViewInit {
   public create(): void {
     console.log('Creating new Sales');
   }
-
 }

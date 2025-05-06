@@ -55,15 +55,15 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 
-      <mat-paginator
-        [length]="totalResults"
-        [pageSize]="limit"
-        [pageSizeOptions]="[2,5]"
-        (page)="onPaginateChange($event)"
-        showFirstLastButtons>
-      </mat-paginator>
-
-
+    </div>
+    <div class="pagination-controls">
+      <button (click)="prevPage()" [disabled]="currentPage === 0">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span>Página {{currentPage + 1}} de {{totalPages}}</span>
+      <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
     </div>
   </div>
 </main>
