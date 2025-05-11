@@ -45,6 +45,21 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="itens">
+          <th mat-header-cell *matHeaderCellDef> Itens </th>
+          <td mat-cell *matCellDef="let element">
+            <ul>
+              @if (element.itens && element.itens.length > 0) {
+                @for (item of element.itens; track item.produto.id) {
+                  <li>{{ item.produto.nome }} - {{ item.quantidade }}</li>
+                }
+              } @else {
+                <li>Sem itens</li>
+              }
+            </ul>
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="data_venda">
           <th mat-header-cell *matHeaderCellDef> Data da Venda </th>
           <td mat-cell *matCellDef="let element"> {{ element.data_venda | date:'dd/MM/yyyy' : 'pt-BR' }}

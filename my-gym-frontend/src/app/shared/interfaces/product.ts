@@ -4,7 +4,7 @@ export interface Product{
   id?: number;
   nome?: string;
   descricao?: string;
-  preco: string;
+  preco: number;
   foto_url?: ImageData;
   categoria?: string;
   academia: number;

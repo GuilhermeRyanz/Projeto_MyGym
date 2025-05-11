@@ -3,13 +3,14 @@ import { Member } from './member';
 import { Product } from './product';
 
 export interface Sale {
-  id: number;
+  id?: number;
   academia?: number;
   vendedor?: Employee | null;
   cliente?: Member | null;
   valor_total?: number;
   data_venda?: string;
-  items: Item[];
+  forma_pagamento?: string;
+  itens: Item[];
 }
 
 export interface Item {

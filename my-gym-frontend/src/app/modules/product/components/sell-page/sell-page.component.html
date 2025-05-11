@@ -1,1 +1,84 @@
-<h2>Vendas </h2>
+<main class="grid justify-content-center align-items-start p-4">
+
+  <div class="col-10">
+    <button mat-raised-button color="primary" (click)="goBack()" class="">
+        <mat-icon>arrow_back</mat-icon> voltar
+    </button>
+  </div>
+
+  <div class="col-10">
+    <mat-card class="p-4">
+      <div class="font-bold text-2xl mb-1">Registrar Venda</div>
+      <div class="grid">
+        <div class="col-12">
+          <form [formGroup]="formGroup" class="p-d-flex p-flex-column p-gap-3">
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Matricula (opcional)</mat-label>
+              <input matInput formControlName="client" placeholder="Nome do cliente">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Forma de Pagamento</mat-label>
+              <mat-select formControlName="formaPagamento">
+                @for (forma of formasPagamento; track forma) {
+                  <mat-option [value]="forma">
+                    {{ forma }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+      <mat-card appearance="outlined" class="p-2">
+        <div class="flex justify-content-between align-items-center mb-2">
+          <div class="text-2xl font-bold">Produtos</div>
+          <button mat-raised-button color="primary" class="add_button bg-black-alpha-10 text-black-alpha-90" (click)="openProductModal()">
+            <mat-icon>add</mat-icon> Adicionar Produto
+          </button>
+        </div>
+
+        @if (cartItems.length === 0) {
+          <div class="bg-black-alpha-10 flex flex-column align-items-center justify-content-center p-4">
+            <mat-icon class="">shopping_cart</mat-icon>
+            <p class="">Nenhum produto adicionado</p>
+            <button mat-button color="primary" (click)="openProductModal()">Adicionar Produto</button>
+          </div>
+        }
+
+        @if (cartItems.length > 0) {
+          <div>
+            @for (item of cartItems; track item.produto.id) {
+              <div class="flex justify-content-between align-items-center bg-black-alpha-10  p-1">
+                <div class="flex flex-wrap align-content-start justify-content-center">
+                  <span>{{ item.produto.nome || 'Produto sem nome' }}</span>
+                  <span>{{ item.quantidade }} x {{ item.preco_unitario | currency:'BRL' }}</span>
+                </div>
+
+                <div class="flex  justify-content-end  align-items-center">
+                  <div>
+                    R$ {{ item.quantidade * item.preco_unitario | currency:'BRL' }}
+                  </div>
+
+                  <button mat-icon-button color="warn" (click)="removeItem(item)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            }
+            <div class="">
+              <h4 class="">Total: {{ getTotal() | currency:'BRL' }}</h4>
+            </div>
+          </div>
+        }
+      </mat-card>
+
+      <!-- Botões de ação -->
+      <div class="mt-2">
+        <button mat-raised-button color="primary" class="add_button  " (click)="finalizeSale()" [disabled]="cartItems.length === 0">
+          Finalizar Venda
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</main>

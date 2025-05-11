@@ -1,3 +1,5 @@
+from boto3 import client
+from django.db.models import Q
 from django_filters import rest_framework as filters
 
 from venda.models import Venda
@@ -13,11 +15,10 @@ class VendaFilter(filters.FilterSet):
     def search_filter(self, queryset, name, value):
         if value:
             return queryset.filter(
-                Q
+                Q(nome__icontains=value) | Q(categoria__icontains=value) | Q(vendedor__nome__icontains=value) | Q(cliente__nome__icontains=value)
             )
-
-
-
+        return queryset
 
     class Meta:
         model = Venda
+        fields = ['academia', 'vendedor', 'cliente']

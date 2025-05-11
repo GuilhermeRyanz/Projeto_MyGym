@@ -32,7 +32,9 @@ class Venda(ModelBase):
 
 class ItemVenda(ModelBase):
     venda = models.ForeignKey(
-        Venda, related_name='items', on_delete=models.SET_NULL, null=True)
+        Venda, related_name='itens',
+        on_delete=models.SET_NULL,
+        null=True)
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, null=True)
     quantidade = models.PositiveIntegerField()
     preco_unitario = models.DecimalField(

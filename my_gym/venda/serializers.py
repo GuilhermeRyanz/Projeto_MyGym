@@ -8,7 +8,6 @@ from aluno.models import AlunoPlano, Aluno
 from aluno.serializers import AlunoSerializer
 from produto.models import LoteProduto
 from produto.serializers import ProdutoSerializer
-from usuario.models import Usuario
 from usuario.serializers import UsuarioSerializer
 from venda.models import ItemVenda, Venda
 
@@ -37,15 +36,15 @@ class ItemVendaSerializer(FlexFieldsModelSerializer):
 
 
 class VendaSerializer(FlexFieldsModelSerializer):
-    items = ItemVendaSerializer(many=True)
+    itens = ItemVendaSerializer(many=True)
     cliente = serializers.PrimaryKeyRelatedField(queryset=Aluno.objects.all(), allow_null=True)
+    valor_total = serializers.DecimalField(required=False, max_digits=10, decimal_places=2)
 
     def create(self, validated_data):
         request = self.context.get('request')
-        items_data = validated_data.pop('items')
+        itens_data = validated_data.pop('itens')
         academia = validated_data['academia']
         vendedor = request.user.usuario
-
         cliente = validated_data.get('cliente')
 
         try:
@@ -54,18 +53,32 @@ class VendaSerializer(FlexFieldsModelSerializer):
         except ObjectDoesNotExist:
             raise serializers.ValidationError("Usuário não possui vínculo com a academia.")
 
-        venda = Venda.objects.create(
-            **validated_data,
-            vendedor=vendedor,
-        )
         total = 0
-
-        for item_data in items_data:
+        for item_data in itens_data:
             produto = item_data['produto']
             quantidade = item_data['quantidade']
             preco_unitario = item_data.get('preco_unitario') or produto.preco
             subtotal = preco_unitario * quantidade
             total += subtotal
+
+        if cliente:
+            alunoPlano = AlunoPlano.objects.filter(aluno=cliente).select_related('plano').first()
+            if alunoPlano and alunoPlano.plano and alunoPlano.plano.desconto:
+                desconto = alunoPlano.plano.desconto or 0
+                total -= total * (desconto / 100)
+
+        total = round(total, 2)
+
+        venda = Venda.objects.create(
+            **validated_data,
+            vendedor=vendedor,
+            valor_total=total,
+        )
+
+        for item_data in itens_data:
+            produto = item_data['produto']
+            quantidade = item_data['quantidade']
+            preco_unitario = item_data.get('preco_unitario') or produto.preco
 
             self._descontar_estoque(produto, quantidade)
 
@@ -76,14 +89,6 @@ class VendaSerializer(FlexFieldsModelSerializer):
                 preco_unitario=preco_unitario,
             )
 
-        if cliente:
-            alunoPlano = AlunoPlano.objects.filter(aluno=cliente).select_related('plano').first()
-            if alunoPlano and alunoPlano.plano and alunoPlano.plano.desconto:
-                desconto = alunoPlano.plano.desconto or 0
-                total -= total * (desconto / 100)
-
-        venda.valor_total = round(total, 2)
-        venda.save()
         return venda
 
     def _descontar_estoque(self, produto, quantidade):
@@ -106,9 +111,9 @@ class VendaSerializer(FlexFieldsModelSerializer):
 
     class Meta:
         model = Venda
-        fields = ['id', 'academia', 'vendedor', 'cliente', 'valor_total', 'data_venda', 'items']
+        fields = ['id', 'academia', 'vendedor', 'cliente', 'valor_total', 'data_venda', 'itens']
         expandable_fields = {
             'cliente': AlunoSerializer,
             'vendedor': UsuarioSerializer,
-            'items': (ItemVendaSerializer, {'many': True}),
+            'itens': (ItemVendaSerializer, {'many': True}),
         }

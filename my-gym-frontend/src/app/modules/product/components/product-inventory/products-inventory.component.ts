@@ -11,6 +11,8 @@ import { ProductItemComponent } from "../../../../shared/components/product-item
 import { MatDialog } from '@angular/material/dialog';
 import { ProductStockModalComponent } from '../product-stock-modal/product-stock-modal.component';
 import { Subject, takeUntil } from 'rxjs';
+import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatInput} from "@angular/material/input";
 
 interface CategoryPagination {
   products: Product[];
@@ -29,6 +31,9 @@ interface CategoryPagination {
     MatCard,
     MatIcon,
     ProductItemComponent,
+    MatFormField,
+    MatInput,
+    MatLabel,
   ],
   templateUrl: './products-inventory.component.html',
   styleUrl: './products-inventory.component.css'
@@ -37,9 +42,11 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
 
   private pathUrlProduct: string = URLS.PRODUCT;
   public products: Product[] | undefined;
+  public searchterm: string = "";
   public gym_id: string | null = "";
   public searchTerm: string = "";
-  public limit: number = 4; // Defina o limite inicial aqui
+  public limit: number = 4;
+  public loading: boolean = false;
   public totalResults: number = 0;
   public currentPage: number = 0;
   public categories: string[] = [
@@ -72,7 +79,7 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
     for (const category of this.categories) {
       this.categoryPanation[category] = {
         products: [],
-        limit: this.limit, // Use o limite definido na classe
+        limit: this.limit,
         offset: 0,
         totalResults: 0,
         loading: false
@@ -94,7 +101,6 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe$)).subscribe((result) => {
       if (result) {
-        // Recarrega a categoria do produto modificado para atualizar a lista
         const categoryOfProduct = this.categories.find(cat =>
           this.categoryPanation[cat]?.products.some(p => p.id === prod.id)
         );
@@ -155,7 +161,6 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
         pagination.products.push(...response.results);
         pagination.offset += pagination.limit;
         pagination.totalResults = response.count;
-        // Removi o this.changeDetectorRef.detectChanges();
       }
       pagination.loading = false;
     }, (error) => {
@@ -188,7 +193,6 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
       categoryData.loading = false;
     }, error => {
       categoryData.loading = false;
-      console.error('Erro ao carregar inventário:', error);
     });
   }
 
@@ -199,4 +203,29 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
   public create() {
     this.router.navigate([`/product/form/create/`]);
   }
+
+  public search() {
+
+    const params: any = {
+      expand: ['lotes'],
+      academia: this.gym_id,
+      limit: this.limit,
+      offset: this.currentPage,
+      search: this.searchterm,
+    };
+
+    this.httpMethods.getPaginated(this.pathUrlProduct, params).pipe(takeUntil(this.unsubscribe$)).subscribe((response) => {
+      this.products = response.results;
+      this.limit = response.count;
+      this.totalResults = response.count;
+      this.currentPage = this.limit;
+
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+    });
+
+  }
+
+
 }

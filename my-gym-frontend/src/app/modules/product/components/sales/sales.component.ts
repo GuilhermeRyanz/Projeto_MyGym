@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Sale } from "../../../../shared/interfaces/sale";
-import { URLS } from "../../../../app.urls";
-import { Subject } from "rxjs";
-import { HttpMethodsService } from "../../../../shared/services/httpMethods/http-methods.service";
-import { AuthService } from "../../../../auth/services/auth.service";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Sale} from "../../../../shared/interfaces/sale";
+import {URLS} from "../../../../app.urls";
+import {Subject} from "rxjs";
+import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
+import {AuthService} from "../../../../auth/services/auth.service";
+import {MatPaginator} from "@angular/material/paginator";
 import {
   MatCell,
   MatCellDef,
@@ -18,15 +18,12 @@ import {
   MatTable,
   MatTableDataSource
 } from "@angular/material/table";
-import {
-  MatFormField,
-  MatInput,
-  MatLabel
-} from "@angular/material/input";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatButton } from "@angular/material/button";
+import {MatFormField, MatInput, MatLabel} from "@angular/material/input";
+import {FormsModule} from "@angular/forms";
+import {MatButton} from "@angular/material/button";
 import {CurrencyPipe, DatePipe} from "@angular/common";
-import {MatIcon, MatIconModule} from "@angular/material/icon";
+import {MatIconModule} from "@angular/material/icon";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-sales',
@@ -58,8 +55,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   public sales: Sale[] = [];
   public dataSource = new MatTableDataSource<Sale>(this.sales);
-  public displayedColumns: string[] = ['cliente', 'vendedor', 'valor_total', 'data_venda'];
-
+  displayedColumns: string[] = ['cliente', 'vendedor', 'valor_total', 'itens', 'data_venda'];
   private pathUrlSales: string = URLS.SALE;
   public searchTerm: string = "";
   public currentPage: number = 0;
@@ -72,6 +68,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
   constructor(
     private httpMethos: HttpMethodsService,
     private authService: AuthService,
+    public router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -112,6 +109,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
         this.sales = response.results;
         this.dataSource.data = this.sales;
         this.currentPage = offset / limit;
+        console.log(response)
       }
     );
   }
@@ -133,10 +131,10 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   public onSearchChange(term: string): void {
     this.searchTerm = term;
-    this.searchChanged.next(term);
+    this.searchRegisters(this.searchTerm, 0);
   }
 
   public create(): void {
-    console.log('Creating new Sales');
+    this.router.navigate(["/product/sellPage"]).then();
   }
 }

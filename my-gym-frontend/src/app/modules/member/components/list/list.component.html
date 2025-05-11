@@ -29,7 +29,8 @@
 
 
   <div class="member-list ml-4">
-    <mat-card class="member-card" *ngFor="let member of members; trackBy: trackById">
+    @for(member of members; track trackById){
+    <mat-card class="member-card">
       <mat-card-content>
         <div class="member-info flex align-items-center">
           <div class="avatar align-items-center">
@@ -60,6 +61,7 @@
        </div>
       </div>
     </mat-card>
+    }
   </div>
 
   <div class="pagination flex justify-content-center gap-2 mt-5">

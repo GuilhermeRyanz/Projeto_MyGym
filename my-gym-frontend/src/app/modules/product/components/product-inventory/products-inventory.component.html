@@ -1,32 +1,44 @@
-<div class="container ml-5">
-  <h2 class="text-2xl font-bold">Estoque</h2>
-  <p class="subtitle text-sm mb-4 flex justify-content-center align-items-center" style="color: #909090">
-    Gerencie os produtos oferecios pelo estabelecimento
-  </p>
-  <div class="flex align-items-center justify-content-between  w-full mb-4">
-    <div class="w-10rem"></div>
-    <div class="align-self-start mr-2">
-      <button
-        mat-raised-button
-        color="primary"
-        class="add_button bg-black-alpha-70 mt-2"
-        style="color: white"
-        (click)="create()">
-        <mat-icon>add</mat-icon>
-        Adicionar produto
-      </button>
+<div class="grid">
+
+  <div class="col-12 justify-content-center align-items-center align-content-center">
+    <h2>Estoque</h2>
+    <span class="flex font-gray w-full justify-content-center">
+      Gerencie e abasteça os produtos oferecidos pelo estabelecimento
+    </span>
+  </div>
+
+  <div class="col-12 p-4">
+    <div class="flex justify-content-between align-items-center col-12 align-content-center align-items-center ">
+      <mat-form-field appearance="outline" class="search w-30rem">
+        <mat-label>Buscar aluno</mat-label>
+        <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
+               (input)="search()" />
+      </mat-form-field>
+
+      <div class="flex align-items-center justify-content-end mb-5">
+        <div class="align-self-start mr-2">
+          <button
+            mat-raised-button
+            color="primary"
+            class="add_button bg-black-alpha-70 mt-2"
+            style="color: white"
+            (click)="create()">
+            <mat-icon>add</mat-icon>
+            Adicionar produto
+          </button>
+        </div>
     </div>
   </div>
 
-  <section class="flex-wrap">
+  <section class="flex-wrap col-12">
     @for(category of categories; track category) {
       @if(categoryPanation[category].products.length > 0) {
         <section class="flex flex-column">
           <div>{{ category }}</div>
           <div class="flex flex-col gap-4 mb-6" id="category-{{ category }}">
-            <div class="flex overflow-x-auto gap-4 styled-scroll" (scroll)="onScroll(category)">
+            <div class="flex overflow-x-auto gap-4 styled-scroll p-2" (scroll)="onScroll(category)">
               @for(prod of categoryPanation[category].products; track prod.id) {
-                <mat-card class="min-w-[20rem]  flex-shrink-0 overflow-hidden border bg-white flex flex-col">
+                <mat-card class="min-w-[16rem]  flex-shrink-0 overflow-hidden border bg-white flex flex-col p-3">
                   <app-product-item [prod]="prod"></app-product-item>
                   <div class="flex justify-between items-center p-3">
                     <button mat-button type="button" (click)="restock(prod)">
@@ -44,4 +56,5 @@
       }
     }
   </section>
+</div>
 </div>
