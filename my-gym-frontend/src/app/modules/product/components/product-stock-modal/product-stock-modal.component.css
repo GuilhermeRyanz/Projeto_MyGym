@@ -1,0 +1,13 @@
+:host {
+  overflow-x: hidden; /* Garante que a modal não tenha scroll horizontal */
+}
+
+main {
+  overflow-x: hidden; /* Reforça a restrição no main */
+}
+
+form {
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}

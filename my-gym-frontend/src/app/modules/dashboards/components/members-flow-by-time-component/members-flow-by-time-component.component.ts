@@ -4,7 +4,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatFormField, MatInputModule} from "@angular/material/input";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
-import {CommonModule, NgClass} from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {MatLabel} from "@angular/material/form-field";
@@ -22,7 +22,6 @@ import {HelpMensageComponent} from "./help-mensage/help-mensage.component";
     CommonModule,
     MatCardModule,
     MatInputModule,
-    NgClass,
     FormsModule,
     MatFormField,
     MatDatepickerInput,

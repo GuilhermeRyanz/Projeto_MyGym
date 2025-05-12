@@ -41,7 +41,7 @@ interface CategoryPagination {
 export class ProductInventoryComponent implements OnInit, OnDestroy {
 
   private pathUrlProduct: string = URLS.PRODUCT;
-  public products: Product[] | undefined;
+  public products: Product[] = [];
   public searchterm: string = "";
   public gym_id: string | null = "";
   public searchTerm: string = "";
@@ -95,8 +95,10 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
 
   public restock(prod: Product) {
     const dialogRef = this.dialog.open(ProductStockModalComponent, {
-      width: '400px',
       data: { produtoId: prod.id },
+      width: '100%',
+      maxWidth: '500px',
+      autoFocus: false,
     });
 
     dialogRef.afterClosed().pipe(takeUntil(this.unsubscribe$)).subscribe((result) => {
@@ -118,7 +120,6 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
     const container = document.getElementById(`category-${category}`) as HTMLElement;
 
     if (!container) {
-      console.log(`Elemento de scroll não encontrado para a categoria: ${category}`);
       return;
     }
 

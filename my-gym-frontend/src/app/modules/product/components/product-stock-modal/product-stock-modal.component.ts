@@ -7,7 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import {MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule, provideNativeDateAdapter} from '@angular/material/core';
+import {provideEcharts} from "ngx-echarts";
+import {MY_DATE_FORMATS} from "../../../dashboards/components/date-format";
 
 @Component({
   selector: 'app-product-stock-modal',
@@ -24,6 +26,13 @@ import { MatNativeDateModule } from '@angular/material/core';
   ],
   templateUrl: './product-stock-modal.component.html',
   styleUrl: './product-stock-modal.component.css',
+  providers: [
+    provideEcharts(),
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+
+  ]
 })
 export class ProductStockModalComponent {
   formGroup: FormGroup;
@@ -37,7 +46,7 @@ export class ProductStockModalComponent {
     this.formGroup = this.fb.group({
       produto: [this.data.produtoId, Validators.required],
       quantidade: [null, Validators.required],
-      data_validade: [null],
+      data_validade: [""],
     });
   }
 
