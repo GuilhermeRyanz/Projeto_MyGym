@@ -35,6 +35,8 @@ class LoteProduto(ModelBase):
     quantidade = models.PositiveIntegerField()
     data_validade = models.DateField()
     data_entrada = models.DateTimeField(auto_now_add=True)
+    preco_total = models.DecimalField(max_digits=10, decimal_places=2)
+    preco_unitario = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"Lote de {self.produto.nome} - Validade {self.data_validade}"

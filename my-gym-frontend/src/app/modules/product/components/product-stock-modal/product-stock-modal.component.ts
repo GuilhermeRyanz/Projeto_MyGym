@@ -46,6 +46,7 @@ export class ProductStockModalComponent {
     this.formGroup = this.fb.group({
       produto: [this.data.produtoId, Validators.required],
       quantidade: [null, Validators.required],
+      preco_total: [null, Validators.required],
       data_validade: [""],
     });
   }
