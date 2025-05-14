@@ -10,7 +10,7 @@ from venda.serializers import VendaSerializer
 # Create your views here.
 
 class VendaViewSet(viewsets.ModelViewSet):
-    queryset = Venda.objects.all()
+    queryset = Venda.objects.all().order_by('-id')
     serializer_class = VendaSerializer
     permission_classes = [IsAuthenticated]
-    filter_class = VendaFilter
+    filterset_class = VendaFilter

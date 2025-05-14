@@ -15,7 +15,7 @@ class VendaFilter(filters.FilterSet):
     def search_filter(self, queryset, name, value):
         if value:
             return queryset.filter(
-                Q(nome__icontains=value) | Q(categoria__icontains=value) | Q(vendedor__nome__icontains=value) | Q(cliente__nome__icontains=value)
+                Q(itens__produto__nome__icontains=value) | Q(itens__produto__categoria__icontains=value) | Q(vendedor__nome__icontains=value) | Q(cliente__nome__icontains=value)
             )
         return queryset
 
