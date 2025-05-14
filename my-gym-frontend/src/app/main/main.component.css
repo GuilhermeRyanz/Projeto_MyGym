@@ -1,19 +1,12 @@
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background: #4dca4f;
   height: 80px;
-  padding: 0 30px;
-  border-radius: 9px;
   color: white;
-  position: relative;
 }
 .user-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
 }
 
 .logo-container {
@@ -78,6 +71,16 @@ mat-sidenav {
   background-color: #ebf0f8;
 }
 
+.active-link,
+a.active-link,
+a[mat-button].active-link {
+  background-color: #4dca4f !important;
+  font-weight: bold;
+  color: #ffffff !important;
+}
 
-
-
+.active-link mat-icon,
+a.active-link mat-icon,
+a[mat-button].active-link mat-icon {
+  color: #ffffff !important;
+}

@@ -1,30 +1,34 @@
 import {Component, DoCheck, ViewChild} from '@angular/core';
-import {MatAnchor, MatButton, MatIconButton} from "@angular/material/button";
+import {MatAnchor, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from "@angular/material/sidenav";
 import {MatToolbar} from "@angular/material/toolbar";
-import {NavigationEnd, Router, RouterLink, RouterOutlet} from "@angular/router";
+import {NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {AuthService} from "../auth/services/auth.service";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-main',
   standalone: true,
-    imports: [
-        MatAnchor,
-        MatButton,
-        MatIcon,
-        MatIconButton,
-        MatSidenav,
-        MatSidenavContainer,
-        MatSidenavContent,
-        MatToolbar,
-        RouterLink,
-        RouterOutlet
-    ],
+  imports: [
+    MatAnchor,
+    MatIcon,
+    MatIconButton,
+    MatSidenav,
+    MatSidenavContainer,
+    MatSidenavContent,
+    MatToolbar,
+    RouterLink,
+    RouterOutlet,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
+    RouterLinkActive
+  ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })
-export class MainComponent implements DoCheck{
+export class MainComponent implements DoCheck {
 
   public title = 'my-gym-frontend';
   public user: string | null = '';
@@ -37,7 +41,8 @@ export class MainComponent implements DoCheck{
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+  }
 
   ngOnInit() {
     if (this.authService.userIsAuth()) {
@@ -67,7 +72,7 @@ export class MainComponent implements DoCheck{
         this.showNav = !event.url.includes('adm/');
         this.opened = !event.url.includes('adm/');
       }
-      if (event instanceof NavigationEnd){
+      if (event instanceof NavigationEnd) {
         this.showBanner = !event.url.includes('auth/')
         this.opened = !event.url.includes('auth/');
 
@@ -82,7 +87,6 @@ export class MainComponent implements DoCheck{
       this.gym_name = currentGymName;
     }
   }
-
 
 
   userInfor() {
