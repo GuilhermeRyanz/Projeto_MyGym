@@ -28,7 +28,7 @@ def upload_data_to_minio(file_obj, nome_original, bucket=None):
     except Exception as e:
         raise serializers.ValidationError(f"Error create bucket file: {str(e)}")
 
-    return f"{settings.MINIO_ENDPOINT}/{bucket}/{name_archive}"
+    return f"{settings.MINIO_ACCESS_ENDPOINT}/{bucket}/{name_archive}"
 
 def delete_data_from_minio(file_url_or_key):
     try:

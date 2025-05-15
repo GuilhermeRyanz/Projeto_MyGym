@@ -11,7 +11,7 @@
     <div class="flex justify-content-between align-items-center col-12 align-content-center align-items-center ">
       <mat-form-field appearance="outline" class="search w-30rem">
         <mat-label>Buscar Produto</mat-label>
-        <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
+        <input matInput="text" placeholder="Digite o nome ou categoria" [(ngModel)]="searchTerm"
                (input)="search()" />
       </mat-form-field>
 
@@ -29,8 +29,6 @@
         </div>
     </div>
   </div>
-
-
 
   @if(!searchterm){
   <section class="flex-wrap col-12">

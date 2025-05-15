@@ -97,7 +97,7 @@ DATABASES = {
         'NAME': 'my_gym',
         'USER': 'my_gym',
         'PASSWORD': '123',
-        'HOST' : '127.0.0.1',
+        'HOST' : 'postgres',
         'PORT' : '5432',
     }
 }
@@ -183,8 +183,8 @@ cloudinary.config(
   secure = True
 )
 
-MINIO_ACCESS_ENDPOINT="http://localhost:9000"
-MINIO_ENDPOINT = "http://localhost:9000"
+MINIO_ACCESS_ENDPOINT="http://3.147.60.102:9000"
+MINIO_ENDPOINT = "http://minio:9000"
 MINIO_ACCESS_KEY = "minioadmin"
 MINIO_SECRET_KEY = "minioadmin"
 MINIO_BUCKET = "date-media"
