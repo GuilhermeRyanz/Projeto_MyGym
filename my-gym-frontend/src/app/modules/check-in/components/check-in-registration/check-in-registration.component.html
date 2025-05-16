@@ -40,12 +40,12 @@
       </mat-card>
     </div>
 
-    <!-- Paginação -->
-    <div class="pagination flex justify-content-center gap-2">
-      <button mat-raised-button (click)="prevPage()" [disabled]="currentPage === 0">Anterior</button>
-      <span>Página {{ currentPage + 1 }} de {{ totalResults / limit | number: '1.0-0' }}</span>
-      <button mat-raised-button (click)="nextPage()" [disabled]="currentPage >= (totalResults / limit) - 1">Próxima</button>
-    </div>
+    <app-paginator
+      [totalItems]="totalResults"
+      [itemsPerPage]="limit"
+      [currentPage]="currentPage"
+      (pageChange)="onPageChange($event)">
+    </app-paginator>
   </mat-tab>
 
   <mat-tab label="Confirmação" [disabled]="!obj">

@@ -8,10 +8,10 @@ import {MemberPlan} from "../../../../shared/interfaces/member-plan";
 import {URLS} from "../../../../app.urls";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {CheckInConfirmComponent} from "../check-in-confirm/check-in-confirm.component";
-import {DecimalPipe, NgForOf} from "@angular/common";
+import {NgForOf} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
 import {debounceTime, Subject} from "rxjs";
-import {MatButton} from "@angular/material/button";
+import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-check-in-registration',
@@ -29,8 +29,7 @@ import {MatButton} from "@angular/material/button";
     CheckInConfirmComponent,
     NgForOf,
     MatIcon,
-    MatButton,
-    DecimalPipe
+    PaginatorComponent
   ],
   templateUrl: './check-in-registration.component.html',
   styleUrl: './check-in-registration.component.css'
@@ -44,7 +43,7 @@ export class CheckInRegistrationComponent implements OnInit {
   protected typeUser: string | null = "";
   public searchTerm: string = "";
   public currentPage: number = 0;
-  public limit: number = 30;
+  public limit: number = 10;
   public totalResults: number = 0;
 
   selectedIndex: number = 0;
@@ -95,19 +94,9 @@ export class CheckInRegistrationComponent implements OnInit {
       });
   }
 
-  public nextPage(): void {
-    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
-    if (this.currentPage < maxPage) {
-      const nextOffset = (this.currentPage + 1) * this.limit;
-      this.searchMember(this.searchTerm, nextOffset);
-    }
-  }
-
-  public prevPage(): void {
-    if (this.currentPage > 0) {
-      const prevOffset = (this.currentPage - 1) * this.limit;
-      this.searchMember(this.searchTerm, prevOffset);
-    }
+  onPageChange(page: number): void {
+    const offset = page * this.limit;
+    this.searchMember(this.searchTerm, offset);
   }
 
   trackById(index: number, member: MemberPlan): number {

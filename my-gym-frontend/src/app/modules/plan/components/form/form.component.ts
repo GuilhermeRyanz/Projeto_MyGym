@@ -111,8 +111,6 @@ export class FormComponent implements OnInit {
                 beneficio: [beneficio, [Validators.maxLength(50)]]
               }));
             });
-          } else {
-            console.warn("Benefícios recebidos não são um array:", response.beneficios);
           }
 
           this.formGroup.patchValue({

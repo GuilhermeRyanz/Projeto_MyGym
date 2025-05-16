@@ -10,11 +10,12 @@ import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {DecimalPipe, NgForOf} from "@angular/common";
+import {NgForOf} from "@angular/common";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {debounceTime, Subject} from "rxjs";
+import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-list',
@@ -30,7 +31,7 @@ import {debounceTime, Subject} from "rxjs";
     MatInput,
     FormsModule,
     MatLabel,
-    DecimalPipe,
+    PaginatorComponent,
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
@@ -120,21 +121,6 @@ export class ListComponent implements OnInit {
       });
   }
 
-  public nextPage(): void {
-    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
-    if (this.currentPage < maxPage) {
-      const nextOffset = (this.currentPage + 1) * this.limit;
-      this.searchEmployee(this.searchTerm, nextOffset)
-    }
-  }
-
-  public prevPage(): void {
-    if (this.currentPage > 0) {
-      const prevOffset = (this.currentPage - 1) * this.limit;
-      this.searchEmployee(this.searchTerm, prevOffset);
-    }
-  }
-
   onSearchChange(term: string): void {
     this.searchTerm = term;
     this.searchChange.next(term);
@@ -181,5 +167,11 @@ export class ListComponent implements OnInit {
     })
 
   }
+
+  onPageChange(page: number): void {
+    const offset = page * this.limit;
+    this.searchEmployee(this.searchTerm, offset);
+  }
+
 
 }

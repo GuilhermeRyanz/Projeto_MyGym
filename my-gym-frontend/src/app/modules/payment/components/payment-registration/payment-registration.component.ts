@@ -9,9 +9,9 @@ import {MemberPlan} from "../../../../shared/interfaces/member-plan";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {PaymentConfirmComponent} from "../payment-confirm/payment-confirm.component";
-import {DecimalPipe, NgForOf} from "@angular/common";
+import {NgForOf} from "@angular/common";
 import {debounceTime, Subject} from "rxjs";
-import {MatButton} from "@angular/material/button";
+import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-payment-registration',
@@ -28,8 +28,7 @@ import {MatButton} from "@angular/material/button";
     MatTab,
     PaymentConfirmComponent,
     NgForOf,
-    DecimalPipe,
-    MatButton
+    PaginatorComponent
   ],
   templateUrl: './payment-registration.component.html',
   styleUrl: './payment-registration.component.css'
@@ -114,20 +113,11 @@ export class PaymentRegistrationComponent implements OnInit {
       });
   }
 
-  public nextPage(): void {
-    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
-    if (this.currentPage < maxPage) {
-      const nextOffset = (this.currentPage + 1) * this.limit;
-      this.searchMember(this.searchTerm, nextOffset);
-    }
+  onPageChange(page: number): void {
+    const offset = page * this.limit;
+    this.searchMember(this.searchTerm, offset);
   }
 
-  public prevPage(): void {
-    if (this.currentPage > 0) {
-      const prevOffset = (this.currentPage - 1) * this.limit;
-      this.searchMember(this.searchTerm, prevOffset);
-    }
-  }
 
   onSearchChange(term: string): void {
     this.searchTerm = term;

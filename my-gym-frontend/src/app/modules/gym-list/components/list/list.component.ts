@@ -5,7 +5,7 @@ import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-m
 import {Router} from "@angular/router";
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {MatButton} from "@angular/material/button";
-import {DecimalPipe} from "@angular/common";
+import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-list',
@@ -16,7 +16,7 @@ import {DecimalPipe} from "@angular/common";
     MatCardContent,
     MatCardModule,
     MatButton,
-    DecimalPipe,
+    PaginatorComponent,
 
 
   ],
@@ -55,19 +55,9 @@ export class ListComponent implements OnInit {
     });
   }
 
-  public nextPage(): void {
-    const maxPage = Math.ceil(this.currentPage / this.limit) - 1;
-    if (this.currentPage < maxPage) {
-      const nextOffset = (this.currentPage - 1) * this.limit;
-      this.search(nextOffset);
-    }
-  }
-
-  public prevPage(): void {
-    if (this.currentPage > 0) {
-      const prevOffset = (this.currentPage - 1) * this.limit;
-      this.search(prevOffset);
-    }
+  onPageChange(page: number): void {
+    const offset = page * this.limit;
+    this.search(offset);
   }
 
   public create(): void {

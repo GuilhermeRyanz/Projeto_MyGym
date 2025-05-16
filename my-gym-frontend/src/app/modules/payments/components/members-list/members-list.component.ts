@@ -10,9 +10,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {MemberPaymentsComponent} from "../member-payments/member-payments.component";
-import {DecimalPipe, NgForOf} from "@angular/common";
+import {NgForOf} from "@angular/common";
 import {debounceTime, Subject} from "rxjs";
-import {MatButton} from "@angular/material/button";
+import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-members-list',
@@ -25,8 +25,7 @@ import {MatButton} from "@angular/material/button";
     MatCard,
     MatCardContent,
     NgForOf,
-    DecimalPipe,
-    MatButton,
+    PaginatorComponent,
   ],
   templateUrl: './members-list.component.html',
   styleUrl: './members-list.component.css'
@@ -98,19 +97,9 @@ export class MembersListComponent implements OnInit {
 
   }
 
-  public nextPage() {
-    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
-    if (this.currentPage < maxPage) {
-      const nextOffset = (this.currentPage + 1) * this.limit;
-      this.searchMember(this.searchTerm, nextOffset)
-    }
-  }
-
-  public prevPage(): void {
-    if (this.currentPage > 0) {
-      const prevOffset = (this.currentPage - 1) * this.limit;
-      this.searchMember(this.searchTerm ,prevOffset);
-    }
+  onPageChange(page: number): void {
+    const offset = page * this.limit;
+    this.searchMember(this.searchTerm, offset);
   }
 
 

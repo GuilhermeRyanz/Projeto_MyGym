@@ -13,7 +13,7 @@ import {
 } from "../../../member/components/confirm-dialog-component/confirm-dialog-component.component";
 import {MatDialog} from "@angular/material/dialog";
 import {PlanDetailComponent} from "../plan-detail/plan-detail.component";
-import {DecimalPipe} from "@angular/common";
+import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-list',
@@ -23,7 +23,7 @@ import {DecimalPipe} from "@angular/common";
     MatButton,
     MatListModule,
     MatCardModule,
-    DecimalPipe
+    PaginatorComponent
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
@@ -82,19 +82,9 @@ export class ListComponent implements OnInit {
     });
   }
 
-  nextPage() {
-    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
-    if (this.currentPage < maxPage) {
-      const nextOffset = (this.currentPage + 1) * this.limit;
-      this.search(nextOffset)
-    }
-  }
-
-  public prevPage(): void {
-    if (this.currentPage > 0) {
-      const prevOffset = (this.currentPage - 1) * this.limit;
-      this.search(prevOffset);
-    }
+  onPageChange(page: number): void {
+    const offset = page * this.limit;
+    this.search(offset);
   }
 
   public create(): void {
