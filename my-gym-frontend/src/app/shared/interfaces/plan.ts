@@ -11,5 +11,6 @@ export interface Plan extends Base{
   dias_permitidos?: number[];
   desconto: number;
   dias_permitidos_str?: string;
+  total_alunos: number;
 
 }

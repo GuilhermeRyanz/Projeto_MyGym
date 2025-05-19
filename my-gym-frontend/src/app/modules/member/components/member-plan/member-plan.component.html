@@ -1,5 +1,5 @@
 <div class="Plan-list">
-  <div class="flex flex-wrap justify-content-center gap-3 p-2">
+  <div class="flex flex-wrap justify-content-center gap-3 p-2 overflow-y-hidden">
     @for (plan of plans; track plan.id) {
       <mat-card class="plan-card w-30rem p-3 flex flex-column justify-content-between">
         <mat-card-content class="flex-grow-1">
@@ -19,6 +19,17 @@
                 <li class="text-sm"> {{benefit}}</li>
               }
             </ul>
+
+            <mat-card  appearance="outlined" class="p-3 mb-3">
+              <div class="flex justify-content-between text-sm font-medium">
+                <div>Duração:</div>
+                <div class="text-primary font-bold">{{ plan.duracao }} meses</div>
+              </div>
+              <div class="flex justify-content-between text-sm font-medium">
+                <div>Dias disponíveis:</div>
+                <div class="text-sm"> {{plan.dias_permitidos_str}}</div>
+              </div>
+            </mat-card>
 
           </div>
         </mat-card-content>

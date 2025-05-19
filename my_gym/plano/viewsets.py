@@ -15,12 +15,11 @@ from aluno.models import AlunoPlano
 from core.permissions import AcademiaPermissionMixin
 from plano import models, serializers, filters
 
+
 class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = models.Plano.objects.all()
     serializer_class = serializers.PlanoSerializer
     filterset_class = filters.PlanoFilter
-
-
 
     def dias_str(self, dias):
 
@@ -73,7 +72,6 @@ class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
             return self.get_paginated_response(planos)
 
         return Response(planos)
-
 
     @action(detail=True, methods=['post'])
     def desativar(self, request, pk=None):

@@ -22,10 +22,11 @@ class PlanoSerializer(serializers.ModelSerializer):
             min_value=1, max_value=7,        ),
         required=False
     )
+    total_alunos = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Plano
-        fields = ['id', 'nome', 'preco', 'descricao', 'duracao', 'beneficios', 'desconto', 'academia', 'dias_permitidos']
+        fields = ['id', 'nome', 'preco', 'descricao', 'duracao', 'beneficios', 'desconto', 'academia', 'dias_permitidos', 'total_alunos']
 
     def validate_user_permission(self):
         request = self.context.get('request')

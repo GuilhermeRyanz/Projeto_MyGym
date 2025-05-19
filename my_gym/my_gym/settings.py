@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'core',
     'academia',
     'aluno',
-    'plano',
+    'plano.apps.PlanoConfig',
     'usuario',
     'pagamento',
     'produto.apps.ProdutoConfig',

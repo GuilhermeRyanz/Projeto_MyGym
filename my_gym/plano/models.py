@@ -71,6 +71,11 @@ class Plano(ModelBase):
         help_text="Lista de dias da semana em que o plano pode ser usado"
     )
 
+    total_alunos = models.PositiveIntegerField(
+        default=0,
+        db_column='total_alunos'
+    )
+
     class Meta:
         db_table = 'plano'
 
