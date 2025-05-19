@@ -33,6 +33,8 @@ class Pagamento(ModelBase):
         if not self.data_pagamento:
             self.data_pagamento = timezone.now().date()
         self.data_vencimento = self.data_pagamento + relativedelta(months=self.aluno_plano.plano.duracao)
+        self.aluno_plano.data_vencimento = self.data_vencimento
+        self.aluno_plano.save()
 
         if not self.valor:
             self.valor = self.aluno_plano.plano.preco

@@ -84,7 +84,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill">
-      <mat-label>Desconto em prudutos (%)</mat-label>
+      <mat-label>Desconto em produtos (%)</mat-label>
       <input matInput type="number" formControlName="desconto" placeholder="Digite o desconto" [min]="0" [max]="100"/>
       @if (formGroup.get('desconto')?.hasError('min')) {
         <mat-error> O desconto não pode ser negativo. </mat-error>
@@ -94,9 +94,9 @@
       }
     </mat-form-field>
 
-    <div class="flex justify-content-between ">
+    <div class="flex justify-content-between align-items-center align-content-center ">
       <h3>Beneficios</h3>
-      <button style="width: 20%;" type="button" mat-button (click)="addBeneficio()">Adicionar Benefício</button>
+      <button mat-raised-button class="add_button w-3 text-white bg-black-alpha-80" type="button" mat-button (click)="addBeneficio()">Adicionar Benefício</button>
     </div>
 
     <div formArrayName="beneficios">

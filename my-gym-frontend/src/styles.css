@@ -35,6 +35,10 @@ button.add_button {
 
 }
 
+bg-red {
+  background-color: #d82d2d;
+}
+
 .help-icon:hover{
   opacity: 0.7;
   background-color: #f0f0f0;

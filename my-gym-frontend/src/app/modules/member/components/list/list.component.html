@@ -32,6 +32,14 @@
     @for(member of members; track trackById){
     <mat-card class="member-card">
       <mat-card-content>
+
+        <mat-card
+          class="absolute top-0 right-0 m-2 px-2 py-1 text-sm shadow-1 rounded" style="color: white ;background-color:{{getMemberStatusColor(member.data_vencimento)}}"
+        >
+          {{getMemberStatus(member.data_vencimento)}}
+
+        </mat-card>
+
         <div class="member-info flex align-items-center">
           <div class="avatar align-items-center">
             {{ getInitials(member.aluno.nome) }}

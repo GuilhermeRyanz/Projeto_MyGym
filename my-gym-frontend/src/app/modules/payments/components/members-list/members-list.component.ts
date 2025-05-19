@@ -79,7 +79,6 @@ export class MembersListComponent implements OnInit {
     const params: any = {
       expand: ['aluno', 'plano'],
       academia: this.gym_id,
-      active: true,
       limit,
       offset,
     }

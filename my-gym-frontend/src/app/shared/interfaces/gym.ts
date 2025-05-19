@@ -1,6 +1,7 @@
-export interface Gym {
+import { Base } from "./base";
 
-  id: string;
+export interface Gym extends Base{
+
   nome: string;
   endereco: string;
   telefone: string;

@@ -1,6 +1,7 @@
-export interface Employee {
+import {Base} from "./base";
 
-  id: number;
+export interface Employee extends Base{
+
   nome: string;
   username: string;
   tipo_usuario: string;

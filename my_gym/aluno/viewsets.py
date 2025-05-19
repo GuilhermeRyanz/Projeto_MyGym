@@ -23,8 +23,7 @@ class AlunoPlanoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return models.AlunoPlano.objects.filter(
             plano__academia__usuarioacademia__usuario=self.request.user
-        ).distinct("aluno__id")
-
+        ).order_by('aluno__id', '-active').distinct("aluno__id")
 
     @action(detail=False, methods=['POST'])
     def alterar_plano(self, request, *args, **kwargs):

@@ -127,8 +127,8 @@ export class ListComponent implements OnInit {
   }
 
 
-  getTipoUsuarioClass(tipo: string): string {
-    switch (tipo) {
+  getTipoUsuarioClass(type: string): string {
+    switch (type) {
       case 'A': return '#ea62e8';
       case 'G': return '#3787e6';
       case 'D': return '#2dd853';

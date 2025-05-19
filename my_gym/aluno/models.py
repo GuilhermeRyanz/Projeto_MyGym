@@ -67,6 +67,12 @@ class AlunoPlano(ModelBase):
         on_delete=models.CASCADE,
         related_name='alunos_plano',
     )
+
+    data_vencimento = models.DateField(
+        null=True,
+        blank=True,
+    )
+
     class Meta:
         db_table = 'aluno_plano'
         unique_together = ('aluno', 'plano')

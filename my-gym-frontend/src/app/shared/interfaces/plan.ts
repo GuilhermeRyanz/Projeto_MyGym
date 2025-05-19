@@ -1,7 +1,7 @@
+import { Base } from "./base";
 
-export interface Plan {
+export interface Plan extends Base{
 
-  id: number;
   nome: string;
   preco: number;
   descricao: string;

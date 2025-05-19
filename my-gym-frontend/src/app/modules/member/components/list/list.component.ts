@@ -65,6 +65,34 @@ export class ListComponent implements OnInit {
 
   }
 
+  public getMemberStatus(data: Date | string | null): string {
+    if (!data) return 'Indefinido';
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // zerar hora local
+
+    const compareDate = new Date(data);
+    compareDate.setHours(0, 0, 0, 0); // também zera hora
+
+    if (compareDate.getTime() < today.getTime()) return 'Inadimplente';
+    if (compareDate.getTime() === today.getTime()) return 'Expira Hoje';
+    return 'Ativo';
+  }
+
+  public getMemberStatusColor(data: Date | string | null): string {
+    if (!data) return '#858585';
+
+    const status = this.getMemberStatus(data);
+    const statusColors: Record<string, string> = {
+      'Inadimplente': '#d82d2d',
+      'Expira Hoje': '#D8A22DFF',
+      'Ativo': '#2dd853',
+      'Indefinido': '#858585'
+    };
+
+    return statusColors[status] || '#858585';
+  }
+
   private getIdGym(): void {
     this.gym_id = localStorage.getItem("academia");
   }

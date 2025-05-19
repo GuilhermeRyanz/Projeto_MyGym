@@ -1,9 +1,9 @@
+import { Base } from './base';
 import { Employee } from './employee';
 import { Member } from './member';
 import { Product } from './product';
 
-export interface Sale {
-  id?: number;
+export interface Sale extends Base {
   academia?: number;
   vendedor?: Employee | null;
   cliente?: Member | null;
@@ -13,8 +13,7 @@ export interface Sale {
   itens: Item[];
 }
 
-export interface Item {
-  id?: number;
+export interface Item extends Base {
   produto: Product;
   preco_unitario?: string;
   quantidade: number;

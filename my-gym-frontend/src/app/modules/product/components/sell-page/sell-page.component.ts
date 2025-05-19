@@ -1,7 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {URLS} from "../../../../app.urls";
 import {CartItem} from "../../../../shared/interfaces/cartItem";
-import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
@@ -12,9 +12,12 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
-import {CurrencyPipe} from "@angular/common";
+import {CurrencyPipe, NgForOf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {MatCard} from "@angular/material/card";
+import {MemberPlan} from "../../../../shared/interfaces/member-plan";
+import {debounceTime, Subject} from "rxjs";
+import {MatAutocomplete, MatAutocompleteSelectedEvent, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 
 @Component({
   selector: 'app-sell-page',
@@ -30,16 +33,27 @@ import {MatCard} from "@angular/material/card";
     CurrencyPipe,
     MatInput,
     MatLabel,
-    MatCard
+    MatCard,
+    FormsModule,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    NgForOf,
   ],
   templateUrl: './sell-page.component.html',
   styleUrl: './sell-page.component.css'
 })
-export class SellPageComponent {
+export class SellPageComponent implements OnInit{
   private pathUrl: string = URLS.SALE;
+  private pathUrMembers: string = URLS.MEMBERPLAN;
   public cartItems: CartItem[] = [];
+  public members: MemberPlan[] = [];
   public formGroup: FormGroup;
+  public selectedMember?: MemberPlan
+  public desc: number = 0
+  public searchTerm: string = "";
   public formasPagamento: string[] = ['Dinheiro', 'Cartão', 'Pix'];
+
+  searchChange = new Subject<string>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,10 +64,41 @@ export class SellPageComponent {
     public httpMethods: HttpMethodsService
   ) {
     this.formGroup = this.formBuilder.group({
-      client: [""],
+      client: [null],
       formaPagamento: ["Dinheiro"],
     });
   }
+
+  ngOnInit() {
+    this.search();
+    this.searchChange.pipe(debounceTime(100)).subscribe((term) => {
+      this.searchMember(term)
+    })
+  }
+
+
+  public searchMember(term: string = ""): void {
+    const params: any = {
+      expand: ['aluno', 'plano'],
+      active: true,
+      academia: this.authService.get_gym(),
+    };
+
+    if (term){
+      params.search = term
+    }
+
+    this.httpMethods.getPaginated(this.pathUrMembers, params)
+      .subscribe((response: any) => {
+        this.members = response.results;
+        console.log(response.results)
+      })
+  }
+
+  public search(): void {
+    this.searchMember(this.searchTerm)
+  }
+
 
   openProductModal(): void {
     const dialogRef = this.dialog.open(ProductSelectModalComponent, {
@@ -77,7 +122,6 @@ export class SellPageComponent {
     });
   }
 
-  ngOnInit(): void {}
 
   removeItem(item: CartItem): void {
     const index = this.cartItems.findIndex(cartItem => cartItem.produto.id === item.produto.id);
@@ -90,7 +134,9 @@ export class SellPageComponent {
   }
 
   getTotal(): number {
-    return this.cartItems.reduce((total, item) => total + (Number(item.preco_unitario) * item.quantidade), 0);
+    const desc = this.selectedMember?.plano.desconto || 0
+    const subtotal = this.cartItems.reduce((total, item) => total + (Number(item.preco_unitario) * item.quantidade), 0);
+    return subtotal * (1 - desc / 100)
   }
 
   finalizeSale(): void {
@@ -123,6 +169,27 @@ export class SellPageComponent {
         this.snackBar.open('Erro ao finalizar venda. Tente novamente.', 'Fechar', { duration: 3000 });
       }
     );
+  }
+
+  onSearchChange(term: string): void {
+    this.searchTerm = term;
+    this.searchChange.next(term);
+  }
+
+  public displayMemberFn(member: MemberPlan | null): string {
+    return member && member.aluno ? `${member.aluno.matricula} - ${member.aluno.nome}` : '';
+  }
+
+  public onMemberSelected(event: MatAutocompleteSelectedEvent): void {
+    const selectedMember = event.option.value as MemberPlan;
+    this.selectedMember = selectedMember
+    this.desc = selectedMember.plano.desconto
+    this.formGroup.get('client')?.setValue(selectedMember.id);
+    console.log('Aluno selecionado:', selectedMember);
+  }
+
+  public get clientControl(): FormControl {
+    return this.formGroup.get('client') as FormControl;
   }
 
   goBack(): void {

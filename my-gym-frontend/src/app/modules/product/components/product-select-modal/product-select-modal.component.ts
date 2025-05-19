@@ -161,7 +161,8 @@ export class ProductSelectModalComponent implements OnInit {
     const cartItem: CartItem = {
       produto: product,
       quantidade: quantity,
-      preco_unitario: product.preco
+      preco_unitario: product.preco,
+
     };
     this.dialogRef.close(cartItem);
   }

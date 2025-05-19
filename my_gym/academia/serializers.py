@@ -1,9 +1,11 @@
 from rest_framework import serializers
 from academia.models import Academia, Frequencia
-from aluno.models import Aluno
+from aluno.models import Aluno, AlunoPlano
 from academia.models import UsuarioAcademia
 from pagamento.models import Pagamento
 from django.utils import timezone
+
+from plano.models import dias_semana_default, DiasSemana
 
 
 class AcademiaSerializer(serializers.ModelSerializer,):
@@ -53,12 +55,29 @@ class FrequenciaSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         aluno = data['aluno']
+        academia = data['academia']
 
-        pagamento = Pagamento.objects.filter(aluno_plano__aluno_id=aluno, aluno_plano__active=True).order_by('-data_vencimento').first()
+        print(aluno, academia)
+
+        pagamento = Pagamento.objects.filter(aluno_plano__aluno_id=aluno, aluno_plano__active=True).order_by(
+            '-data_vencimento').first()
 
         if pagamento:
             if pagamento.data_vencimento < timezone.now().date():
                 raise serializers.ValidationError("Pagamento expirado!")
         else:
-            raise serializers.ValidationError("Na há pagamentos validos registrado para esse aluno no plano atual.")
+            raise serializers.ValidationError("Não há pagamentos válidos registrado para esse aluno no plano atual.")
+
+        # Correção aqui: adicionando os parênteses em .first()
+        alunos_plano = AlunoPlano.objects.filter(aluno=aluno, active=True, plano__academia=academia).first()
+        if not alunos_plano:
+            raise serializers.ValidationError("Aluno não possui plano na academia ativo")
+
+        today = timezone.now().weekday() + 1  # Convertendo para 1-7 para corresponder ao DiasSemana
+
+        if today not in alunos_plano.plano.dias_permitidos:
+            dias_permitidos = [DiasSemana(dia).label for dia in alunos_plano.plano.dias_permitidos]
+            raise serializers.ValidationError(
+                f"Dia não permitido para este plano. Dias permitidos: {', '.join(dias_permitidos)}")
+
         return data

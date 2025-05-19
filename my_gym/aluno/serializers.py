@@ -51,7 +51,7 @@ class AlunoPlanoSerializer(FlexFieldsModelSerializer):
 
     class Meta:
         model = models.AlunoPlano
-        fields = ['id', 'aluno', 'active', 'created_at', 'plano']
+        fields = ['id', 'aluno', 'active', 'created_at', 'plano', 'data_vencimento']
         expandable_fields = {'aluno': AlunoSerializer, 'plano': PlanoSerializer}
 
     def create(self, validated_data):

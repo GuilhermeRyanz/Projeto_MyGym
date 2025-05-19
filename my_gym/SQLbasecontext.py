@@ -1,3 +1,7 @@
+# This is a reference file containing the SQL schema for the database
+# It is not meant to be loaded during startup
+# The original class has been modified to prevent it from being initialized during import
+
 class SQLBaseContext:
     def __init__(self, db):
         self.db = db

@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'plano',
     'usuario',
     'pagamento',
-    'produto',
+    'produto.apps.ProdutoConfig',
     'corsheaders',
     'venda'
 ]
@@ -98,7 +98,7 @@ DATABASES = {
         'USER': 'my_gym',
         'PASSWORD': '123',
         'HOST' : '127.0.0.1',
-        'PORT' : '5432',
+        'PORT' : '5438',
     }
 }
 

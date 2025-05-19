@@ -21,6 +21,8 @@ class Produto(ModelBase):
     foto = models.URLField('foto', blank=True, null=True)
     academia = models.ForeignKey( Academia , on_delete=models.CASCADE, null=True, blank=True)
     data_cadastro = models.DateField(auto_now_add=True)
+    quantidade_estoque = models.PositiveIntegerField(default=0)
+    estoque_minimo = models.PositiveIntegerField(default=0)
 
     categoria = models.CharField(
         max_length=100,

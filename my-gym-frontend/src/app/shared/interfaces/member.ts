@@ -1,8 +1,8 @@
+import { Base } from "./base";
 import {Plan} from "./plan";
 
-export interface Member {
+export interface Member extends Base{
 
-  id: number
   nome: string
   email: string
   telefone: string

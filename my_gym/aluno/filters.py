@@ -25,6 +25,8 @@ class AlunoPlanoFilter(filters.FilterSet):
     aluno = filters.NumberFilter(field_name='aluno__id', lookup_expr='exact')
     nome = filters.CharFilter(field_name='aluno__nome', lookup_expr='icontains')
     matricula = filters.CharFilter(field_name='aluno__matricula', lookup_expr='icontains')
+    vencido = filters.BooleanFilter(field_name='data_vencimento', lookup_expr='lte')
+    plano = filters.NumberFilter(field_name='plano__id', lookup_expr='exact')
 
     search = filters.CharFilter(method='filter_busca', label='search')
 
@@ -34,7 +36,6 @@ class AlunoPlanoFilter(filters.FilterSet):
                 Q(aluno__nome__icontains=value) | Q(aluno__matricula__icontains=value)
             )
         return queryset
-
 
     class Meta:
         model = AlunoPlano

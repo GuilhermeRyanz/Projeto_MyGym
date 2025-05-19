@@ -12,6 +12,21 @@
   <div class="member-list ml-4">
     <mat-card class="member-card" *ngFor="let member of members; trackBy: trackById" (click)="selectMember(member)">
       <mat-card-content>
+
+        @if(!member.active){
+          <mat-card
+            class="absolute top-0 right-0 m-2 px-2 py-1 text-sm shadow-1 rounded text-white-alpha-90" style="background-color: #d82d2d"
+          >
+            Inativo
+          </mat-card>
+        } @else {
+          <mat-card
+            class="absolute top-0 right-0 m-2 px-2 py-1 text-sm shadow-1 rounded text-white-alpha-90" style="background-color: #2dd853"
+          >
+            Ativo
+          </mat-card>
+        }
+
         <div class="member-info flex align-items-center">
           <div class="avatar align-items-center">
             {{ getInitials(member.aluno.nome) }}
@@ -22,7 +37,7 @@
         </div>
         <div class="extra-info">
           <div class="info-row">
-            <span>Plano Atual:</span> <strong>{{ member.plano.nome }}</strong>
+            <span>Plano recente:</span> <strong>{{ member.plano.nome }}</strong>
           </div>
           <div class="info-row">
             <span>Matrícula:</span> <strong>{{(member.aluno.matricula) }}</strong>

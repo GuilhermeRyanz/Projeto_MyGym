@@ -1,12 +1,11 @@
 import {Member} from "./member";
 import {Plan} from "./plan";
+import {Base} from "./base";
 
-export interface MemberPlan {
+export interface MemberPlan extends Base {
 
-  id: number;
   aluno: Member;
-  active: boolean;
-  created_at: Date;
   plano: Plan;
+  data_vencimento: Date;
 
 }

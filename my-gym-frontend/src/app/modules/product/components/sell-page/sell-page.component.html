@@ -1,8 +1,7 @@
 <main class="grid justify-content-center align-items-start p-4">
-
   <div class="col-10">
     <button mat-raised-button color="primary" (click)="goBack()" class="">
-        <mat-icon>arrow_back</mat-icon> voltar
+      <mat-icon>arrow_back</mat-icon> voltar
     </button>
   </div>
 
@@ -13,10 +12,20 @@
         <div class="col-12">
           <form [formGroup]="formGroup" class="p-d-flex p-flex-column p-gap-3">
             <mat-form-field appearance="outline" class="w-full">
-              <mat-label>Matricula (opcional)</mat-label>
-              <input matInput formControlName="client" placeholder="Nome do cliente">
+              <mat-label>Cliente</mat-label>
+              <input
+                matInput
+                placeholder="Digite o nome ou matrícula"
+                [formControl]="clientControl"
+                [matAutocomplete]="auto"
+                (input)="onSearchChange(clientControl.value || '')"
+              >
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMemberFn" (optionSelected)="onMemberSelected($event)">
+                <mat-option *ngFor="let member of members" [value]="member">
+                  {{ member.aluno.matricula }} - {{ member.aluno.nome }}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
-
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Forma de Pagamento</mat-label>
               <mat-select formControlName="formaPagamento">
@@ -49,33 +58,34 @@
         @if (cartItems.length > 0) {
           <div>
             @for (item of cartItems; track item.produto.id) {
-              <div class="flex justify-content-between align-items-center bg-black-alpha-10  p-1">
+              <div class="flex justify-content-between align-items-center bg-black-alpha-10 p-1">
                 <div class="flex flex-wrap align-content-start justify-content-center">
                   <span>{{ item.produto.nome || 'Produto sem nome' }}</span>
                   <span>{{ item.quantidade }} x {{ item.preco_unitario | currency:'BRL' }}</span>
                 </div>
-
-                <div class="flex  justify-content-end  align-items-center">
+                <div class="flex justify-content-end align-items-center">
                   <div>
                     R$ {{ item.quantidade * item.preco_unitario | currency:'BRL' }}
                   </div>
-
                   <button mat-icon-button color="warn" (click)="removeItem(item)">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>
               </div>
             }
-            <div class="">
-              <h4 class="">Total: {{ getTotal() | currency:'BRL' }}</h4>
+            <div class="flex justify-content-between align-content-center">
+              <div class="">Total: {{ getTotal() | currency:'BRL' }}</div>
+              @if(this.desc > 0){
+                <div class="flex align-content-center align-items-center"  style="color: #4dca4f" >
+                  <mat-icon>arrow_downward</mat-icon>Desc: {{this.desc}}%</div>
+              }
             </div>
           </div>
         }
       </mat-card>
 
-      <!-- Botões de ação -->
       <div class="mt-2">
-        <button mat-raised-button color="primary" class="add_button  " (click)="finalizeSale()" [disabled]="cartItems.length === 0">
+        <button mat-raised-button color="primary" class="add_button" (click)="finalizeSale()" [disabled]="formGroup.invalid || cartItems.length === 0">
           Finalizar Venda
         </button>
       </div>

@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {MatCardContent} from "@angular/material/card";
+import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
 
 @Component({
@@ -8,6 +8,7 @@ import {MatIcon} from "@angular/material/icon";
   imports: [
     MatCardContent,
     MatIcon,
+    MatCard,
   ],
   templateUrl: './product-item.component.html',
   styleUrl: './product-item.component.css'

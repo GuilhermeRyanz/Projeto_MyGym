@@ -10,21 +10,24 @@
         <div class="text-2xl font-bold whitespace-nowrap">R$ {{ prod.preco }}</div>
       </div>
 
-      <div class="flex items-center text-1xl gap-1 font-gray">
-        <mat-icon fontIcon="local_offer" class="text-1xl text-gray-400"></mat-icon>
-        {{ prod.categoria || 'Produto' }}
-      </div>
+      @if(prod.categoria){
+        <div class="flex items-center text-1xl gap-1 font-gray">
+          <mat-icon fontIcon="local_offer" class="text-1xl text-gray-400"></mat-icon>
+          {{ prod.categoria || 'Produto' }}
+        </div>
+      }
 
       <div class="text-xl font-gray"  >
         <strong>Marca:</strong> {{ prod.marca || 'Desconhecida' }}
       </div>
 
-      <p class="text-sl font-gray ">{{ prod.descricao }}</p>
+      <p class="text-xl font-gray ">{{ prod.descricao }}</p>
 
-      <div class="text-xl" style="color: #666666">
-        Em estoque: {{ prod.quantidade_estoque }} unidade{{ prod.quantidade_estoque === 1 ? '' : 's' }}
+      <div>
+        <mat-card appearance="outlined" class="text-xl font-gray p-1">
+          Em estoque: {{ prod.quantidade_estoque }} unidade{{ prod.quantidade_estoque === 1 ? '' : 's' }}
+        </mat-card>
       </div>
-
 
     </mat-card-content>
 </main>

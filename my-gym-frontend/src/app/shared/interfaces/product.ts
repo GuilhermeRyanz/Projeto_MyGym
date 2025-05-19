@@ -1,7 +1,7 @@
+import {Base} from "./base";
 
-export interface Product{
+export interface Product extends Base{
 
-  id?: number;
   nome?: string;
   descricao?: string;
   preco: number;
@@ -18,13 +18,8 @@ export interface Product{
 }
 
 
-export interface Lote{
+export interface Lote extends Base{
 
-  id: number;
-  produto: number;
-  created_at: Date;
-  modified_at: Date;
-  active: boolean;
   quantidade?: number;
   data_validade: Date;
   data_entrada: Date;

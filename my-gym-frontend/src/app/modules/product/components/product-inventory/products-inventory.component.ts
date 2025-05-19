@@ -10,7 +10,7 @@ import { MatIcon } from "@angular/material/icon";
 import { ProductItemComponent } from "../../../../shared/components/product-item/product-item.component";
 import { MatDialog } from '@angular/material/dialog';
 import { ProductStockModalComponent } from '../product-stock-modal/product-stock-modal.component';
-import { Subject, takeUntil } from 'rxjs';
+import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 
@@ -42,7 +42,6 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
 
   private pathUrlProduct: string = URLS.PRODUCT;
   public products: Product[] = [];
-  public searchterm: string = "";
   public gym_id: string | null = "";
   public searchTerm: string = "";
   public limit: number = 4;
@@ -63,6 +62,7 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
   } = {};
 
   private unsubscribe$ = new Subject<void>();
+  private searchChange = new Subject<string>();
 
   constructor(
     private readonly httpMethods: HttpMethodsService,
@@ -76,6 +76,16 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.getIdGym();
+
+    this.searchChange
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(() => {
+        this.doSearch();
+      });
+
     for (const category of this.categories) {
       this.categoryPanation[category] = {
         products: [],
@@ -87,6 +97,7 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
       this.getInventory(category);
     }
   }
+
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
@@ -116,7 +127,7 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  public onScroll(category: string) {
+  public onScroll(category: string = "") {
     const container = document.getElementById(`category-${category}`) as HTMLElement;
 
     if (!container) {
@@ -205,28 +216,39 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
     this.router.navigate([`/product/form/create/`]);
   }
 
-  public search() {
+  public onSearchInput(term: string) {
+    this.searchTerm = term;
+    this.searchChange.next(term);
+  }
+
+
+  private doSearch() {
+    this.loading = true;
 
     const params: any = {
       expand: ['lotes'],
       academia: this.gym_id,
       limit: this.limit,
       offset: this.currentPage,
-      search: this.searchterm,
+      search: this.searchTerm,
     };
 
-    this.httpMethods.getPaginated(this.pathUrlProduct, params).pipe(takeUntil(this.unsubscribe$)).subscribe((response) => {
-      this.products = response.results;
-      this.limit = response.count;
-      this.totalResults = response.count;
-      this.currentPage = this.limit;
-
-      this.loading = false;
-    }, error => {
-      this.loading = false;
-    });
-
+    this.httpMethods.getPaginated(this.pathUrlProduct, params)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          this.products = response.results;
+          this.totalResults = response.count;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Erro na busca:', error);
+          this.loading = false;
+          this.products = [];
+        }
+      });
   }
+
 
 
 }

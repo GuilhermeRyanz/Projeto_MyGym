@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
 
@@ -15,24 +16,32 @@ from venda.models import ItemVenda, Venda
 class ItemVendaSerializer(FlexFieldsModelSerializer):
     class Meta:
         model = ItemVenda
-        fields = ['produto', 'quantidade', 'preco_unitario']
+        fields = ['id', 'produto', 'quantidade', 'preco_unitario', 'active']
         expandable_fields = {
             'produto': ProdutoSerializer,
         }
 
     def validate(self, data):
-        produto = data['produto']
-        quantidade = data['quantidade']
+        quantidade = data.get('quantidade')
+        produto = data.get('produto')
 
-        estoque_total = sum(
-            lote.quantidade
-            for lote in LoteProduto.objects.filter(produto=produto, quantidade__gt=0)
-        )
-
-        if quantidade > estoque_total:
-            raise serializers.ValidationError(f"Estoque insuficiente para o produto '{produto.nome}'.")
+        if quantidade <= 0:
+            raise serializers.ValidationError("A quantidade deve ser maior que zero.")
+        if produto.quantidade_estoque < quantidade:
+            raise serializers.ValidationError(
+                f"Estoque insuficiente para {produto.nome}. Disponível: {produto.quantidade_estoque}.")
 
         return data
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            produto = validated_data['produto']
+            quantidade = validated_data['quantidade']
+
+            produto.quantidade_estoque -= quantidade
+            produto.save()
+
+            return super().create(validated_data)
 
 
 class VendaSerializer(FlexFieldsModelSerializer):
@@ -81,6 +90,8 @@ class VendaSerializer(FlexFieldsModelSerializer):
             preco_unitario = item_data.get('preco_unitario') or produto.preco
 
             self._descontar_estoque(produto, quantidade)
+            produto.quantidade_estoque -= quantidade
+            produto.save()
 
             ItemVenda.objects.create(
                 venda=venda,
@@ -88,6 +99,7 @@ class VendaSerializer(FlexFieldsModelSerializer):
                 quantidade=quantidade,
                 preco_unitario=preco_unitario,
             )
+
 
         return venda
 
@@ -105,6 +117,7 @@ class VendaSerializer(FlexFieldsModelSerializer):
                 lote.quantidade -= restante
                 restante = 0
             lote.save()
+
 
         if restante > 0:
             raise serializers.ValidationError(f"Estoque insuficiente para o produto '{produto.nome}'.")
