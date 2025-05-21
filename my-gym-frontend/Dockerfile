@@ -11,8 +11,8 @@ FROM nginx:alpine
 
 COPY --from=builder /app/dist/my-gym-frontend/browser* /usr/share/nginx/html
 
-COPY ../../../WebstormProjects/bit-post-web/nginx.conf /etc/nginx/nginx.conf
-COPY ../../../WebstormProjects/bit-post-web/mime.types /etc/nginx/mime.types
+COPY .nginx.conf /etc/nginx/nginx.conf
+COPY .mime.types /etc/nginx/mime.types
 
 EXPOSE 80
 
