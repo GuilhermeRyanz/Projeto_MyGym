@@ -1,10 +1,10 @@
 FROM node:21 AS builder
 WORKDIR /app
 
-COPY . .
-
+COPY package*.json ./
 RUN npm install
 
+COPY . .
 RUN npm run build --prod
 
 FROM nginx:alpine
