@@ -1,27 +1,28 @@
 @if (showBanner) {
   <mat-toolbar color="primary" class="header justify-content-between">
 
-  <div class="flex">
-    <button mat-icon-button aria-label="Menu icon" class="align-self-center" (click)="opened=!opened">
-      <mat-icon>menu</mat-icon>
-    </button>
+    <div class="flex">
+      <button mat-icon-button aria-label="Menu icon"
+              class="align-self-center align-content-center justify-content-center align-items-center w-4rem h-4rem"
+              (click)="opened=!opened">
+        <img src="img/MyGymLogoOnlyWhite_0001.png" alt="teste" class="w-3rem h-3rem">
+      </button>
 
-    <div class="user-info">
-      <span>Usuário: {{ user }}</span>
-      @if (gym_name) { <span>Academia: {{ gym_name }}</span> }
-    </div>
-  </div>
-
-    <div class="logo-container">
-      <img src="img/MyGymLogoOnlyWhite_0001.png" width="50px" alt="teste">
-      <h1>MyGym</h1>
+      <div class="user-info">
+        @if (gym_name) {
+          <span>{{ gym_name }}</span>
+        }
+      </div>
     </div>
 
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon class="text-white-alpha-90">settings</mat-icon>
-    </button>
+    <div class="flex align-items-center justify-content-end">
+      <p>{{ user }}</p>
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="flex align-items-center justify-content-start">
+        <mat-icon class="text-white-alpha-90">person</mat-icon>
+      </button>
+    </div>
 
-    <mat-menu #menu="matMenu" class="align-self-end justify-content-end " >
+    <mat-menu #menu="matMenu" class="align-self-end justify-content-end ">
       <button mat-menu-item>
         <mat-icon>person</mat-icon>
         <span>Perfil</span>
@@ -36,21 +37,24 @@
 
 }
 <mat-sidenav-container autosize>
-  @if(showNav) {
+  @if (showNav) {
     <mat-sidenav [(opened)]="opened" mode="side">
       <nav class="side-nav">
-        <a mat-button routerLink="my_gym/home" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+        <a mat-button routerLink="my_gym/home" routerLinkActive="active-link"
+           [routerLinkActiveOptions]="{ exact: true }">
           <mat-icon>home</mat-icon>
           Home
         </a>
 
-        @if(tipo_usuario === "D" || tipo_usuario === "G") {
+        @if (tipo_usuario === "D" || tipo_usuario === "G") {
           <ng-container>
-            <a mat-button routerLink="employee/list" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+            <a mat-button routerLink="employee/list" routerLinkActive="active-link"
+               [routerLinkActiveOptions]="{ exact: true }">
               <mat-icon>badge</mat-icon>
               Funcionários
             </a>
-            <a mat-button routerLink="dashboards/dashboard" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+            <a mat-button routerLink="dashboards/dashboard" routerLinkActive="active-link"
+               [routerLinkActiveOptions]="{ exact: true }">
               <mat-icon>bar_chart</mat-icon>
               DashBoards
             </a>
@@ -58,47 +62,56 @@
         }
 
         <ng-container>
-          <a mat-button routerLink="member/list" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <a mat-button routerLink="member/list" routerLinkActive="active-link"
+             [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon>people</mat-icon>
             Alunos
           </a>
-          <a mat-button routerLink="plan/list" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <a mat-button routerLink="plan/list" routerLinkActive="active-link"
+             [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon>view_list</mat-icon>
             Planos
           </a>
-          <a mat-button routerLink="check-in/register" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <a mat-button routerLink="check-in/register" routerLinkActive="active-link"
+             [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon>check_circle</mat-icon>
             Check-in
           </a>
-          <a mat-button routerLink="payment/paymentRegistration" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <a mat-button routerLink="payment/paymentRegistration" routerLinkActive="active-link"
+             [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon>payment</mat-icon>
             Pagamento
           </a>
-          <a mat-button routerLink="member/form/create" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <a mat-button routerLink="member/form/create" routerLinkActive="active-link"
+             [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon>person_add</mat-icon>
             Cadastro
           </a>
 
-          <a mat-button routerLink="product/productInventory" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <a mat-button routerLink="product/productInventory" routerLinkActive="active-link"
+             [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon>inventory</mat-icon>
             Inventario
           </a>
 
-          <a mat-button routerLink="payments/membersListPayments" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <a mat-button routerLink="payments/membersListPayments" routerLinkActive="active-link"
+             [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon>attach_money</mat-icon>
             Pagamentos
           </a>
 
-          <a mat-button routerLink="product/sales" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+          <a mat-button routerLink="product/sales" routerLinkActive="active-link"
+             [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon>point_of_sale</mat-icon>
             Venda
           </a>
 
         </ng-container>
 
-        @if(tipo_usuario === "D") {
+        @if (tipo_usuario === "D") {
           <ng-container>
-            <a mat-button routerLink="adm/gym/list" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
+            <a mat-button routerLink="adm/gym/list" routerLinkActive="active-link"
+               [routerLinkActiveOptions]="{ exact: true }">
               <mat-icon>corporate_fare</mat-icon>
               Academias
             </a>
