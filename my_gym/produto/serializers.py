@@ -49,7 +49,7 @@ class LoteSerializer(serializers.ModelSerializer):
 
 
 class ProdutoSerializer(FlexFieldsModelSerializer):
-    quantidade_estoque = serializers.IntegerField()
+    quantidade_estoque = serializers.IntegerField(read_only=True)
     foto = serializers.ImageField(write_only=True, required=False)
     foto_url = serializers.URLField(source='foto', read_only=True)
 

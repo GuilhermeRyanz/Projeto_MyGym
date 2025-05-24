@@ -16,7 +16,7 @@ class AlunoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
 
 
 class AlunoPlanoViewSet(viewsets.ModelViewSet):
-    queryset = models.AlunoPlano.objects.all()
+    queryset = models.AlunoPlano.objects.all().distinct()
     serializer_class = AlunoPlanoSerializer
     filterset_class = AlunoPlanoFilter
 

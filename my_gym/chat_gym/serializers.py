@@ -8,4 +8,3 @@ class ChatSerializer:
             "name": self.chat.name,
             "messages": [message.serialize() for message in self.chat.messages],
         }
-

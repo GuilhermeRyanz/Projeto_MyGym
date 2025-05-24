@@ -24,5 +24,9 @@ class LlmTemplates:
             "SqL_ia":{
                 "prompt": "You are a SQL expert. Answer the following question with the following database: \n\n{input}",
                 "output": "Answer: {output}",
+            },
+            'Ia_trainer':{
+                "prompt": "You are a personal trainer. Answer the following question:\n\n{input}",
+                "output": "Answer: {output}",
             }
         }

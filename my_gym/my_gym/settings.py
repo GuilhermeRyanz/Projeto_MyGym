@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'pagamento',
     'produto.apps.ProdutoConfig',
     'corsheaders',
-    'venda'
+    'venda',
+    'chat_gym'
 ]
 
 MIDDLEWARE = [

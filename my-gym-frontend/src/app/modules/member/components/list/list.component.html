@@ -5,13 +5,45 @@
 
   <div class="flex align-items-center justify-content-between  w-full mb-4">
 
-    <div class="w-10rem"></div>
 
-    <mat-form-field appearance="outline" class="search w-30rem">
-      <mat-label>Buscar aluno</mat-label>
-      <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
-             (input)="onSearchChange(searchTerm)" />
-    </mat-form-field>
+    <div class=" p-1 overflow-hidden flex align-items-center justify-content-between align-content-centern">
+
+      <mat-form-field appearance="outline" class="search w-30rem ml-4">
+        <mat-label>Buscar aluno</mat-label>
+        <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
+               (input)="onSearchChange(searchTerm)"/>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="search w-10rem ml-4">
+        <mat-label>Filtrar por Plano</mat-label>
+        <mat-select [(ngModel)]="selectedPlan" (selectionChange)="onPlanChange()">
+          <mat-option [value]="null">Todos os Planos</mat-option>
+          @for (plan of plans; track plan.id) {
+            <mat-option [value]="plan.id">{{ plan.nome }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-icon-button [matMenuTriggerFor]="menu"
+              class="align-content-center justify-content-center align-items-center align-self-center mb-4">
+        <mat-icon class="text-gray-300">filter_list</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu" class="p-1">
+
+        <button
+          mat-menu-item
+          (click)="toogleInadimplente()"
+          class="ml-2"
+        >
+          <mat-icon>filter_list</mat-icon>
+          {{ expired ? 'Ver todos' : ' Mostrar inadimplente' }}
+        </button>
+
+      </mat-menu>
+
+    </div>
+
 
     <div class="align-self-start mr-2">
       <button
@@ -29,46 +61,47 @@
 
 
   <div class="member-list ml-4">
-    @for(member of members; track trackById){
-    <mat-card class="member-card">
-      <mat-card-content>
+    @for (member of members; track trackById) {
+      <mat-card class="member-card">
+        <mat-card-content>
 
-        <mat-card
-          class="absolute top-0 right-0 m-2 px-2 py-1 text-sm shadow-1 rounded" style="color: white ;background-color:{{getMemberStatusColor(member.data_vencimento)}}"
-        >
-          {{getMemberStatus(member.data_vencimento)}}
+          <mat-card
+            class="absolute top-0 right-0 m-2 px-2 py-1 text-sm shadow-1 rounded"
+            style="color: white ;background-color:{{getMemberStatusColor(member.data_vencimento)}}"
+          >
+            {{ getMemberStatus(member.data_vencimento) }}
 
-        </mat-card>
+          </mat-card>
 
-        <div class="member-info flex align-items-center">
-          <div class="avatar align-items-center">
-            {{ getInitials(member.aluno.nome) }}
+          <div class="member-info flex align-items-center">
+            <div class="avatar align-items-center">
+              {{ getInitials(member.aluno.nome) }}
+            </div>
+            <div class=" flex-column">
+              <div class="name font-bold">{{ member.aluno.nome }}</div>
+              <div class="email">{{ member.aluno.email }}</div>
+            </div>
           </div>
-          <div class=" flex-column">
-          <div class="name font-bold">{{ member.aluno.nome }}</div>
-          <div class="email">{{ member.aluno.email }}</div>
-        </div>
-        </div>
-        <div class="extra-info">
-          <div class="info-row">
-            <span>Plano Atual:</span> <strong>{{ member.plano.nome }}</strong>
+          <div class="extra-info">
+            <div class="info-row">
+              <span>Plano Atual:</span> <strong>{{ member.plano.nome }}</strong>
+            </div>
+            <div class="info-row">
+              <span>Matrícula:</span> <strong>{{ (member.aluno.matricula) }}</strong>
+            </div>
           </div>
-          <div class="info-row">
-            <span>Matrícula:</span> <strong>{{(member.aluno.matricula) }}</strong>
+        </mat-card-content>
+        <div class="footer p-2 flex justify-content-between align-items-center">
+          <div class=" icon-edit flex items-center gap-2" (click)="edit(member.aluno)">
+            <mat-icon>edit</mat-icon>
+            <span>Editar</span>
           </div>
-        </div>
-      </mat-card-content>
-      <div class="footer p-2 flex justify-content-between align-items-center">
-         <div class=" icon-edit flex items-center gap-2" (click)="edit(member.aluno)">
-          <mat-icon>edit</mat-icon>
-          <span>Editar</span>
-         </div>
-         <div class=" icon-delete flex items-center gap-2" (click)="disable(member.aluno)">
+          <div class=" icon-delete flex items-center gap-2" (click)="disable(member.aluno)">
             <mat-icon>delete</mat-icon>
             <span>Apagar</span>
-       </div>
-      </div>
-    </mat-card>
+          </div>
+        </div>
+      </mat-card>
     }
   </div>
 
