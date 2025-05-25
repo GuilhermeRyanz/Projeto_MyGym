@@ -1,24 +1,13 @@
-class questionSerializer:
-    def __init__(self, question):
-        self.question = question
+from rest_framework import serializers
+from chat_gym.models import Questions
 
-    def serialize(self):
-        return {
-            "id": self.question.id,
-            "text": self.question.text,
-            "created_at": self.question.created_at.isoformat(),
-            "updated_at": self.question.updated_at.isoformat(),
-        }
 
-class SessionSerializer:
-    def __init__(self, session):
-        self.session = session
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Questions
+        fields = '__all__'
 
-    def serialize(self):
-        return {
-            "id": self.session.id,
-            "user_id": self.session.user.id,
-            "session_id": self.session.session_id,
-            "created_at": self.session.created_at.isoformat(),
-            "updated_at": self.session.updated_at.isoformat(),
-        }
+class SessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Questions
+        fields = '__all__'

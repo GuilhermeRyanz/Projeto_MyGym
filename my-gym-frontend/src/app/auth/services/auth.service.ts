@@ -19,7 +19,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router, private httpMethods: HttpMethodsService) {
   }
 
-  login(payload: Credentials) {
+  public login(payload: Credentials) {
     const headers = { 'Content-Type': 'application/json' };
 
     const apiUrl = this.pathUrl + 'api/token/';
@@ -51,6 +51,10 @@ export class AuthService {
       }),
       catchError((error: any ) => this.httpMethods.handleError(error))
     );
+  }
+
+  public MemberLogin(): void{
+    return
   }
 
   public get_gym(): string | null {

@@ -80,11 +80,12 @@ export const routes: Routes = [
         loadChildren: () => import('./modules/product/product.module').then(m => m.ProductModule),
         canActivate: [AuthGuardService]
 
+      },
+      {
+        path: "MemberArea",
+        loadChildren: () => import('./modules/member-area/member-area.module').then(m => m.MemberAreaModule),
       }
-
-
-    ]
-
+    ],
   },
 
 

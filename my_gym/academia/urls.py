@@ -8,7 +8,4 @@ router.register('frequencias', viewsets.FrequenciaViewSet)
 
 router.register('frequenciaDiaHora', viewsets.FrequenciaDiaHoraViewSet, basename='frequencia_dia_hora')
 
-
-
-
 urlpatterns = router.urls

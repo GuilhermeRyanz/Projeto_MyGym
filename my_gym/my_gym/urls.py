@@ -16,21 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from usuario.viewsets import  AuthTokenView
+from usuario.viewsets import AuthTokenView
 from rest_framework_simplejwt.views import TokenRefreshView
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/academia/', include('academia.urls')),
     path('api/aluno/', include('aluno.urls')),
-    path('api/plano/',include('plano.urls')),
+    path('api/plano/', include('plano.urls')),
     path('api/usuario/', include('usuario.urls')),
     path('api/pagamento/', include('pagamento.urls')),
-    path('api/produto/',include('produto.urls')),
-    path('api/token/',  AuthTokenView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/produto/', include('produto.urls')),
     path('api/venda/', include('venda.urls')),
+    path('api/chat/', include('chat_gym.urls')),
+    path('api/token/', AuthTokenView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
 ]
