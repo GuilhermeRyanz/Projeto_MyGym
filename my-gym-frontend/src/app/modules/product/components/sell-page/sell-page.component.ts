@@ -91,7 +91,6 @@ export class SellPageComponent implements OnInit{
     this.httpMethods.getPaginated(this.pathUrMembers, params)
       .subscribe((response: any) => {
         this.members = response.results;
-        console.log(response.results)
       })
   }
 

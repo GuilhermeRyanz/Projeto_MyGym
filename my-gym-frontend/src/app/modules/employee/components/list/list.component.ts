@@ -146,10 +146,33 @@ export class ListComponent implements OnInit {
   }
 
   public edit(employee: Employee) {
+    if (employee.tipo_usuario === 'D') {
+      this.snackBar.open(
+        "Não é possivel alterar dados do dono da cademia", "Fechar",
+        {
+          duration: 5000,
+          verticalPosition: 'top',
+        }
+      )
+      return
+    }
+
     this.router.navigate([`/employee/form/${employee.id}`]).then();
   }
 
   public disable(employee: Employee): void {
+
+    if (employee.tipo_usuario === 'D') {
+      this.snackBar.open(
+        "Não é ppssivel excluir o dono do estabelecimento", "Fechar",
+        {
+          duration: 5000,
+          verticalPosition: 'top',
+        }
+      )
+      return
+    }
+
     const dialogRef = this.dialog.open(ConfirmDialogComponentComponent);
     const path: string = 'desativar_usuario'
 

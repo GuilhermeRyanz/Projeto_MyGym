@@ -58,6 +58,11 @@ export class AuthService {
   }
 
 
+  private getTypeUser() {
+    return localStorage.getItem("tipo_usuario");
+  }
+
+
   public refreshToken(): Observable<string> {
     const refreshToken = this.getTokenRefresh();
     if (!refreshToken) {
