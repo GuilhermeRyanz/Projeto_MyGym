@@ -9,6 +9,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatButton} from "@angular/material/button";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {DecimalPipe} from "@angular/common";
+import {fomateDayWeek} from "../../../../shared/util/FomateDayWeek";
 
 @Component({
   selector: 'app-member-plan',
@@ -116,5 +117,6 @@ export class MemberPlanComponent implements OnInit {
     })
   }
 
+  protected readonly fomateDayWeek = fomateDayWeek;
 }
 

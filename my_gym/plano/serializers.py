@@ -26,7 +26,7 @@ class PlanoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Plano
-        fields = ['id', 'nome', 'preco', 'descricao', 'duracao', 'beneficios', 'desconto', 'academia', 'dias_permitidos', 'total_alunos']
+        fields = ['id', 'nome', 'preco', 'descricao', 'duracao', 'beneficios', 'desconto', 'academia', 'dias_permitidos', 'total_alunos' ,'active']
 
     def validate_user_permission(self):
         request = self.context.get('request')

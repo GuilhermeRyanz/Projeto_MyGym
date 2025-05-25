@@ -14,6 +14,7 @@ import {
 import {MatDialog} from "@angular/material/dialog";
 import {PlanDetailComponent} from "../plan-detail/plan-detail.component";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
+import {fomateDayWeek} from "../../../../shared/util/FomateDayWeek";
 
 @Component({
   selector: 'app-list',
@@ -35,12 +36,12 @@ export class ListComponent implements OnInit {
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
   public limit: number = 3;
-  public totalResults: number = 0;
+  public totalResults: number = 1;
   public currentPage: number = 0;
+
   private getIdGym(): void {
     this.gym_id = localStorage.getItem("academia")
   }
-
 
   constructor(private httpMethods: HttpMethodsService,
               private router: Router,
@@ -55,7 +56,7 @@ export class ListComponent implements OnInit {
     this.getTypeUser()
   }
 
-  getTypeUser() {
+  public getTypeUser() {
     this.typeUser = localStorage.getItem("tipo_usuario");
   }
 
@@ -69,17 +70,17 @@ export class ListComponent implements OnInit {
 
     this.httpMethods.getPaginated(this.pathUrlPlan, params)
       .subscribe((response: any) => {
-      if (response.results.length <= 0) {
-        const errosMensager = "Não há planos ativos cadastrados!"
-        this.snackBar.open(errosMensager, 'fechar', {
-          duration: 2000,
-          verticalPosition: 'top',
-        });
-      }
-      this.plans = response.results;
-      this.totalResults = response.count;
-      this.currentPage = offset / limit;
-    });
+        if (response.results.length <= 0) {
+          const errosMensager = "Não há planos ativos cadastrados!"
+          this.snackBar.open(errosMensager, 'fechar', {
+            duration: 2000,
+            verticalPosition: 'top',
+          });
+        }
+        this.plans = response.results;
+        this.totalResults = response.count;
+        this.currentPage = offset / limit;
+      });
   }
 
   onPageChange(page: number): void {
@@ -95,7 +96,7 @@ export class ListComponent implements OnInit {
     this.router.navigate([`/plan/form/${plan.id}`]).then();
   }
 
-  public viewDetail(plano:  Plan): void {
+  public viewDetail(plano: Plan): void {
     this.dialog.open(PlanDetailComponent, {
       width: '40rem',
       maxWidth: 'none',
@@ -109,8 +110,8 @@ export class ListComponent implements OnInit {
       if (result) {
         this.httpMethods.disable(this.pathUrlPlan, plan, 'desativar').subscribe(() => {
           this.search()
-          let sucessMensage =  "Plano desativado"
-          this.snackBar.open(  sucessMensage, 'Fechar', {
+          let sucessMensage = "Plano desativado"
+          this.snackBar.open(sucessMensage, 'Fechar', {
             duration: 5000,
             verticalPosition: 'top',
           });
@@ -119,4 +120,5 @@ export class ListComponent implements OnInit {
     });
   }
 
+  protected readonly fomateDayWeek = fomateDayWeek;
 }

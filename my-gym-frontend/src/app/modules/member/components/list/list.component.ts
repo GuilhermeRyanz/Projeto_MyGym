@@ -16,9 +16,11 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {debounceTime, Subject} from "rxjs";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {MatOption, MatSelect} from "@angular/material/select";
-import {PlanServiceService} from "../../../../shared/services/plan/plan-service.service";
 import {Plan} from "../../../../shared/interfaces/plan";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {AuthService} from "../../../../auth/services/auth.service";
+import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-list',
@@ -33,12 +35,16 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
     FormsModule,
     MatButton,
     PaginatorComponent,
-    MatSelect,
     MatOption,
     MatMenu,
     MatMenuItem,
     MatIconButton,
-    MatMenuTrigger
+    MatMenuTrigger,
+    MatAutocomplete,
+    MatAutocompleteTrigger,
+    NgForOf,
+    NgIf
+
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
@@ -48,9 +54,8 @@ export class ListComponent implements OnInit {
 
   private pathUrlMemberPlan: string = URLS.MEMBERPLAN
   public members: MemberPlan [] | undefined;
-  public gym_id: string | null = "";
-  protected typeUser: string | null = "";
   public searchTerm: string = "";
+  public searchPlanTerm: string = "";
   public limit: number = 12;
   public totalResults: number = 0;
   public currentPage: number = 0;
@@ -58,27 +63,143 @@ export class ListComponent implements OnInit {
   public expired : boolean = false;
 
   searchChange = new Subject<string>();
+  searchPlanChange = new Subject<string>();
 
   constructor(private httpMethods: HttpMethodsService,
               private router: Router,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
+              private authService: AuthService
               ) {
+  }
+
+  displayPlanFn(plan: Plan | null): string {
+    return plan ? plan.nome : '';
   }
 
   public selectedPlan: string | null = null;
 
-  ngOnInit() {
-    this.getIdGym();
-    this.search();
-    this.getTypeUser()
-    this.loadPlans();
 
+  ngOnInit() {
+    this.search();
+    this.searchPlan();
 
     this.searchChange.pipe(debounceTime(100)).subscribe((term) => {
       this.searchMember(term, 0)
     })
 
+    this.searchPlanChange.pipe(debounceTime(100)).subscribe((term) => {
+      this.searchPlan(term)
+    })
+
+  }
+
+  public search(): void {
+    this.searchMember(this.searchTerm, 0)
+  };
+
+  public create(): void {
+    this.router.navigate(['/member/form/create']).then();
+  };
+
+  public edit(member: Member) {
+    this.router.navigate([`/member/form/${member.id}`]).then();
+  };
+
+  public disable(member: Member): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponentComponent)
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const gymId = this.authService.get_gym()
+        if (!gymId) {
+          return
+        }
+        member.academia = gymId
+
+        this.httpMethods.disable(this.pathUrlMemberPlan, member, 'desativar_aluno').subscribe(() => {
+          this.searchMember();
+          let sucessMensage =  "Aluno desativado"
+          this.snackBar.open(  sucessMensage, 'Fechar', {
+            duration: 5000,
+            verticalPosition: 'top',
+          });
+        })
+      }
+    })
+  };
+
+  public searchMember(term: string = "", offset: number = 0, limit: number = this.limit): void {
+    const params: any = {
+      expand: ['aluno', 'plano'],
+      active: true,
+      academia: this.authService.get_gym(),
+      limit,
+      offset,
+    };
+
+    if (this.selectedPlan) {
+      params.plano = this.selectedPlan;
+    }
+
+    if (term){
+      params.search = term
+    }
+
+    if (this.expired) {
+      params.expired  = true;
+    }
+
+    this.httpMethods.getPaginated(this.pathUrlMemberPlan, params)
+      .subscribe((response: any) => {
+        this.members = response.results;
+        this.totalResults = response.count;
+        this.currentPage = offset / limit;
+      })
+  }
+
+  onSearchChange(term: string): void {
+    this.searchTerm = term;
+    this.searchChange.next(term);
+  }
+
+  onSelectedPlan(event: any): void {
+    this.selectedPlan = event.option.value.id; // Ajuste para o campo correto do plano, como 'id' ou outro identificador
+    this.searchMember(this.searchTerm, 0); // Reaplica a busca com o plano selecionado
+  }
+
+  onPageChange(page: number): void {
+    const offset = page * this.limit;
+    this.searchMember(this.searchTerm, offset);
+  }
+
+  public toogleInadimplente(): void {
+    this.expired = !this.expired;
+    this.search()
+  }
+
+  private searchPlan(term: string = ""): void {
+
+    const params: any = {
+      active: true,
+      academia: this.authService.get_gym(),
+      limit: 20,
+      offset: 0,
+    };
+
+    if (term) {
+      params.search = term;
+    }
+
+    this.httpMethods.getPaginated(URLS.PLAN, params)
+      .subscribe((response: any) => {
+        this.plans = response.results;
+      });
+  }
+
+  onSearchPlanChange(term: string): void {
+    this.searchPlanTerm = term
+    this.searchPlanChange.next(term)
   }
 
   public getMemberStatus(data: Date | string | null): string {
@@ -109,30 +230,6 @@ export class ListComponent implements OnInit {
     return statusColors[status] || '#858585';
   }
 
-  private getIdGym(): void {
-    this.gym_id = localStorage.getItem("academia");
-  }
-
-  private getTypeUser() {
-    this.typeUser = localStorage.getItem("tipo_usuario");
-  }
-
-  public search(): void {
-    this.searchMember(this.searchTerm, 0)
-  };
-
-  public create(): void {
-    this.router.navigate(['/member/form/create']).then();
-  };
-
-  public edit(member: Member) {
-    this.router.navigate([`/member/form/${member.id}`]).then();
-  };
-
-  trackById(index: number, member: MemberPlan) {
-    return member.aluno.id;
-  }
-
   getInitials(name: string): string {
     if (!name) return '';
     const nameParts = name.trim().split(' ');
@@ -140,81 +237,10 @@ export class ListComponent implements OnInit {
     return initials.length > 2 ? initials.substring(0, 2) : initials;
   }
 
-  public disable(member: Member): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponentComponent)
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        if (this.gym_id) {
-          member.academia = this.gym_id;
-        } else {
-          console.error('Gym ID is missing');
-          return;
-        }
-        this.httpMethods.disable(this.pathUrlMemberPlan, member, 'desativar_aluno').subscribe(() => {
-          this.searchMember();
-          let sucessMensage =  "Aluno desativado"
-          this.snackBar.open(  sucessMensage, 'Fechar', {
-            duration: 5000,
-            verticalPosition: 'top',
-          });
-        })
-      }
-    })
-  };
-
-  public searchMember(term: string = "", offset: number = 0, limit: number = this.limit): void {
-    const params: any = {
-      expand: ['aluno', 'plano'],
-      active: true,
-      academia: this.gym_id,
-      limit,
-      offset,
-    };
-
-    if (this.selectedPlan) {
-      params.plano = this.selectedPlan;
-    }
-
-    if (term){
-      params.search = term
-    }
-
-    if (this.expired) {
-      params.expired  = true;
-    }
-
-    this.httpMethods.getPaginated(this.pathUrlMemberPlan, params)
-      .subscribe((response: any) => {
-        this.members = response.results;
-        this.totalResults = response.count;
-        this.currentPage = offset / limit;
-      })
-  }
-
-  onSearchChange(term: string): void {
-    this.searchTerm = term;
-    this.searchChange.next(term);
-  }
-
-  onPageChange(page: number): void {
-    const offset = page * this.limit;
-    this.searchMember(this.searchTerm, offset);
-  }
-
-  public toogleInadimplente(): void {
-    this.expired = !this.expired;
-    this.search()
-  }
-
-  private loadPlans(): void {
-    this.httpMethods.get(URLS.PLAN + { academia: this.gym_id })
-      .subscribe((response: any) => {
-        this.plans = response.results;
-      });
-  }
-  public onPlanChange(): void {
-    this.search();
+  public clearPlanFilter(): void {
+    this.selectedPlan = null;
+    this.searchPlanTerm = '';
+    this.searchMember(this.searchTerm, 0); // Reaplica a busca sem o filtro de plano
   }
 
 

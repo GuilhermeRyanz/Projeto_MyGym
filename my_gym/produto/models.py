@@ -32,6 +32,10 @@ class Produto(ModelBase):
     def __str__(self):
         return self.nome, self.categoria
 
+
+    class Meta:
+        db_table = 'produto'
+
 class LoteProduto(ModelBase):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name="lote_produto")
     quantidade = models.PositiveIntegerField()
@@ -42,3 +46,6 @@ class LoteProduto(ModelBase):
 
     def __str__(self):
         return f"Lote de {self.produto.nome} - Validade {self.data_validade}"
+
+    class Meta:
+        db_table = 'lote_produto'

@@ -14,14 +14,23 @@
                (input)="onSearchChange(searchTerm)"/>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="search w-10rem ml-4">
-        <mat-label>Filtrar por Plano</mat-label>
-        <mat-select [(ngModel)]="selectedPlan" (selectionChange)="onPlanChange()">
-          <mat-option [value]="null">Todos os Planos</mat-option>
-          @for (plan of plans; track plan.id) {
-            <mat-option [value]="plan.id">{{ plan.nome }}</mat-option>
-          }
-        </mat-select>
+      <mat-form-field appearance="outline" class="w-3 flex">
+        <mat-label>Filtro Por Plano</mat-label>
+        <input
+          matInput
+          placeholder="Planos"
+          [(ngModel)]="searchPlanTerm"
+          [matAutocomplete]="auto"
+          (input)="onSearchPlanChange(searchPlanTerm || '')"
+        >
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayPlanFn" (optionSelected)="onSelectedPlan($event)">
+          <mat-option (click)="clearPlanFilter()" *ngIf="selectedPlan">
+            Todos os Planos
+          </mat-option>
+          <mat-option *ngFor="let plan of plans" [value]="plan">
+            {{ plan.nome }}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
 
       <button mat-icon-button [matMenuTriggerFor]="menu"
@@ -37,7 +46,7 @@
           class="ml-2"
         >
           <mat-icon>filter_list</mat-icon>
-          {{ expired ? 'Ver todos' : ' Mostrar inadimplente' }}
+          {{ expired ? 'Ver todos' : ' Apenas inadimplentes' }}
         </button>
 
       </mat-menu>
@@ -61,7 +70,7 @@
 
 
   <div class="member-list ml-4">
-    @for (member of members; track trackById) {
+    @for (member of members; track member.aluno.id) {
       <mat-card class="member-card">
         <mat-card-content>
 

@@ -30,6 +30,9 @@ class Venda(ModelBase):
         Academia, on_delete=models.SET_NULL, null=True,
     )
 
+    class Meta:
+        db_table = 'venda'
+
 class ItemVenda(ModelBase):
     venda = models.ForeignKey(
         Venda, related_name='itens',
@@ -44,4 +47,7 @@ class ItemVenda(ModelBase):
 
     def subtotal(self):
         return self.preco_unitario * self.quantidade
+
+    class Meta:
+        db_table = 'item_venda'
 
