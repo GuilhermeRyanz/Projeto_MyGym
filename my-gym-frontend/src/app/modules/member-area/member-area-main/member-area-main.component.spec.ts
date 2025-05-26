@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MemberAuthComponent } from './member-auth.component';
+import { MemberAreaMainComponent } from './member-area-main.component';
 
-describe('MemberAuthComponent', () => {
-  let component: MemberAuthComponent;
-  let fixture: ComponentFixture<MemberAuthComponent>;
+describe('MemberAreaMainComponent', () => {
+  let component: MemberAreaMainComponent;
+  let fixture: ComponentFixture<MemberAreaMainComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MemberAuthComponent]
+      imports: [MemberAreaMainComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MemberAuthComponent);
+    fixture = TestBed.createComponent(MemberAreaMainComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

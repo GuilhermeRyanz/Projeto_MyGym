@@ -1,10 +1,14 @@
 from datetime import datetime
+
+from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
 from core.models import ModelBase
 
-
 class Aluno(ModelBase):
+
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='aluno')
 
     nome = models.CharField(
         db_column='nome',
@@ -29,8 +33,6 @@ class Aluno(ModelBase):
         auto_now=False,
         default=datetime.now
     )
-
-
     matricula = models.CharField(
         db_column='matricula',
         max_length=20,
@@ -48,13 +50,13 @@ class Aluno(ModelBase):
             ano_atual = datetime.now().year
             self.matricula = f"{ano_atual}-{self.id:03}"
             super().save(update_fields=['matricula'])
+            # self.set_password(self.matricula)
 
     def __str__(self):
         return self.nome
 
 
 class AlunoPlano(ModelBase):
-
     aluno = models.ForeignKey(
         Aluno,
         on_delete=models.CASCADE,
@@ -67,11 +69,7 @@ class AlunoPlano(ModelBase):
         on_delete=models.CASCADE,
         related_name='alunos_plano',
     )
-
-    data_vencimento = models.DateField(
-        null=True,
-        blank=True,
-    )
+    data_vencimento = models.DateField(null=True, blank=True)
 
     class Meta:
         db_table = 'aluno_plano'

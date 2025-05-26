@@ -59,15 +59,13 @@ class IaGestor:
 
 
 class IaPersona:
-    def __init__(self, academia_id: int, user_question: str, member_id: int):
-        self.academia_id = academia_id
+    def __init__(self,user_question: str, member_id: int):
         self.user_question = user_question
         self.member_id = member_id
 
     def get_member_data(self):
         data = AlunoPlano.objects.filter(
-            aluno_id=self.member_id,
-            plano__academia=self.academia_id,
+            aluno=self.member_id,
             active=True
         ).values(
             'aluno__nome',
@@ -99,4 +97,4 @@ class IaPersona:
 
         result = llm.invoke(query)
 
-        return result
+        return  [result, self.user_question,]

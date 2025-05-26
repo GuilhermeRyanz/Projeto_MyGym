@@ -75,9 +75,7 @@ export class MainComponent implements DoCheck {
       if (event instanceof NavigationEnd) {
         this.showBanner = !event.url.includes('auth/')
         this.opened = !event.url.includes('auth/');
-
       }
-
     });
   }
 

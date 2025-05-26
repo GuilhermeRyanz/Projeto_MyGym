@@ -1,6 +1,9 @@
+from datetime import date
+
+from django.contrib.auth.models import User
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
-from datetime import date
+from tutorial.quickstart.serializers import UserSerializer
 
 from aluno import models
 from aluno.models import Aluno
@@ -9,6 +12,7 @@ from plano.serializers import PlanoSerializer
 
 
 class AlunoSerializer(serializers.ModelSerializer):
+    # user = UserSerializer()
     id = serializers.ReadOnlyField(read_only=True)
     matricula = serializers.CharField(read_only=True)
     nome = serializers.CharField(max_length=100)
@@ -18,7 +22,7 @@ class AlunoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Aluno
-        fields = ['active', 'id', 'nome', 'email', 'telefone', 'matricula', "data_nascimento",]
+        fields = ['active', 'id', 'nome', 'email', 'telefone', 'matricula', "data_nascimento"]
 
     def validate_data_nascimento(self, value):
         if value and value > date.today():
@@ -40,7 +44,11 @@ class AlunoSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
+    # def create(self, validated_data):
+    #     user_data = validated_data.pop('user')
+    #     user = User.objects.create(**user_data)
+    #     aluno = Aluno.objects.create(user=user, **validated_data)
+    #     return aluno
 
 
 class AlunoPlanoSerializer(FlexFieldsModelSerializer):

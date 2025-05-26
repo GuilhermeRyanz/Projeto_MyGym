@@ -6,8 +6,3 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Questions
         fields = '__all__'
-
-class SessionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Questions
-        fields = '__all__'

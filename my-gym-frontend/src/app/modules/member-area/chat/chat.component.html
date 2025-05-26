@@ -1,0 +1,32 @@
+<div class="chat-container">
+  <mat-toolbar color="primary">
+    <span>Chat com MyGym IA</span>
+  </mat-toolbar>
+
+  <div class="chat-messages" #chatMessages>
+    @for (message of messages; track message.id) {
+      <div class="message" [ngClass]="{'user-message': message.isUser, 'ia-message': !message.isUser}">
+        <div class="message-content">
+          <span class="message-text">{{ message.text }}</span>
+          <span class="message-time">{{ message.time | date:'shortTime' }}</span>
+        </div>
+      </div>
+    }
+    @if (!messages.length) {
+      <div class="empty-state">
+        <p>Faça uma pergunta para começar a conversar com a IA!</p>
+      </div>
+    }
+  </div>
+
+  <form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="chat-input">
+    <mat-form-field appearance="fill" class="input-field">
+      <mat-label>Digite sua pergunta</mat-label>
+      <input matInput formControlName="question">
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!chatForm.valid || loading">
+      <mat-icon>send</mat-icon>
+      {{ loading ? 'Enviando...' : 'Enviar' }}
+    </button>
+  </form>
+</div>

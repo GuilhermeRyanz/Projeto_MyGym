@@ -1,4 +1,6 @@
 from django.db import models
+from sqlalchemy import false
+
 from academia.models import Academia
 from core.models import ModelBase
 from cloudinary.models import CloudinaryField
@@ -19,7 +21,7 @@ class Produto(ModelBase):
     descricao = models.TextField(blank=True)
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     foto = models.URLField('foto', blank=True, null=True)
-    academia = models.ForeignKey( Academia , on_delete=models.CASCADE, null=True, blank=True)
+    academia = models.ForeignKey( Academia , on_delete=models.CASCADE, null=False)
     data_cadastro = models.DateField(auto_now_add=True)
     quantidade_estoque = models.PositiveIntegerField(default=0)
     estoque_minimo = models.PositiveIntegerField(default=0)

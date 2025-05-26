@@ -1,37 +1,72 @@
 <div class="container">
   <div class="form-container">
-    <form [formGroup]="formGroup" (ngSubmit)="authentic(formGroup.value)" class="mat-elevation-z2 form">
-      <div class="header">
-        <img src="img/MyGymLogoOnly_0002.png" alt="teste" height="100" width="100">
-        <h2>Entrar no MyGym</h2>
-      </div>
-      <mat-form-field appearance="fill" class="email">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="username" placeholder="Digite seu usuário"/>
-        @if (formGroup.get('username')?.hasError('required')) {
-          <mat-error>
-            Email Obrigatório
-          </mat-error>
-        }
-        @if (formGroup.get('username')?.hasError('email')) {
-          <mat-error>
-            Por favor, insira um email válido.
-          </mat-error>
-        }
-      </mat-form-field>
+    <mat-tab-group [(selectedIndex)]="selectedTab">
+      <mat-tab label="Usuário">
+        <form [formGroup]="formGroup" (ngSubmit)="authentic(formGroup.value)" class="mat-elevation-z2 form">
+          <div class="header">
+            <img src="img/MyGymLogoOnly_0002.png" alt="MyGym Logo" height="100" width="100">
+            <h2>Entrar como Usuário</h2>
+          </div>
+          <mat-form-field appearance="fill" class="email">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="username" placeholder="Digite seu email"/>
+            @if (formGroup.get('username')?.hasError('required')) {
+              <mat-error>Email obrigatório</mat-error>
+            }
+            @if (formGroup.get('username')?.hasError('email')) {
+              <mat-error>Por favor, insira um email válido.</mat-error>
+            }
+          </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Senha</mat-label>
-        <input matInput type="password" formControlName="password" placeholder="Digite sua senha" />
-      </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Senha</mat-label>
+            <input matInput type="password" formControlName="password" placeholder="Digite sua senha" />
+            @if (formGroup.get('password')?.hasError('required')) {
+              <mat-error>Senha obrigatória</mat-error>
+            }
+          </mat-form-field>
 
-      <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit">Entrar</button>
+          <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit">Entrar</button>
 
-      <div class="register-container">
-        Novo aqui?
-        <a routerLink="/auth/register" class="register-link">Registre-se</a>
-      </div>
-    </form>
+          <div class="register-container">
+            Novo aqui?
+            <a routerLink="/auth/register" class="register-link">Registre-se</a>
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="Aluno">
+        <form [formGroup]="formGroup" (ngSubmit)="authenticMember(formGroup.value)" class="mat-elevation-z2 form">
+          <div class="header">
+            <img src="img/MyGymLogoOnly_0002.png" alt="MyGym Logo" height="100" width="100">
+            <h2>Entrar como Aluno</h2>
+          </div>
+          <mat-form-field appearance="fill" class="email">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="username" placeholder="Digite seu email"/>
+            @if (formGroup.get('username')?.hasError('required')) {
+              <mat-error>Email obrigatório</mat-error>
+            }
+            @if (formGroup.get('username')?.hasError('email')) {
+              <mat-error>Por favor, insira um email válido.</mat-error>
+            }
+          </mat-form-field>
 
+          <mat-form-field appearance="fill">
+            <mat-label>Senha</mat-label>
+            <input matInput type="password" formControlName="password" placeholder="Digite sua senha" />
+            @if (formGroup.get('password')?.hasError('required')) {
+              <mat-error>Senha obrigatória</mat-error>
+            }
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit">Entrar</button>
+
+          <div class="register-container">
+            Novo aluno?
+            <a routerLink="/auth/register-aluno" class="register-link">Registre-se</a>
+          </div>
+        </form>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>

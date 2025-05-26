@@ -1,30 +1,37 @@
 from django.db import models
-
 from core.models import ModelBase
 from usuario.models import Usuario
+from academia.models import Aluno
 
-
-class Session(ModelBase):
-
-    user = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    session_id = models.CharField(max_length=255)
-
-    class Meta:
-        unique_together = ('user', 'session_id')
-
-class Questions(models.Model):
-
+class Questions(ModelBase):
     question = models.TextField()
-    answer = models.TextField( null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name='questions')
-
-    def __str__(self):
-        return f"Question: {self.question[:20]}..."
+    answer = models.TextField(null=True, blank=True)
+    usuario = models.ForeignKey(
+        Usuario,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='questions'
+    )
+    aluno = models.ForeignKey(
+        Aluno,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='questions'
+    )
 
     class Meta:
         ordering = ['-created_at']
         verbose_name = 'Question'
         verbose_name_plural = 'Questions'
         db_table = 'questions'
+
+    def __str__(self):
+        if self.usuario:
+            autor = f"Usuario {self.usuario.nome}"
+        elif self.aluno:
+            autor = f"Aluno {self.aluno.nome}"
+        else:
+            autor = "Desconhecido"
+        return f"Pergunta de {autor}: {self.question[:50]}"

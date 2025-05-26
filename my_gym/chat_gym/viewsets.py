@@ -1,4 +1,3 @@
-from cherrypy.lib.cptools import allow
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
@@ -7,8 +6,6 @@ from chat_gym.behaviors import ChatBehavior
 
 from chat_gym.models import Questions
 from chat_gym.serializers import QuestionSerializer
-from core.permissions import AcademiaPermissionMixin
-
 
 class QuestionView(viewsets.ModelViewSet):
     queryset = Questions.objects.all()

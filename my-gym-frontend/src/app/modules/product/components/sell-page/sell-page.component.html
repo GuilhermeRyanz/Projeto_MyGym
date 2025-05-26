@@ -1,7 +1,7 @@
 <main class="grid justify-content-center align-items-start p-4">
   <div class="col-10">
-    <button mat-raised-button color="primary" (click)="goBack()" class="">
-      <mat-icon>arrow_back</mat-icon> voltar
+    <button mat-raised-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon> Voltar
     </button>
   </div>
 
@@ -18,21 +18,21 @@
                 placeholder="Digite o nome ou matrícula"
                 [formControl]="clientControl"
                 [matAutocomplete]="auto"
-                (input)="onSearchChange(clientControl.value || '')"
+                (input)="onSearchChange($any($event.target).value || '')"
               >
               <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMemberFn" (optionSelected)="onMemberSelected($event)">
-                <mat-option *ngFor="let member of members" [value]="member">
-                  {{ member.aluno.matricula }} - {{ member.aluno.nome }}
-                </mat-option>
+                @for (member of members; track member.id) {
+                  <mat-option [value]="member">
+                    {{ member.aluno.matricula }} - {{ member.aluno.nome }}
+                  </mat-option>
+                }
               </mat-autocomplete>
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Forma de Pagamento</mat-label>
               <mat-select formControlName="formaPagamento">
                 @for (forma of formasPagamento; track forma) {
-                  <mat-option [value]="forma">
-                    {{ forma }}
-                  </mat-option>
+                  <mat-option [value]="forma">{{ forma }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -49,8 +49,8 @@
 
         @if (cartItems.length === 0) {
           <div class="bg-black-alpha-10 flex flex-column align-items-center justify-content-center p-4">
-            <mat-icon class="">shopping_cart</mat-icon>
-            <p class="">Nenhum produto adicionado</p>
+            <mat-icon>shopping_cart</mat-icon>
+            <p>Nenhum produto adicionado</p>
             <button mat-button color="primary" (click)="openProductModal()">Adicionar Produto</button>
           </div>
         }
@@ -64,9 +64,7 @@
                   <span>{{ item.quantidade }} x {{ item.preco_unitario | currency:'BRL' }}</span>
                 </div>
                 <div class="flex justify-content-end align-items-center">
-                  <div>
-                    R$ {{ item.quantidade * item.preco_unitario | currency:'BRL' }}
-                  </div>
+                  <div>R$ {{ item.quantidade * item.preco_unitario | currency:'BRL' }}</div>
                   <button mat-icon-button color="warn" (click)="removeItem(item)">
                     <mat-icon>delete</mat-icon>
                   </button>
@@ -74,10 +72,11 @@
               </div>
             }
             <div class="flex justify-content-between align-content-center">
-              <div class="">Total: {{ getTotal() | currency:'BRL' }}</div>
-              @if(this.desc > 0){
-                <div class="flex align-content-center align-items-center"  style="color: #4dca4f" >
-                  <mat-icon>arrow_downward</mat-icon>Desc: {{this.desc}}%</div>
+              <div>Total: {{ getTotal() | currency:'BRL' }}</div>
+              @if (desc > 0) {
+                <div class="flex align-content-center align-items-center" style="color: #4dca4f">
+                  <mat-icon>arrow_downward</mat-icon> Desc: {{ desc }}%
+                </div>
               }
             </div>
           </div>
@@ -85,7 +84,13 @@
       </mat-card>
 
       <div class="mt-2">
-        <button mat-raised-button color="primary" class="add_button" (click)="finalizeSale()" [disabled]="formGroup.invalid || cartItems.length === 0">
+        <button
+          mat-raised-button
+          color="primary"
+          class="add_button"
+          (click)="finalizeSale()"
+          [disabled]="formGroup.invalid || cartItems.length === 0"
+        >
           Finalizar Venda
         </button>
       </div>
