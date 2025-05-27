@@ -12,7 +12,6 @@ from plano.serializers import PlanoSerializer
 
 
 class AlunoSerializer(serializers.ModelSerializer):
-    # user = UserSerializer()
     id = serializers.ReadOnlyField(read_only=True)
     matricula = serializers.CharField(read_only=True)
     nome = serializers.CharField(max_length=100)
@@ -41,14 +40,13 @@ class AlunoSerializer(serializers.ModelSerializer):
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
+        instance.user.username  = instance.email
+        instance.user.email = instance.email
+        instance.user.save()
+        instance.email = instance.user.email
+
         instance.save()
         return instance
-
-    # def create(self, validated_data):
-    #     user_data = validated_data.pop('user')
-    #     user = User.objects.create(**user_data)
-    #     aluno = Aluno.objects.create(user=user, **validated_data)
-    #     return aluno
 
 
 class AlunoPlanoSerializer(FlexFieldsModelSerializer):

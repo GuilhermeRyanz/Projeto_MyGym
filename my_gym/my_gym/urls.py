@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from aluno.viewsets import AuthTokenViewAluno
 from usuario.viewsets import AuthTokenView
 from rest_framework_simplejwt.views import TokenRefreshView
 urlpatterns = [
@@ -31,6 +32,7 @@ urlpatterns = [
     path('api/venda/', include('venda.urls')),
     path('api/chat/', include('chat_gym.urls')),
     path('api/token/', AuthTokenView.as_view(), name='token_obtain_pair'),
+    path('api/aluno/token/', AuthTokenViewAluno.as_view(), name='aluno_token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
 ]

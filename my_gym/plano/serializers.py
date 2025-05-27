@@ -30,7 +30,7 @@ class PlanoSerializer(serializers.ModelSerializer):
 
     def validate_user_permission(self):
         request = self.context.get('request')
-        if request.user.usuario.tipo_usuario == "A":
+        if request.user.tipo_usuario == "A":
             raise ValidationError("Tipo de usuário inválido")
 
 
@@ -42,7 +42,7 @@ class PlanosAlunosAtivosSerializer(serializers.ModelSerializer):
     def validate(self, data):
         request = self.context.get('request')
 
-        if request and request.user.usuario.tipo_usuario not in ["G", "D"]:
+        if request and request.user.tipo_usuario not in ["G", "D"]:
             raise ValidationError({"academia": "Tipo de usuário inválido para essa funcionalidade."})
 
         academia = request.query_params.get('academia')

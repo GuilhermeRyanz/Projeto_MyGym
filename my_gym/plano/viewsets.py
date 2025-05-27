@@ -24,7 +24,7 @@ class PlanoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def desativar(self, request, pk=None):
 
-        if request.user.usuario.tipo_usuario == "A":
+        if request.user.tipo_usuario == "A":
             return Response({'erro': 'Seu cargo não tem permissão para desativar planos.'}, status=403)
 
         try:

@@ -53,7 +53,7 @@ class VendaSerializer(FlexFieldsModelSerializer):
         request = self.context.get('request')
         itens_data = validated_data.pop('itens')
         academia = validated_data['academia']
-        vendedor = request.user.usuario
+        vendedor = request.user
         cliente = validated_data.get('cliente')
 
         try:

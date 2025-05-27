@@ -8,7 +8,7 @@ from usuario.models import Usuario
 class AcademiaPermissionMixin:
     def check_permission(self, academia):
 
-        if not UsuarioAcademia.objects.filter(usuario=self.request.user.usuario, academia__id=academia).exists():
+        if not UsuarioAcademia.objects.filter(usuario=self.request.user, academia__id=academia).exists():
             raise PermissionDenied("Você não está associado a essa academia.")
 
 
@@ -36,11 +36,11 @@ class UsuarioPermission(BasePermission):
 
 
     # def has_object_permission(self, request, view, obj):
-    #     if view.action in ['update', 'partial_update',] and obj == request.user.usuario:
+    #     if view.action in ['update', 'partial_update',] and obj == request.user:
     #         return True
     #
     #     academia_id = obj.academia.id
-    #     if not UsuarioAcademia.objects.filter(usuario=request.user.usuario, academia_id=academia_id).exists():
+    #     if not UsuarioAcademia.objects.filter(usuario=request.user, academia_id=academia_id).exists():
     #         raise PermissionDenied("Você não está autorizado a modificar este usuário.")
     #
     #     if obj.tipo_usuario not in [Usuario.TipoUsuario.GERENTE, Usuario.TipoUsuario.ATENDENTE]:
@@ -70,7 +70,7 @@ class UsuarioPermission(BasePermission):
 #         Verifica se o usuário está associado à academia.
 #         """
 #         if not UsuarioAcademia.objects.filter(
-#             usuario=self.request.user.usuario, academia__id=academia_id
+#             usuario=self.request.user, academia__id=academia_id
 #         ).exists():
 #             raise PermissionDenied("Você não tem permissão para acessar dados desta academia.")
 #
@@ -94,7 +94,7 @@ class UsuarioPermission(BasePermission):
 #
 #         # Filtra os objetos com base nas academias associadas ao usuário
 #         academias_ids = UsuarioAcademia.objects.filter(
-#             usuario=self.request.user.usuario
+#             usuario=self.request.user
 #         ).values_list("academia_id", flat=True)
 #         return super().get_queryset().filter(academia__id__in=academias_ids)
 #
@@ -118,7 +118,7 @@ class UsuarioPermission(BasePermission):
 #
 #         # Verifica associação com a academia
 #         if not UsuarioAcademia.objects.filter(
-#             usuario=request.user.usuario, academia_id=academia_id
+#             usuario=request.user, academia_id=academia_id
 #         ).exists():
 #             raise PermissionDenied("Você não está associado à academia deste objeto.")
 #

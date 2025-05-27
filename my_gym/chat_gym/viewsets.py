@@ -10,8 +10,6 @@ from chat_gym.serializers import QuestionSerializer
 class QuestionView(viewsets.ModelViewSet):
     queryset = Questions.objects.all()
     serializer_class = QuestionSerializer
-    filter_backends = [DjangoFilterBackend]
-    permission_classes = [permissions.IsAuthenticated]
 
     @action(detail=False, methods=['post'])
     def ask_gestor(self, request):

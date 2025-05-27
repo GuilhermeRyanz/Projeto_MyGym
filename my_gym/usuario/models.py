@@ -1,14 +1,15 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from rest_framework.authtoken.models import Token
 
 
-class Usuario(User):
+class Usuario(AbstractUser):
 
     class TipoUsuario(models.TextChoices):
         DONO = 'D', 'Dono'
         GERENTE = 'G', 'Gerente'
         ATENDENTE = 'A', 'Atendente'
+        MEMBRO = 'M', 'Membro'
 
 
     nome = models.CharField(

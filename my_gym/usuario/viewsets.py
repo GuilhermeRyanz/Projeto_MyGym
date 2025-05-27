@@ -39,7 +39,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def desativar_usuario(self, request, pk=None):
 
-        if request.user.usuario.tipo_usuario == "A":
+        if request.user.tipo_usuario == "A":
             return Response(
                 {'erro': 'Seu cargo não tem permissão para desativar outros usuários.'},
                 status=status.HTTP_403_FORBIDDEN
@@ -47,7 +47,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
         try:
 
-            usuario_academia = UsuarioAcademia.objects.get(academia__usuarioacademia__usuario=request.user.usuario, usuario_id=pk)
+            usuario_academia = UsuarioAcademia.objects.get(academia__usuarioacademia__usuario=request.user, usuario_id=pk)
 
             usuario_academia.active = False
             usuario_academia.save()

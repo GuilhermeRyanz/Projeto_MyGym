@@ -31,7 +31,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     def validate_academia(self, value):
         request_user = self.context['request'].user
-        if not UsuarioAcademia.objects.filter(usuario=request_user.usuario, academia=value).exists():
+        if not UsuarioAcademia.objects.filter(usuario=request_user, academia=value).exists():
             raise serializers.ValidationError("Você não tem permissão para associar um usuário a esta academia.")
         return value
 
@@ -72,7 +72,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
         try:
 
-            if request.user.usuario.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
+            if request.user.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
                 raise serializers.ValidationError("error","Esse tipo de usuario nao pode editar outros")
 
             instance.username = validated_data.get('username', instance.username)

@@ -7,4 +7,5 @@ router.register('alunos', viewsets.AlunoViewSet)
 
 router.register('alunoPlano', viewsets.AlunoPlanoViewSet)
 
+
 urlpatterns = router.urls

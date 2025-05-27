@@ -54,8 +54,8 @@ export class LoginComponent implements OnInit {
 
   public authenticMember(credentials: { username: string; password: string }): void {
     const payload = {
-      email: credentials.username,
-      senha: credentials.password
+      username: credentials.username,
+      password: credentials.password
     };
     this.authService.loginMember(payload).subscribe({
       next: () => console.log('Login de aluno bem-sucedido'),

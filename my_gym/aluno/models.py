@@ -5,10 +5,12 @@ from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
 from core.models import ModelBase
+from usuario.models import Usuario
+
 
 class Aluno(ModelBase):
 
-    # user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='aluno')
+    user = models.OneToOneField(Usuario, on_delete=models.CASCADE, null=True, blank=True, related_name='aluno')
 
     nome = models.CharField(
         db_column='nome',
@@ -45,12 +47,21 @@ class Aluno(ModelBase):
         db_table = 'aluno'
 
     def save(self, *args, **kwargs):
+        if Usuario.objects.get(username=self.email):
+            return
         super().save(*args, **kwargs)
         if not self.matricula:
             ano_atual = datetime.now().year
             self.matricula = f"{ano_atual}-{self.id:03}"
-            super().save(update_fields=['matricula'])
-            # self.set_password(self.matricula)
+            usuario = Usuario.objects.create_user(
+                username=self.email,
+                password=make_password(self.matricula),
+                email=self.email,
+                nome=self.nome,
+                tipo_usuario="M",
+            )
+            self.user_id = usuario.id
+            super().save(update_fields=['matricula','user_id'])
 
     def __str__(self):
         return self.nome

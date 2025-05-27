@@ -27,8 +27,8 @@ class AcademiaSerializer(serializers.ModelSerializer,):
         academia = super().create(validated_data)
         UsuarioAcademia.objects.create(
             academia=academia,
-            usuario=request.user.usuario,
-            tipo_usuario=request.user.usuario.tipo_usuario,
+            usuario=request.user,
+            tipo_usuario=request.user.tipo_usuario,
         )
         return academia
 

@@ -159,8 +159,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
+AUTH_USER_MODEL = 'usuario.Usuario'
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),

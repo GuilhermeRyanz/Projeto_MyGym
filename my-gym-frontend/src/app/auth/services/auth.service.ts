@@ -50,22 +50,16 @@ export class AuthService {
     );
   }
 
-  public loginMember(payload: { email: string; senha: string }) {
+  public loginMember(payload: { username: string; password: string }) {
     const headers = { 'Content-Type': 'application/json' };
-    const apiUrl = this.pathUrl + 'api/aluno/login/';
+    const apiUrl = this.pathUrl + 'api/aluno/token/';
 
     return this.http.post(apiUrl, payload, { headers }).pipe(
       tap((response: any) => {
         this.setToken(response.access_token, response.refresh_token);
         localStorage.setItem('tipo_usuario', response.tipo_usuario);
         localStorage.setItem('email', response.email);
-        localStorage.setItem('nome_usuario', response.name);
-        localStorage.setItem('matricula', response.matricula);
-
-        if (response.academia) {
-          localStorage.setItem('academia', response.academia);
-          localStorage.setItem('academia_nome', response.academia_nome);
-        }
+        localStorage.setItem('nome_usuario', response.name)
 
         this.showBannerEmmiter.emit(true);
         this.userUpdateEmitter.emit();

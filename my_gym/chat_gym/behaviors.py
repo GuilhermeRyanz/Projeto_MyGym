@@ -19,7 +19,7 @@ class ChatBehavior:
     def ask_gestor(self):
         quest = self.data.get('quest')
         academia = self.data.get('academia')
-        user = self.request.user.usuario
+        user = self.request.user
 
         if self.validate_gestor(user, academia):
             ia = chat_gym.chat.IaGestor(academia_id=academia, user_question=quest)
