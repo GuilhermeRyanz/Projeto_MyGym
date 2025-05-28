@@ -1,11 +1,12 @@
-<div class="chat-container">
-  <mat-toolbar color="primary">
+<main class="align-items-center h-full">
+  <div class="align-items-center justify-content-center d-flex flex-column h-100 w-100 p-3">
+  <mat-toolbar color="primary" class="col-6">
     <span>Chat com MyGym IA</span>
   </mat-toolbar>
 
-  <div class="chat-messages" #chatMessages>
+  <div class="col-12 align-items-center justify-content-center gap-2" #chatMessages>
     @for (message of messages; track message.id) {
-      <div class="message" [ngClass]="{'user-message': message.isUser, 'ia-message': !message.isUser}">
+      <div class="message mt-3" [ngClass]="{'user-message': message.isUser, 'ia-message': !message.isUser}">
         <div class="message-content">
           <span class="message-text">{{ message.text }}</span>
           <span class="message-time">{{ message.time | date:'shortTime' }}</span>
@@ -22,11 +23,12 @@
   <form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="chat-input">
     <mat-form-field appearance="fill" class="input-field">
       <mat-label>Digite sua pergunta</mat-label>
-      <input matInput formControlName="question">
+      <input matInput formControlName="quest">
     </mat-form-field>
     <button mat-raised-button color="primary" type="submit" [disabled]="!chatForm.valid || loading">
       <mat-icon>send</mat-icon>
       {{ loading ? 'Enviando...' : 'Enviar' }}
     </button>
   </form>
-</div>
+  </div>
+</main>

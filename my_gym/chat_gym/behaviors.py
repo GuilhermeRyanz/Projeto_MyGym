@@ -38,12 +38,12 @@ class ChatBehavior:
 
     def ask_persona(self):
         quest = self.data.get('quest')
-        member = self.request.data.get('aluno')
+        member = self.request.user.aluno
 
         ia = chat_gym.chat.IaPersona(user_question=quest, member_id=member)
         rs = ia.run()
 
-        aluno = Aluno.objects.filter(id=member).first()
+        aluno = Aluno.objects.filter(id=member.id).first()
 
         Questions.objects.create(
             question=quest,

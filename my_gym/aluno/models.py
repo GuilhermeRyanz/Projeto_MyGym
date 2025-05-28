@@ -47,15 +47,16 @@ class Aluno(ModelBase):
         db_table = 'aluno'
 
     def save(self, *args, **kwargs):
-        if Usuario.objects.get(username=self.email):
-            return
+        validate = Usuario.objects.filter(email=self.email).exists()
+        if validate:
+            raise Exception("Já existe um usuário cadastrado com esse email")
         super().save(*args, **kwargs)
         if not self.matricula:
             ano_atual = datetime.now().year
             self.matricula = f"{ano_atual}-{self.id:03}"
             usuario = Usuario.objects.create_user(
                 username=self.email,
-                password=make_password(self.matricula),
+                password=self.matricula,
                 email=self.email,
                 nome=self.nome,
                 tipo_usuario="M",

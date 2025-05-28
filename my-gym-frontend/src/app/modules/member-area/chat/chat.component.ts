@@ -5,18 +5,21 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {environment} from "../../../../environments/environments";
-import {AuthService} from "../../../auth/services/auth.service";
-import {DatePipe, NgClass} from "@angular/common";
-import {HttpMethodsService} from "../../../shared/services/httpMethods/http-methods.service";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { DatePipe, NgClass } from '@angular/common';
+import { HttpMethodsService } from '../../../shared/services/httpMethods/http-methods.service';
 
 interface ChatMessage {
   id: number;
   text: string;
   time: Date;
   isUser: boolean;
+  question?: string;
+  answer?: string;
+  active?: boolean;
+  created_at?: Date;
+  modified_at?: Date;
+  usuario?: number;
 }
 
 @Component({
@@ -45,25 +48,45 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   private messageIdCounter = 0;
   private apiUrl3 = 'api/chat/quest/';
   private apiUrl = 'api/chat/quest/ask_persona/';
-  private apiUrl2 = 'api/chat/quest/ask_gestor/';
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService,
     private httpMethods: HttpMethodsService,
-    private http: HttpClient,
-    private snackBar: MatSnackBar
   ) {
     this.chatForm = this.formBuilder.group({
-      question: ['', Validators.required]
+      quest: ['', Validators.required]
     });
   }
 
   ngOnInit() {
-    this.httpMethods.get(this.apiUrl3)
-      .subscribe((resp)=>{
-        this.messages = resp;
-      })
+    this.httpMethods.get(this.apiUrl3).subscribe((resp: any) => {
+      this.messages = resp.results.flatMap((msg: any) => [
+        {
+          id: this.messageIdCounter++,
+          text: msg.question,
+          time: new Date(msg.created_at),
+          isUser: true,
+          active: msg.active,
+          answer: msg.answer,
+          created_at: new Date(msg.created_at),
+          modified_at: new Date(msg.modified_at),
+          question: msg.question,
+          usuario: msg.usuario
+        },
+        {
+          id: this.messageIdCounter++,
+          text: msg.answer,
+          time: new Date(msg.created_at),
+          isUser: false,
+          active: msg.active,
+          answer: msg.answer,
+          created_at: new Date(msg.created_at),
+          modified_at: new Date(msg.modified_at),
+          question: msg.question,
+          usuario: msg.usuario
+        }
+      ]);
+    });
   }
 
   ngAfterViewChecked() {
@@ -73,29 +96,44 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   sendMessage() {
     if (this.chatForm.invalid || this.loading) return;
 
-    const question = this.chatForm.get('question')?.value;
-    const token = this.authService.getToken();
+    const quest = this.chatForm.get('quest')?.value;
 
     this.messages.push({
       id: this.messageIdCounter++,
-      text: question,
+      text: quest,
       time: new Date(),
-      isUser: true
+      isUser: true,
+      active: true,
+      answer: '',
+      question: quest,
+      created_at: new Date(),
+      modified_at: new Date(),
     });
 
     this.loading = true;
+
+    const payload = { quest: quest };
+
     this.chatForm.reset();
-    this.chatForm.get('question')?.setErrors(null);
+    this.chatForm.get('quest')?.setErrors(null);
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-    const payload = { quest: question };
-
-    this.httpMethods.post(this.apiUrl, payload)
-
-
+    this.httpMethods.post(this.apiUrl, payload).subscribe(
+      response => {
+        this.loading = false;
+        this.messages.push({
+          id: this.messageIdCounter++,
+          text: response['result'],
+          time: new Date(),
+          isUser: false,
+          active: true,
+          answer: response['result'],
+          question: quest,
+          created_at: new Date(),
+          modified_at: new Date(),
+        });
+        this.scrollToBottom();
+      }
+    );
   }
 
   private scrollToBottom() {
