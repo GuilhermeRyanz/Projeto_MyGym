@@ -78,6 +78,7 @@ class FrequenciaDiaHoraViewSet(viewsets.ModelViewSet):
     serializer_class = FrequenciaSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = FrequenciaFilter
+    permissions_class = [permissions.IsAuthenticated,]
 
     def get_queryset(self):
 
