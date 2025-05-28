@@ -1,13 +1,13 @@
-import {Component, OnInit, ViewChild, ElementRef, AfterViewChecked, input, Input} from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { DatePipe, NgClass } from '@angular/common';
-import { HttpMethodsService } from '../../../shared/services/httpMethods/http-methods.service';
+import {AfterViewChecked, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {DatePipe, NgClass} from '@angular/common';
+import {HttpMethodsService} from '../../../shared/services/httpMethods/http-methods.service';
 
 interface ChatMessage {
   id: number;
@@ -49,6 +49,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   private messageIdCounter = 0;
   private apiUrl3 = 'api/chat/quest/';
   private apiUrl = ""
+
   constructor(
     private formBuilder: FormBuilder,
     private httpMethods: HttpMethodsService,
@@ -119,7 +120,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
     this.loading = true;
 
-    const payload = { quest: quest };
+    const payload = {quest: quest};
 
     this.chatForm.reset();
     this.chatForm.get('quest')?.setErrors(null);
