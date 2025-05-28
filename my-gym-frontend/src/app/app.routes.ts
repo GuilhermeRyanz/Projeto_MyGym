@@ -11,6 +11,11 @@ export const routes: Routes = [
     children: [
 
       {
+        path: "",
+        redirectTo: "my_gym/home",
+        pathMatch: "full",
+      },
+      {
         path: 'auth',
         loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
       },
@@ -56,13 +61,6 @@ export const routes: Routes = [
         loadChildren: () => import('./modules/check-in/check-in.module').then(m => m.CheckInModule),
         canActivate: [AuthGuardService]
       },
-
-      {
-        path: "",
-        redirectTo: "my_gym/home",
-        pathMatch: "full",
-      },
-
       {
         path: "dashboards",
         loadChildren: () => import('./modules/dashboards/dashboards.module').then(m => m.DashboardsModule),
@@ -84,7 +82,16 @@ export const routes: Routes = [
       {
         path: "MemberArea",
         loadChildren: () => import('./modules/member-area/member-area.module').then(m => m.MemberAreaModule),
+        canActivate: [AuthGuardService],
+      },
+      {
+        path: "chat",
+        loadChildren: () => import('./modules/chat/chat.module').then(m => m.ChatModule),
+        canActivate: [AuthGuardService],
+
       }
+
+
     ],
   },
 

@@ -1,10 +1,9 @@
-<main class="align-items-center h-full">
-  <div class="align-items-center justify-content-center d-flex flex-column h-100 w-100 p-3">
-  <mat-toolbar color="primary" class="col-6">
+<main class="chat-container">
+  <mat-toolbar color="primary" class="chat-toolbar">
     <span>Chat com MyGym IA</span>
   </mat-toolbar>
 
-  <div class="col-12 align-items-center justify-content-center gap-2" #chatMessages>
+  <div class="chat-messages" #chatMessages>
     @for (message of messages; track message.id) {
       <div class="message mt-3" [ngClass]="{'user-message': message.isUser, 'ia-message': !message.isUser}">
         <div class="message-content">
@@ -20,15 +19,14 @@
     }
   </div>
 
-  <form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="chat-input">
-    <mat-form-field appearance="fill" class="input-field">
+  <form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="grid justify-content-center justify-content-start chat-input">
+    <mat-form-field appearance="fill" class="col-8 align-self-center justify-content-start align-items-center align-content-center">
       <mat-label>Digite sua pergunta</mat-label>
       <input matInput formControlName="quest">
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" [disabled]="!chatForm.valid || loading">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!chatForm.valid || loading" class="align-self-center">
       <mat-icon>send</mat-icon>
       {{ loading ? 'Enviando...' : 'Enviar' }}
     </button>
   </form>
-  </div>
 </main>

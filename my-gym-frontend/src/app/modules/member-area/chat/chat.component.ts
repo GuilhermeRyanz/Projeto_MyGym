@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef, AfterViewChecked, input, Input} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -44,11 +44,11 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   messages: ChatMessage[] = [];
   loading = false;
   @ViewChild('chatMessages') chatMessagesContainer!: ElementRef;
+  @Input() IsMember: boolean = false;
 
   private messageIdCounter = 0;
   private apiUrl3 = 'api/chat/quest/';
-  private apiUrl = 'api/chat/quest/ask_persona/';
-
+  private apiUrl = ""
   constructor(
     private formBuilder: FormBuilder,
     private httpMethods: HttpMethodsService,
@@ -59,6 +59,13 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+
+    if (this.IsMember) {
+      this.apiUrl = 'api/chat/quest/ask_member/';
+    } else {
+      this.apiUrl = 'api/chat/quest/ask_persona/';
+    }
+
     this.httpMethods.get(this.apiUrl3).subscribe((resp: any) => {
       this.messages = resp.results.flatMap((msg: any) => [
         {
