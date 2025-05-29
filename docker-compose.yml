@@ -23,28 +23,38 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     command: server /data --console-address ":9001"
-  #      volumes:
-  #        - minio-data:/data
+    #      volumes:
+    #        - minio-data:/data
 
-#  backend:
-#    build: ./my_gym
-#
-#    command: >
-#      sh -c "python manage.py migrate &&
-#             python manage.py runserver 0.0.0.0:8000"
-#    #    volumes:
-#    #      - ./backend:/app
-#    ports:
-#      - "8000:8000"
-#    depends_on:
-#      - postgres
-#    environment:
-#      - DEBUG=1
-#      - DB_NAME=my_gym
-#      - DB_USER=my_gym
-#      - DB_PASSWORD=123
-#      - DB_HOST=postgres
-#      - DB_PORT=5432
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: [ "redis-server", "--appendonly", "yes" ]
+
+
+  #  backend:
+  #    build: ./my_gym
+  #
+  #    command: >
+  #      sh -c "python manage.py migrate &&
+  #             python manage.py runserver 0.0.0.0:8000"
+  #    #    volumes:
+  #    #      - ./backend:/app
+  #    ports:
+  #      - "8000:8000"
+  #    depends_on:
+  #      - postgres
+  #    environment:
+  #      - DEBUG=1
+  #      - DB_NAME=my_gym
+  #      - DB_USER=my_gym
+  #      - DB_PASSWORD=123
+  #      - DB_HOST=postgres
+  #      - DB_PORT=5432
 
   #  backend:
   #    image: python:3.11-slim
@@ -85,3 +95,5 @@ services:
 volumes:
   postgres-data:
   minio-data:
+  redis_data:
+
