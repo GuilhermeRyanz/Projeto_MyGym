@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from academia.actions import AcademiaActions
-from academia.models import Academia, Frequencia
+from academia.models import Academia, Frequencia, Gasto
 from aluno.models import Aluno, AlunoPlano
 from academia.models import UsuarioAcademia
 from pagamento.models import Pagamento
@@ -59,3 +59,8 @@ class FrequenciaSerializer(serializers.ModelSerializer):
         aluno = data['aluno']
         academia = data['academia']
         AcademiaActions.CheckInAluno(aluno, academia)
+
+class GastoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gasto
+        fields = '__all__'

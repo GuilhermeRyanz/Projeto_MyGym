@@ -103,3 +103,32 @@ class UsuarioAcademia(ModelBase):
 
     class Meta:
         db_table = 'usuario_academia'
+
+
+class TipoGasto(models.TextChoices):
+    ENERGIA = 'energia', 'Energia Elétrica'
+    AGUA = 'agua', 'Água'
+    SALARIO = 'salario', 'Salário de Funcionários'
+    MANUTENCAO = 'manutencao', 'Manutenção'
+    PRODUTOS = 'produtos', 'Reabastecimento de Produtos'
+    LIMPEZA = 'limpeza', 'Materiais de Limpeza'
+    IMPOSTOS = 'impostos', 'Impostos e Taxas'
+    OUTROS = 'outros', 'Outros'
+
+class Gasto(ModelBase):
+    tipo = models.CharField(
+        db_column='tipo',
+        max_length=20,
+        choices=TipoGasto.choices,
+    )
+
+    descricao = models.CharField(blank=True, null=True, max_length=200)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    academia = models.ForeignKey(
+        Academia, on_delete=models.CASCADE, related_name='gastos',
+        db_column='academia',
+    )
+
+
+    class Meta:
+        db_table = 'gasto'

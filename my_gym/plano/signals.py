@@ -4,7 +4,7 @@ from aluno.models import AlunoPlano
 
 
 @receiver(pre_save, sender=AlunoPlano)
-def atualizar_total_alunos_alteracao(sender, instance, **kwargs):
+def update_total_members_in_update(sender, instance, **kwargs):
     if not instance.pk:
         return
 
@@ -20,7 +20,7 @@ def atualizar_total_alunos_alteracao(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=AlunoPlano)
-def atualizar_total_alunos_criacao(sender, instance, created, **kwargs):
+def update_total_members_in_creation(sender, instance, created, **kwargs):
     if created and instance.active:
         plano = instance.plano
         plano.total_alunos += 1

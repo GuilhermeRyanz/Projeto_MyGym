@@ -6,8 +6,8 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from academia import models, serializers, filters
 from academia.filters import FrequenciaFilter
-from academia.models import Frequencia, Academia
-from academia.serializers import FrequenciaSerializer
+from academia.models import Frequencia, Academia, Gasto
+from academia.serializers import FrequenciaSerializer, GastoSerializer
 from aluno.models import AlunoPlano
 from core.permissions import AcademiaPermissionMixin
 from rest_framework.decorators import action
@@ -32,7 +32,6 @@ class AcademiaViewSet(viewsets.ModelViewSet):
     def desativar_academia(self, request, pk=None):
         try:
             academia = models.Academia.objects.get(pk=pk)
-
 
             try:
                 usuario_academia = models.UsuarioAcademia.objects.filter(academia=academia, active=True)
@@ -134,3 +133,15 @@ class FrequenciaDiaHoraViewSet(viewsets.ModelViewSet):
             'alunos_por_dia': alunos_por_dia_dict,
             'alunos_por_hora': alunos_por_hora_dict
         })
+
+class GastoViewSets(viewsets.ModelViewSet):
+    queryset = Gasto.objects.all()
+    serializer_class = GastoSerializer
+    filter_backends = [DjangoFilterBackend, ]
+    filterset_class = filters.FrequenciaFilter
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def get_queryset(self):
+        return models.Academia.objects.filter(
+            usuarioacademia__usuario=self.request.user
+        )

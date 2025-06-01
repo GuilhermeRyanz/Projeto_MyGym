@@ -5,7 +5,10 @@ import uuid
 from django.conf import settings
 from rest_framework import serializers
 
-s3 = boto3.client(
+
+
+def get_s3_client():
+    return boto3.client(
     's3',
     endpoint_url=settings.MINIO_ENDPOINT,
     aws_access_key_id=settings.MINIO_ACCESS_KEY,
@@ -14,6 +17,7 @@ s3 = boto3.client(
 
 
 def upload_data_to_minio(file_obj, nome_original, bucket=None):
+    s3 = get_s3_client()
     bucket = bucket or settings.MINIO_BUCKET
     extension = nome_original.split('.')[-1].lower()
     name_archive = f"media/{uuid.uuid4()}.{extension}"
@@ -31,6 +35,7 @@ def upload_data_to_minio(file_obj, nome_original, bucket=None):
     return f"{settings.MINIO_ENDPOINT}/{bucket}/{name_archive}"
 
 def delete_data_from_minio(file_url_or_key):
+    s3 = get_s3_client()
     try:
         prefix = f"{settings.MINIO_ENDPOINT}/{settings.MINIO_BUCKET}/"
         if file_url_or_key.startswith(prefix):

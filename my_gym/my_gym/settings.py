@@ -9,10 +9,14 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 import cloudinary
+from celery.schedules import crontab
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,8 +60,6 @@ INSTALLED_APPS = [
     'venda',
     'chat_gym',
     'django_celery_results',
-    'django_celery_beat',
-
 ]
 
 MIDDLEWARE = [
@@ -91,8 +93,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'my_gym.wsgi.application'
 
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -102,8 +102,8 @@ DATABASES = {
         'NAME': 'my_gym',
         'USER': 'my_gym',
         'PASSWORD': '123',
-        'HOST' : 'localhost',
-        'PORT' : '5438',
+        'HOST' : 'postgres',
+        'PORT' : '5432',
     }
 }
 
@@ -181,9 +181,23 @@ MINIO_ACCESS_KEY = "minioadmin"
 MINIO_SECRET_KEY = "minioadmin"
 MINIO_BUCKET = "date-media"
 
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_TIMEZONE = 'Asia/Karachi'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Manaus'
+CELERY_BEAT_SCHEDULE = {
+    'enviar-emails-vencimento-8h': {
+        'task': 'aluno.tasks.email_send_expired',
+        'schedule': crontab(hour=8, minute=0),
+    },
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = 'guilhermeryanfsantos@gmail.com'
