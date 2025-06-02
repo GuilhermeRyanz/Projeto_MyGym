@@ -5,8 +5,7 @@ from pagamento.models import Pagamento
 class PagamentoFilter(filters.FilterSet):
     aluno = filters.CharFilter(field_name='aluno', lookup_expr='exact')
     academia = filters.CharFilter(field_name='academia', lookup_expr='exact')
-
-
+    data = filters.DateRangeFilter(field_name='data_pagamento')
 
     class Meta:
         model = Pagamento

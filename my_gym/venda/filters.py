@@ -9,6 +9,7 @@ class VendaFilter(filters.FilterSet):
 
     academia = filters.NumberFilter(field_name='academia__id', lookup_expr='exact')
     vendedor = filters.NumberFilter(field_name='vendedor__id', lookup_expr='exact')
+    data = filters.DateRangeFilter(field_name='data_venda')
 
     search = filters.CharFilter(method='search_filter', label='Search' )
 

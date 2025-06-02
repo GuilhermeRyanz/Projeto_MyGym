@@ -19,8 +19,6 @@ class UsuarioFilter(filters.FilterSet):
             )
         return queryset
 
-   # "GET /api/aluno/alunoPlano/?expand=aluno&expand=plano&active=true&search=jonas&academia=1 HTTP/1.1"
-
     def filter_ativos(self, queryset, name, value):
         if value:
             return queryset.annotate(
