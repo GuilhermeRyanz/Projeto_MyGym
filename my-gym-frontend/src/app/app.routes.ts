@@ -89,6 +89,11 @@ export const routes: Routes = [
         loadChildren: () => import('./modules/chat/chat.module').then(m => m.ChatModule),
         canActivate: [AuthGuardService],
 
+      },
+      {
+        path: "expense",
+        loadChildren: () => import('./modules/expenses/expenses.module').then(m => m.ExpensesModule),
+        canActivate: [AuthGuardService],
       }
 
 

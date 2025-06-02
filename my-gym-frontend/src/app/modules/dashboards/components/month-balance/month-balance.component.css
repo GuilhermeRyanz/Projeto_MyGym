@@ -1,0 +1,98 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+mat-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  position: relative;
+}
+
+.chart-title {
+  margin: 0;
+  flex: 0 0 auto; /* Mantém o título à esquerda sem crescer */
+}
+
+.selected-month-year {
+  font-size: 1.3rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-align: center;
+  flex: 1; /* Centraliza ocupando o espaço disponível */
+  margin: 0 16px;
+}
+
+.month-picker {
+  flex: 0 0 auto;
+  width: 180px;
+}
+
+.month-picker ::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.month-picker ::ng-deep .mat-form-field-label {
+  font-size: 1rem;
+  color: #1890ff;
+}
+
+.month-picker ::ng-deep .mat-input-element {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+div[echarts] {
+  height: 400px;
+}
+
+.detail-chart-container {
+  position: relative;
+  width: 66%;
+}
+
+.balance-total {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 10;
+}
+
+.balance-total.negative {
+  color: #f5222d; /* Vermelho para valores negativos */
+}
+
+.balance-total.positive {
+  color: #13c2c2; /* Verde para valores positivos */
+}
+
+@media (max-width: 768px) {
+  div[echarts] {
+    width: 100% !important;
+    margin-bottom: 20px;
+  }
+
+  .flex {
+    flex-direction: column;
+  }
+
+  .detail-chart-container {
+    width: 100%;
+  }
+
+  .balance-total {
+    font-size: 1rem;
+    right: 5px;
+    top: 5px;
+  }
+
+}

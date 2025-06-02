@@ -60,7 +60,7 @@
             </a>
 
             <a mat-button routerLink="chat/main" routerLinkActive="active-link"
-              [routerLinkActiveOptions]="{ exact: true }">
+               [routerLinkActiveOptions]="{ exact: true }">
               <mat-icon>smart_toy</mat-icon>
               GymIA
             </a>
@@ -93,7 +93,11 @@
             <mat-icon>person_add</mat-icon>
             Cadastro
           </a>
-
+          <a mat-button routerLink="expense/list" routerLinkActive="active-link"
+             [routerLinkActiveOptions]="{ exact: true }">
+            <mat-icon>receipt_long</mat-icon>
+            Gastos
+          </a>
           <a mat-button routerLink="product/productInventory" routerLinkActive="active-link"
              [routerLinkActiveOptions]="{ exact: true }">
             <mat-icon>inventory</mat-icon>

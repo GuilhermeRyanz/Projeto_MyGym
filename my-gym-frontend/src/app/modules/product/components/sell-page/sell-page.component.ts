@@ -36,7 +36,6 @@ import { MatAutocomplete, MatAutocompleteSelectedEvent, MatAutocompleteTrigger }
     MatCard,
     MatAutocompleteTrigger,
     MatAutocomplete,
-    NgForOf,
   ],
   templateUrl: './sell-page.component.html',
   styleUrls: ['./sell-page.component.css']
@@ -63,7 +62,7 @@ export class SellPageComponent implements OnInit {
     public httpMethods: HttpMethodsService
   ) {
     this.formGroup = this.formBuilder.group({
-      client: [null, Validators.required], // Tornar obrigatório
+      client: [null, Validators.required],
       formaPagamento: ['Dinheiro', Validators.required],
     });
   }
@@ -72,7 +71,7 @@ export class SellPageComponent implements OnInit {
     this.search();
     this.searchChange.pipe(
       debounceTime(300),
-      distinctUntilChanged() // Evitar buscas duplicadas
+      distinctUntilChanged()
     ).subscribe((term) => {
       this.searchMember(term);
     });
@@ -92,7 +91,6 @@ export class SellPageComponent implements OnInit {
     this.httpMethods.getPaginated(this.pathUrMembers, params).subscribe({
       next: (response: any) => {
         this.members = response.results;
-        // Validar selectedMember
         if (this.selectedMember && !this.members.find(m => m.id === this.selectedMember!.id)) {
           this.selectedMember = null;
           this.desc = 0;
@@ -111,7 +109,7 @@ export class SellPageComponent implements OnInit {
     this.searchMember(this.searchTerm);
   }
 
-  openProductModal(): void {
+  public openProductModal(): void {
     const dialogRef = this.dialog.open(ProductSelectModalComponent, {
       width: '600px',
       data: { academia: this.authService.get_gym(), cartItems: this.cartItems },

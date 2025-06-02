@@ -98,8 +98,8 @@ class VendaSerializer(FlexFieldsModelSerializer):
                 produto=produto,
                 quantidade=quantidade,
                 preco_unitario=preco_unitario,
+                total=quantidade * preco_unitario,
             )
-
 
         return venda
 

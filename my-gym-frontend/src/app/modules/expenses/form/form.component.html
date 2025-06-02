@@ -1,1 +1,56 @@
-<p>form works!</p>
+<main class="p-3 flex flex-column gap-3">
+  <div class="flex justify-content-start">
+    <h2 class="font-bold text-2xl">{{ data.title || 'Registrar Gasto' }}</h2>
+  </div>
+  <div id="container-prod" class="flex flex-column">
+    <form [formGroup]="formGroup" (ngSubmit)="register()" class="flex flex-column gap-3">
+      <!-- Campo de Categoria -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="tipo" placeholder="tipo" required>
+          @for (cat of categories; track $index) {
+            <mat-option [value]="cat">{{ cat | titlecase }}</mat-option>
+          }
+        </mat-select>
+        @if (formGroup.get('categoria')?.hasError('required') && formGroup.get('categoria')?.touched) {
+          <mat-error>Campo Obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Campo de Descrição -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Descrição</mat-label>
+        <input matInput formControlName="descricao" placeholder="Descrição" required />
+        @if (formGroup.get('descricao')?.hasError('required') && formGroup.get('descricao')?.touched) {
+          <mat-error>Campo Obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Campo de Valor -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Valor</mat-label>
+        <input matInput type="number" formControlName="valor" placeholder="Digite o valor do gasto" required />
+        @if (formGroup.get('valor')?.hasError('required') && formGroup.get('valor')?.touched) {
+          <mat-error>Campo Obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Campo de Data -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Data de Validade</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="data" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (formGroup.get('data')?.hasError('required') && formGroup.get('data')?.touched) {
+          <mat-error>Campo Obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Botões -->
+      <div class="flex justify-content-end gap-2">
+        <button mat-button type="button" class="add_button bg-black-alpha-80 text-white" (click)="closeDialog()">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit" class="add_button text-white" [disabled]="formGroup.invalid">Salvar</button>
+      </div>
+    </form>
+  </div>
+</main>

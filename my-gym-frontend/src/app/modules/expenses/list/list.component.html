@@ -1,69 +1,79 @@
-<!--<h2 class="title">Vendas</h2>-->
-<!--<div class="subtitle flex justify-content-center flex mb-4">Verifique as vendas realizada e regisstre novas vendas</div>-->
+<h2 class="title">Gastos</h2>
+<div class="subtitle flex justify-content-center flex mb-4">Resgistre e verifique os gastos do estabelecimento</div>
 
-<!--<main class="ml-8 mr-8">-->
-<!--  <div class="flex align-items-center justify-content-start">-->
-<!--    <mat-form-field appearance="outline" class="search w-30rem">-->
-<!--      <mat-label>Buscar registro</mat-label>-->
-<!--      <input matInput="text" placeholder="Por descrição ou Categoria" [(ngModel)]="searchTerm"-->
-<!--             (input)="onSearchChange(searchTerm)" />-->
-<!--    </mat-form-field>-->
+<main class="ml-8 mr-8">
+  <div class="flex align-items-center justify-content-start">
+    <mat-form-field appearance="outline" class="search w-30rem">
+      <mat-label>Buscar registro</mat-label>
+      <input matInput="text" placeholder="Por descrição ou Categoria" [(ngModel)]="searchTerm"
+             (input)="onSearchChange(searchTerm)" />
+    </mat-form-field>
 
-<!--    <div class="flex align-items-center justify-content-between  w-full mb-4">-->
-<!--      <div class="w-10rem"></div>-->
-<!--      <div class="align-self-start mr-2">-->
-<!--        <button-->
-<!--          mat-raised-button-->
-<!--          color="primary"-->
-<!--          class="add_button bg-black-alpha-70 mt-2"-->
-<!--          style="color: white"-->
-<!--          (click)="create()">-->
-<!--          <mat-icon>add</mat-icon>-->
-<!--          Registrar nova Gasto-->
-<!--        </button>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
+    <div class="flex align-items-center justify-content-between  w-full mb-4">
+      <div class="w-10rem"></div>
+      <div class="align-self-start mr-2">
+        <button
+          mat-raised-button
+          color="primary"
+          class="add_button bg-black-alpha-70 mt-2"
+          style="color: white"
+          (click)="create()">
+          <mat-icon>add</mat-icon>
+          Registrar Gasto
+        </button>
+      </div>
+    </div>
+  </div>
 
-<!--  <div>-->
-<!--    <div class="mat-elevation-z1 bg-black-alpha-80">-->
-<!--      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">-->
+  <div>
+    <div class="mat-elevation-z1 bg-black-alpha-80">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
 
-<!--        <ng-container matColumnDef="cliente">-->
-<!--          <th mat-header-cell *matHeaderCellDef> Tipo </th>-->
-<!--          <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>-->
-<!--        </ng-container>-->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> id </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
 
-<!--        <ng-container matColumnDef="Descrição">-->
-<!--          <th mat-header-cell *matHeaderCellDef> Descrição </th>-->
-<!--          <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>-->
-<!--        </ng-container>-->
+        <ng-container matColumnDef="categoria">
+          <th mat-header-cell *matHeaderCellDef> Tipo </th>
+          <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+        </ng-container>
 
-<!--        <ng-container matColumnDef="valor">-->
-<!--          <th mat-header-cell *matHeaderCellDef> Valor </th>-->
-<!--          <td mat-cell *matCellDef="let element"> {{ element.valor| currency:'BRL':'symbol':'1.2-2':'pt-BR' }}-->
-<!--          </td>-->
-<!--        </ng-container>-->
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef> Descrição </th>
+          <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+        </ng-container>
 
-<!--        <ng-container matColumnDef="data">-->
-<!--          <th mat-header-cell *matHeaderCellDef> Data </th>-->
-<!--          <td mat-cell *matCellDef="let element"> {{ element.data | date:'dd/MM/yyyy' : 'pt-BR' }}-->
-<!--          </td>-->
-<!--        </ng-container>-->
+        <ng-container matColumnDef="valor">
+          <th mat-header-cell *matHeaderCellDef> Valor </th>
+          <td mat-cell *matCellDef="let element"> {{ element.valor| currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+          </td>
+        </ng-container>
 
-<!--        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
-<!--        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
-<!--      </table>-->
+        <ng-container matColumnDef="data">
+          <th mat-header-cell *matHeaderCellDef> Data </th>
+          <td mat-cell *matCellDef="let element"> {{ element.data | date:'dd/MM/yyyy' : 'pt-BR' }}
+          </td>
+        </ng-container>
 
-<!--    </div>-->
-<!--    <div class="pagination-controls">-->
-<!--      <button (click)="prevPage()" [disabled]="currentPage === 0">-->
-<!--        <mat-icon>chevron_left</mat-icon>-->
-<!--      </button>-->
-<!--      <span>Página {{currentPage + 1}} de {{totalPages}}</span>-->
-<!--      <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">-->
-<!--        <mat-icon>chevron_right</mat-icon>-->
-<!--      </button>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</main>-->
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef> Registrado em </th>
+          <td mat-cell *matCellDef="let element"> {{ element.created_at | date:'dd/MM/yyyy' : 'pt-BR' }}
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+    </div>
+    <div class="pagination-controls">
+      <button (click)="prevPage()" [disabled]="currentPage === 0">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span>Página {{currentPage + 1}} de {{totalPages}}</span>
+      <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </div>
+</main>

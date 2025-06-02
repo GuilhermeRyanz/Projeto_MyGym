@@ -55,10 +55,10 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   public sales: Sale[] = [];
   public dataSource = new MatTableDataSource<Sale>(this.sales);
-  displayedColumns: string[] = ['cliente', 'vendedor', 'valor_total', 'itens', 'data_venda'];
+  protected readonly displayedColumns: string[] = ['cliente', 'vendedor', 'valor_total', 'itens', 'data_venda'];
   private pathUrlSales: string = URLS.SALE;
   public searchTerm: string = "";
-  public currentPage: number = 0;
+  public currentPage: number = 1;
   public limit: number = 10;
   public totalResults: number = 0;
   public searchChanged = new Subject<string>();
@@ -72,14 +72,11 @@ export class SalesComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('Valor inicial de currentPage:', this.currentPage);
     this.search(); // carrega os dados ao iniciar
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    console.log('Paginator atribuído ao dataSource:', this.dataSource.paginator);
-
   }
 
   get totalPages(): number {
@@ -109,7 +106,6 @@ export class SalesComponent implements OnInit, AfterViewInit {
         this.sales = response.results;
         this.dataSource.data = this.sales;
         this.currentPage = offset / limit;
-        console.log(response)
       }
     );
   }

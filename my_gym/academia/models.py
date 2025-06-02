@@ -7,8 +7,6 @@ from usuario.models import Usuario
 from django.contrib.auth.models import User
 
 
-# Create your models here.
-
 class Academia(ModelBase):
     nome = models.CharField(
         db_column='name',
@@ -42,7 +40,6 @@ class Academia(ModelBase):
 
 
 class Frequencia(ModelBase):
-
     academia = models.ForeignKey(
         Academia, on_delete=models.CASCADE,
         db_column='academia',
@@ -64,7 +61,6 @@ class Frequencia(ModelBase):
 
 
 class UsuarioAcademia(ModelBase):
-
     usuario = models.ForeignKey(
         Usuario,
         on_delete=models.CASCADE,
@@ -115,6 +111,7 @@ class TipoGasto(models.TextChoices):
     IMPOSTOS = 'impostos', 'Impostos e Taxas'
     OUTROS = 'outros', 'Outros'
 
+
 class Gasto(ModelBase):
     tipo = models.CharField(
         db_column='tipo',
@@ -128,7 +125,11 @@ class Gasto(ModelBase):
         Academia, on_delete=models.CASCADE, related_name='gastos',
         db_column='academia',
     )
-
+    data = models.DateTimeField(
+        null=True,
+        blank=True,
+        db_column='data',
+    )
 
     class Meta:
         db_table = 'gasto'

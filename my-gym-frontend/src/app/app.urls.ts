@@ -1,5 +1,6 @@
 export const URLS = {
   GYM: 'api/academia/academias/',
+  EXPENSE: 'api/academia/gastos/',
   USERS: 'api/usuario/usuarios/',
   PLAN: 'api/plano/planos/',
   MEMBER: 'api/aluno/alunos/',

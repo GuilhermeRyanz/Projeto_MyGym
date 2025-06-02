@@ -44,6 +44,10 @@ class ItemVenda(ModelBase):
         max_digits=10,
         decimal_places=2,
     )
+    total = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+    )
 
     def subtotal(self):
         return self.preco_unitario * self.quantidade

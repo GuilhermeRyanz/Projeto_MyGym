@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title class="chart-title">Balanço Mensal</mat-card-title>
+    <div class="selected-month-year">
+      {{ dateControl.value | date: 'MMMM/yyyy' | titlecase }}
+    </div>
+    <mat-form-field appearance="outline" class="month-picker">
+      <mat-label>Data</mat-label>
+      <input matInput [matDatepicker]="pickerBegin" [formControl]="dateControl" readonly>
+      <mat-datepicker-toggle matSuffix [for]="pickerBegin"></mat-datepicker-toggle>
+      <mat-datepicker #pickerBegin startView="multi-year" (monthSelected)="onMonthSelected($event, pickerBegin)" panelClass="month-picker"></mat-datepicker>
+    </mat-form-field>
+  </mat-card-header>
+  <div class="flex justify-content-between p-2">
+    <div echarts [options]="mainChartOptions" (chartClick)="onChartClick($event)" style="width: 33%; height: 400px;"></div>
+    <div class="detail-chart-container">
+      <div class="balance-total" *ngIf="data['balanço mensal']" [ngClass]="{'negative': data['balanço mensal'].total < 0, 'positive': data['balanço mensal'].total >= 0}">
+        Balanço Mensal: {{ data['balanço mensal'].total | currency:'BRL' }}
+      </div>
+      <div echarts [options]="detailChartOptions" style="width: 100%; height: 400px;"></div>
+    </div>
+  </div>
+</mat-card>

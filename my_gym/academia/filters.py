@@ -1,13 +1,15 @@
+from django.db.models import Q
 from django_filters import rest_framework as filters
 
 from academia import models
 
+
 class AcademiaFilter(filters.FilterSet):
-    id_usuario = filters.NumberFilter(field_name='usuarioacademia__usuario', lookup_expr='exact' )
+    id_usuario = filters.NumberFilter(field_name='usuarioacademia__usuario', lookup_expr='exact')
+
     class Meta:
         model = models.Academia
-        fields = ['id','id_usuario','nome']
-
+        fields = ['id', 'id_usuario', 'nome']
 
 
 class FrequenciaFilter(filters.FilterSet):
@@ -19,3 +21,15 @@ class FrequenciaFilter(filters.FilterSet):
     class Meta:
         model = models.Frequencia
         fields = ['data_inicio', 'data_fim', 'academia', 'aluno']
+
+
+class GastoFilter(filters.FilterSet):
+    academia = filters.NumberFilter(field_name='academia__id')
+    search = filters.CharFilter(method="filter_busca")
+
+    def filter_busca(self, queryset, name, value):
+        if value:
+            return queryset.filter(
+                Q(tipo__icontains=value) | Q(descricao__icontains=value)
+            )
+        return queryset

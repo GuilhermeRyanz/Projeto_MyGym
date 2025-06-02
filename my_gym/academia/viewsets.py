@@ -1,5 +1,8 @@
 from datetime import datetime, timedelta
-from django.db.models import Count
+from decimal import Decimal
+from pickle import FALSE
+
+from django.db.models import Count, Sum, F, ExpressionWrapper, DecimalField
 from django.db.models.functions import ExtractWeekDay, ExtractHour
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import viewsets, permissions
@@ -12,6 +15,9 @@ from aluno.models import AlunoPlano
 from core.permissions import AcademiaPermissionMixin
 from rest_framework.decorators import action
 from rest_framework import status
+from venda.models import Venda, ItemVenda
+
+from pagamento.models import Pagamento
 from plano.models import Plano
 
 
@@ -43,8 +49,6 @@ class AcademiaViewSet(viewsets.ModelViewSet):
                     plano.active = False
                     plano.save()
 
-
-
                 return Response(
                     {
                         'status': 'Academia desativada',
@@ -57,8 +61,88 @@ class AcademiaViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'erro': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @action(detail=False, methods=['GET'])
+    def month_balance(self, request):
+        data = request.query_params.get("data")
+        academia = request.query_params.get("academia")
 
+        try:
+            mes = int(data.split('-')[1])
+            ano = int(data.split('-')[0])
+        except Exception as e:
+            return Response({'erro': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+        def to_decimal(value):
+            return Decimal('0') if value is None else Decimal(str(value))
+
+        pagamentos = Pagamento.objects.filter(
+            aluno_plano__plano__academia__id=academia,
+            data_pagamento__year=ano,
+            data_pagamento__month=mes,
+        )
+        total_mensalidades = to_decimal(pagamentos.aggregate(total=Sum('valor'))['total'])
+        detalhamento_mensalidades = pagamentos.values(
+            'aluno_plano__plano__nome'
+        ).annotate(
+            total=Sum('valor')
+        )
+
+        itens_venda = ItemVenda.objects.filter(
+            venda__academia__id=academia,
+            venda__data_venda__year=ano,
+            venda__data_venda__month=mes,
+        )
+        total_vendas = to_decimal(itens_venda.aggregate(total=Sum('total'))['total'])
+        detalhamento_vendas = itens_venda.values(
+            'produto__categoria'
+        ).annotate(
+            total=Sum('total')
+        )
+
+        gastos = Gasto.objects.filter(
+            academia__id=academia,
+            data__year=ano,
+            data__month=mes,
+        )
+        total_gastos = to_decimal(gastos.aggregate(total=Sum('valor'))['total'])
+        detalhamento_gastos = gastos.values(
+            'tipo'
+        ).annotate(
+            total=Sum('valor')
+        )
+
+        return Response({
+            'mensalidades': {
+                'total': float(total_mensalidades),  # Convert to float for JSON serialization
+                'detalhamento': [
+                    {
+                        'aluno_plano__plano__nome': item['aluno_plano__plano__nome'],
+                        'total': float(item['total'])  # Convert to float for JSON
+                    } for item in detalhamento_mensalidades
+                ]
+            },
+            'vendas': {
+                'total': float(total_vendas),
+                'detalhamento': [
+                    {
+                        'produto__categoria': item['produto__categoria'],
+                        'total': float(item['total'])
+                    } for item in detalhamento_vendas
+                ]
+            },
+            'gastos': {
+                'total': float(total_gastos),
+                'detalhamento': [
+                    {
+                        'tipo': item['tipo'],
+                        'total': float(item['total'])
+                    } for item in detalhamento_gastos
+                ]
+            },
+            'balanço mensal': {
+                'total': float(total_mensalidades + total_vendas - total_gastos)  # Ensure Decimal math
+            }
+        })
 class FrequenciaViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
     queryset = models.Frequencia.objects.all()
     serializer_class = serializers.FrequenciaSerializer
@@ -77,7 +161,7 @@ class FrequenciaDiaHoraViewSet(viewsets.ModelViewSet):
     serializer_class = FrequenciaSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = FrequenciaFilter
-    permissions_class = [permissions.IsAuthenticated,]
+    permissions_class = [permissions.IsAuthenticated, ]
 
     def get_queryset(self):
 
@@ -134,14 +218,15 @@ class FrequenciaDiaHoraViewSet(viewsets.ModelViewSet):
             'alunos_por_hora': alunos_por_hora_dict
         })
 
+
 class GastoViewSets(viewsets.ModelViewSet):
     queryset = Gasto.objects.all()
     serializer_class = GastoSerializer
-    filter_backends = [DjangoFilterBackend, ]
-    filterset_class = filters.FrequenciaFilter
+    filterset_class = filters.GastoFilter
     permission_classes = [permissions.IsAuthenticated, ]
 
     def get_queryset(self):
-        return models.Academia.objects.filter(
-            usuarioacademia__usuario=self.request.user
+        return Gasto.objects.filter(
+            academia__usuarioacademia__usuario=self.request.user,
+            academia__usuarioacademia__active=True
         )

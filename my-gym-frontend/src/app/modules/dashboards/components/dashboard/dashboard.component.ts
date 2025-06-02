@@ -10,6 +10,7 @@ import {MonthlyEarningsChartComponent} from "../monthly-earnings-chart/monthly-e
 import {
   PlansWithNewMembersComponentComponent
 } from "../plans-with-new-members-component/plans-with-new-members-component.component";
+import {MonthBalanceComponent} from "../month-balance/month-balance.component";
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +21,7 @@ import {
     MemberPlansOverviewComponentComponent,
     MonthlyEarningsChartComponent,
     PlansWithNewMembersComponentComponent,
+    MonthBalanceComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
