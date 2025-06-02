@@ -175,8 +175,8 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-MINIO_ACCESS_ENDPOINT="http://localhost:9000"
-MINIO_ENDPOINT = "http://localhost:9000"
+MINIO_ACCESS_ENDPOINT="http://15.229.119.68:9000"
+MINIO_ENDPOINT = "http://minio:9000"
 MINIO_ACCESS_KEY = "minioadmin"
 MINIO_SECRET_KEY = "minioadmin"
 MINIO_BUCKET = "date-media"
