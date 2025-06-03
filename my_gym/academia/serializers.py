@@ -1,3 +1,4 @@
+from attr.setters import validate
 from rest_framework import serializers
 
 from academia.actions import AcademiaActions
@@ -59,6 +60,8 @@ class FrequenciaSerializer(serializers.ModelSerializer):
         aluno = data['aluno']
         academia = data['academia']
         AcademiaActions.CheckInAluno(aluno, academia)
+        return data
+
 
 class GastoSerializer(serializers.ModelSerializer):
     class Meta:
