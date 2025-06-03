@@ -62,9 +62,9 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   ngOnInit() {
 
     if (this.IsMember) {
-      this.apiUrl = 'api/chat/quest/ask_member/';
-    } else {
       this.apiUrl = 'api/chat/quest/ask_persona/';
+    } else {
+      this.apiUrl = 'api/chat/quest/ask_gestor/';
     }
 
     this.httpMethods.get(this.apiUrl3).subscribe((resp: any) => {
