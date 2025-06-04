@@ -3,37 +3,50 @@
   <p class="subtitle flex justify-content-center">Gerencie os funcionarios com acesso ao sistema</p>
   <div class="flex align-items-center justify-content-between  w-full mb-4">
 
-    <div class="w-10rem"></div>
+    <div class=" p-1 overflow-hidden flex align-items-center justify-content-between align-content-center">
 
-    <mat-form-field appearance="outline" class="search w-30rem">
-      <mat-label>Buscar Funcionario</mat-label>
-      <input matInput="text" placeholder="Digite o nome ou email" [(ngModel)]="searchTerm"
-             (input)="onSearchChange(searchTerm)" />
-    </mat-form-field>
+        <mat-form-field appearance="outline" class="search w-30rem">
+          <mat-label>Buscar Funcionario</mat-label>
+          <input matInput="text" placeholder="Digite o nome ou email" [(ngModel)]="searchTerm"
+                 (input)="onSearchChange(searchTerm)"/>
+        </mat-form-field>
+
+        <mat-form-field class="w-3" appearance="outline">
+          <mat-label>Data Contratação</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Data inicial"
+                   (dateChange)="onDateRangeChange({start: $event.value, end: endDate})">
+            <input matEndDate placeholder="Data final"
+                   (dateChange)="onDateRangeChange({start: startDate, end: $event.value})">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+    </div>
 
     <div class="align-self-start mr-2">
-    <button
-      mat-raised-button
-      color="primary"
-      class="add_button bg-black-alpha-70 mt-2"
-      style="color: white"
-      (click)="create()">
-      <mat-icon>add</mat-icon>
-      Novo funcionário
-    </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="add_button bg-black-alpha-70 mt-2"
+        style="color: white"
+        (click)="create()">
+        <mat-icon>add</mat-icon>
+        Novo funcionário
+      </button>
     </div>
 
   </div>
 
-  <div class="member-list ml-4">
+  <div class="member-list ml-6">
     <mat-card class="member-card gap-3" *ngFor="let employee of employers; trackBy: trackById">
-
-
       <mat-card-content>
         <mat-card
-          class="absolute top-0 right-0 m-2 px-2 py-1 text-sm shadow-1 rounded" style="color: white ;background-color:{{getTipoUsuarioClass(employee.tipo_usuario)}}"
+          class="absolute top-0 right-0 m-2 px-2 py-1 text-sm shadow-1 rounded"
+          style="color: white ;background-color:{{getTipoUsuarioClass(employee.tipo_usuario)}}"
         >
-          {{getTypeUserClass(employee.tipo_usuario)}}
+          {{ getTypeUserClass(employee.tipo_usuario) }}
 
         </mat-card>
 
@@ -48,14 +61,14 @@
           </div>
         </div>
         <div class="email">
-          Data contratacao: {{employee.data_de_contratacao}}
+          Data contratacao: {{ employee.data_de_contratacao }}
         </div>
 
 
       </mat-card-content>
       <div class="footer p-2 flex justify-content-around align-items-center">
         <div class=" icon-edit flex items-center gap-2" (click)="edit(employee)">
-          <mat-icon >edit</mat-icon>
+          <mat-icon>edit</mat-icon>
           <span>Editar</span>
         </div>
         <div class="icon-delete flex items-center gap-2" (click)="disable(employee)">

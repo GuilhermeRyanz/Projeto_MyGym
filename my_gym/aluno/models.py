@@ -47,7 +47,7 @@ class Aluno(ModelBase):
         db_table = 'aluno'
 
     def save(self, *args, **kwargs):
-        validate = Usuario.objects.filter(email=self.email).exists()
+        validate = Usuario.objects.filter(email=self.email).exclude(id=self.user_id).exists()
         if validate:
             raise Exception("Já existe um usuário cadastrado com esse email")
         super().save(*args, **kwargs)

@@ -8,18 +8,19 @@ from usuario.models import Usuario
 class UsuarioFilter(filters.FilterSet):
     academia = filters.NumberFilter(field_name='usuarioacademia__academia', lookup_expr='exact' )
     email = filters.CharFilter(field_name='username', lookup_expr='icontains')
-    active = filters.BooleanFilter(method="filter_ativos")
+    active = filters.BooleanFilter(method="active_filter")
+    search = filters.CharFilter(method='search_filter', lookup_expr='search')
+    data_contratacao_after = filters.DateTimeFilter(field_name='usuarioacademia__data_contratacao', lookup_expr='gte')
+    data_contratacao_before = filters.DateTimeFilter(field_name='usuarioacademia__data_contratacao', lookup_expr='lte')
 
-    search = filters.CharFilter(method='filter_busca', lookup_expr='search')
-
-    def filter_busca(self, queryset, name, value):
+    def search_filter(self, queryset, name, value):
         if value:
             return queryset.filter(
                 Q(nome__icontains=value) | Q(username__icontains=value)
             )
         return queryset
 
-    def filter_ativos(self, queryset, name, value):
+    def active_filter(self, queryset, name, value):
         if value:
             return queryset.annotate(
                 has_academia=Exists(

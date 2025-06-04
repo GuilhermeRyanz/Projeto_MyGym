@@ -11,11 +11,19 @@ import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {NgForOf} from "@angular/common";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {debounceTime, Subject} from "rxjs";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
+import {
+  MatDatepickerToggle,
+  MatDateRangeInput,
+  MatDateRangePicker,
+  MatEndDate,
+  MatStartDate
+} from "@angular/material/datepicker";
+import {provideNativeDateAdapter} from "@angular/material/core";
 
 @Component({
   selector: 'app-list',
@@ -32,9 +40,18 @@ import {PaginatorComponent} from "../../../../shared/components/paginator/pagina
     FormsModule,
     MatLabel,
     PaginatorComponent,
+    MatSuffix,
+    MatDatepickerToggle,
+    MatDateRangeInput,
+    MatDateRangePicker,
+    MatHint,
+    MatStartDate,
+    MatEndDate
   ],
   templateUrl: './list.component.html',
-  styleUrl: './list.component.css'
+  styleUrl: './list.component.css',
+  providers: [provideNativeDateAdapter()],
+
 })
 export class ListComponent implements OnInit {
 
@@ -46,6 +63,8 @@ export class ListComponent implements OnInit {
   public limit: number = 30;
   public totalResults: number = 0;
   public currentPage: number = 0;
+  public startDate: Date | null = null;
+  public endDate: Date | null = null;
 
   searchChange = new Subject<string>();
 
@@ -101,8 +120,8 @@ export class ListComponent implements OnInit {
   }
 
   public searchEmployee(term: string = ``, offset: number = 0, limit: number = this.limit): void {
+
     const params: any = {
-      expand: ['aluno', 'plano'],
       active: true,
       academia: this.gym_id,
       limit,
@@ -112,6 +131,14 @@ export class ListComponent implements OnInit {
     if (term) {
       params.search = term;
     }
+
+    if (this.startDate) {
+      params.data_contratacao_after = this.startDate.toISOString().split('T')[0];
+    }
+    if (this.endDate) {
+      params.data_contratacao_before = this.endDate.toISOString().split('T')[0];
+    }
+
 
     this.httpMethods.getPaginated(this.pathUrlEmployee, params)
       .subscribe((response: any) => {
@@ -124,6 +151,16 @@ export class ListComponent implements OnInit {
   onSearchChange(term: string): void {
     this.searchTerm = term;
     this.searchChange.next(term);
+  }
+
+  onDateRangeChange(dateRange: any): void {
+    if (dateRange.start) {
+      this.startDate = dateRange.start;
+    }
+    if (dateRange.end) {
+      this.endDate = dateRange.end;
+    }
+    this.search();
   }
 
 
