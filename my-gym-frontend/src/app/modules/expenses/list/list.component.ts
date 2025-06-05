@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CurrencyPipe, DatePipe } from "@angular/common";
-import { MatButton } from "@angular/material/button";
+import {CurrencyPipe, DatePipe, NgIf} from "@angular/common";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {
   MatCell,
   MatCellDef,
@@ -14,19 +14,27 @@ import {
   MatTable,
   MatTableDataSource
 } from "@angular/material/table";
-import { MatFormField, MatLabel } from "@angular/material/form-field";
+import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import { MatIcon } from "@angular/material/icon";
 import { MatInput } from "@angular/material/input";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { URLS } from "../../../app.urls";
 import { Expense } from "../../../shared/interfaces/expense";
-import { debounceTime, Subject } from "rxjs";
+import {debounceTime, elementAt, Subject} from "rxjs";
 import { MatPaginator } from "@angular/material/paginator";
 import { HttpMethodsService } from "../../../shared/services/httpMethods/http-methods.service";
 import { AuthService } from "../../../auth/services/auth.service";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { FormComponent } from "../form/form.component";
+import {
+  MatDatepickerToggle,
+  MatDateRangeInput,
+  MatDateRangePicker,
+  MatEndDate,
+  MatStartDate
+} from "@angular/material/datepicker";
+import {provideNativeDateAdapter} from "@angular/material/core";
 
 @Component({
   selector: 'app-list',
@@ -50,10 +58,19 @@ import { FormComponent } from "../form/form.component";
     MatTable,
     ReactiveFormsModule,
     MatHeaderCellDef,
-    FormsModule
+    FormsModule,
+    MatDateRangeInput,
+    MatDateRangePicker,
+    MatDatepickerToggle,
+    MatEndDate,
+    MatStartDate,
+    MatSuffix,
+    MatIconButton,
+    NgIf
   ],
   templateUrl: './list.component.html',
-  styleUrl: './list.component.css'
+  styleUrl: './list.component.css',
+  providers: [provideNativeDateAdapter()],
 })
 export class ListComponent implements OnInit {
   private readonly pathUrl: string = URLS.EXPENSE;
@@ -64,7 +81,9 @@ export class ListComponent implements OnInit {
   public limit: number = 10;
   public totalResults: number = 0;
   public searchChanged = new Subject<string>();
-  protected readonly displayedColumns: string[] = ['id', 'categoria', 'descricao', 'valor', 'data'];
+  public startDate: Date | null = null;
+  public endDate: Date | null = null;
+  protected readonly displayedColumns: string[] = ['categoria', 'descricao', 'valor', 'data','actions'];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -78,7 +97,7 @@ export class ListComponent implements OnInit {
   ngOnInit() {
     this.search();
     this.searchChanged.pipe(debounceTime(300)).subscribe((term) => {
-      this.searchTerm = term; // Atualiza o searchTerm
+      this.searchTerm = term;
       this.searchExpenses(term, 0);
     });
   }
@@ -107,6 +126,13 @@ export class ListComponent implements OnInit {
       params.search = term;
     }
 
+    if (this.startDate){
+      params.data_after = this.startDate.toISOString().split('T')[0];
+    }
+    if (this.endDate){
+      params.data_before = this.endDate.toISOString().split('T')[0];
+    }
+
     this.httpMethods.getPaginated(this.pathUrl, params)
       .subscribe((response: any) => {
         this.Expenses = response.results;
@@ -132,7 +158,51 @@ export class ListComponent implements OnInit {
   }
 
   public onSearchChange(term: string): void {
-    this.searchChanged.next(term); // Emite o termo para o Subject
+    this.searchChanged.next(term);
+  }
+
+  public onDateRangeChange(dateRange: any): void {
+    if (dateRange.start) {
+      this.startDate = dateRange.start;
+    }
+    if (dateRange.end) {
+      this.endDate = dateRange.end;
+    }
+    this.search();
+  }
+
+  public clearDateRange(): void {
+    this.startDate = null;
+    this.endDate = null;
+    this.search();
+  }
+
+  public edit(element:any): void{
+    const dialogRef = this.dialog.open(FormComponent, {
+      width: '600px',
+      maxWidth: '90vw',
+      minHeight: '400px',
+      panelClass: 'custom-modal',
+      autoFocus: true,
+      data: {
+        title: 'atualizar registro',
+        action: 'update',
+        expense: {
+          id: element.id,
+          academia: this.authService.get_gym(),
+          categoria: '',
+          descricao: '',
+          valor: 0,
+          data: null
+        }
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.searchExpenses(this.searchTerm, 0);
+      }
+    });
   }
 
   public create(): void {
@@ -161,4 +231,6 @@ export class ListComponent implements OnInit {
       }
     });
   }
+
+  protected readonly elementAt = elementAt;
 }

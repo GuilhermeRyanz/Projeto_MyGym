@@ -102,7 +102,6 @@ export class ListComponent implements OnInit {
     this.searchEmployee(this.searchTerm, 0);
   }
 
-
   getInitials(name: string): string {
     if (!name) return '';
     const nameParts = name.trim().split(' ');
@@ -138,7 +137,6 @@ export class ListComponent implements OnInit {
     if (this.endDate) {
       params.data_contratacao_before = this.endDate.toISOString().split('T')[0];
     }
-
 
     this.httpMethods.getPaginated(this.pathUrlEmployee, params)
       .subscribe((response: any) => {

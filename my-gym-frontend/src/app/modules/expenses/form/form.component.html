@@ -4,7 +4,6 @@
   </div>
   <div id="container-prod" class="flex flex-column">
     <form [formGroup]="formGroup" (ngSubmit)="register()" class="flex flex-column gap-3">
-      <!-- Campo de Categoria -->
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Tipo</mat-label>
         <mat-select formControlName="tipo" placeholder="tipo" required>
@@ -17,7 +16,6 @@
         }
       </mat-form-field>
 
-      <!-- Campo de Descrição -->
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Descrição</mat-label>
         <input matInput formControlName="descricao" placeholder="Descrição" required />
@@ -26,7 +24,6 @@
         }
       </mat-form-field>
 
-      <!-- Campo de Valor -->
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Valor</mat-label>
         <input matInput type="number" formControlName="valor" placeholder="Digite o valor do gasto" required />
@@ -35,7 +32,6 @@
         }
       </mat-form-field>
 
-      <!-- Campo de Data -->
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Data de Validade</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="data" />
@@ -46,10 +42,9 @@
         }
       </mat-form-field>
 
-      <!-- Botões -->
       <div class="flex justify-content-end gap-2">
         <button mat-button type="button" class="add_button bg-black-alpha-80 text-white" (click)="closeDialog()">Cancelar</button>
-        <button mat-raised-button color="primary" type="submit" class="add_button text-white" [disabled]="formGroup.invalid">Salvar</button>
+        <button mat-raised-button color="primary" type="submit" class="add_button bg-black-alpha-80 text-white" [disabled]="formGroup.invalid">Salvar</button>
       </div>
     </form>
   </div>

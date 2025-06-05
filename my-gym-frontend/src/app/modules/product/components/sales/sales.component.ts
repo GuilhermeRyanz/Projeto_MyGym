@@ -18,12 +18,20 @@ import {
   MatTable,
   MatTableDataSource
 } from "@angular/material/table";
-import {MatFormField, MatInput, MatLabel} from "@angular/material/input";
+import {MatFormField, MatInput, MatLabel, MatSuffix} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
-import {MatButton} from "@angular/material/button";
-import {CurrencyPipe, DatePipe} from "@angular/common";
+import {MatButton, MatIconButton} from "@angular/material/button";
+import {CurrencyPipe, DatePipe, NgIf} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {Router} from "@angular/router";
+import {
+  MatDatepickerToggle,
+  MatDateRangeInput,
+  MatDateRangePicker,
+  MatEndDate,
+  MatStartDate
+} from "@angular/material/datepicker";
+import {provideNativeDateAdapter} from "@angular/material/core";
 
 @Component({
   selector: 'app-sales',
@@ -47,9 +55,19 @@ import {Router} from "@angular/router";
     MatRowDef,
     MatRow,
     MatIconModule,
-    MatLabel
+    MatLabel,
+    MatDateRangeInput,
+    MatDateRangePicker,
+    MatDatepickerToggle,
+    MatEndDate,
+    MatStartDate,
+    MatSuffix,
+    MatIconButton,
+    NgIf
   ],
-  standalone: true
+  standalone: true,
+  providers: [provideNativeDateAdapter()],
+
 })
 export class SalesComponent implements OnInit, AfterViewInit {
 
@@ -61,6 +79,8 @@ export class SalesComponent implements OnInit, AfterViewInit {
   public currentPage: number = 1;
   public limit: number = 10;
   public totalResults: number = 0;
+  public startDate: Date | null = null;
+  public endDate: Date | null = null;
   public searchChanged = new Subject<string>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -77,6 +97,16 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+  }
+
+  onDateRangeChange(dateRange: any): void {
+    if (dateRange.start) {
+      this.startDate = dateRange.start;
+    }
+    if (dateRange.end) {
+      this.endDate = dateRange.end;
+    }
+    this.search();
   }
 
   get totalPages(): number {
@@ -100,6 +130,13 @@ export class SalesComponent implements OnInit, AfterViewInit {
       params.search = term;
     }
 
+    if (this.startDate){
+      params.data_after = this.startDate.toISOString().split('T')[0];
+    }
+    if (this.endDate){
+      params.data_before = this.endDate.toISOString().split('T')[0];
+    }
+
     this.httpMethos.getPaginated(this.pathUrlSales, params).subscribe(
       (response: any) => {
         this.totalResults = response.count;
@@ -116,6 +153,12 @@ export class SalesComponent implements OnInit, AfterViewInit {
       const nextOffset = (this.currentPage + 1) * this.limit;
       this.searchRegisters(this.searchTerm, nextOffset);
     }
+  }
+
+  public clearDateRange(): void {
+    this.startDate = null;
+    this.endDate = null;
+    this.search();
   }
 
   public prevPage(): void {
