@@ -1,7 +1,23 @@
-<nav class="paginator">
-  <button (click)="prev()" [disabled]="currentPage === 0">Anterior</button>
+<div class="paginator" *ngIf="totalItems > 0">
+  <button
+    (click)="prev()"
+    [disabled]="!hasPreviousPage"
+    class="paginator-button">
+    Anterior
+  </button>
 
-  <span>Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+  <span class="paginator-info">
+    {{ totalItems === 0 ? '0' : startIndex }} - {{ endIndex }} de {{ totalItems }}
+  </span>
 
-  <button (click)="next()" [disabled]="currentPage >= totalPages - 1">Próxima</button>
-</nav>
+  <button
+    (click)="next()"
+    [disabled]="!hasNextPage"
+    class="paginator-button">
+    Próximo
+  </button>
+</div>
+
+<div class="paginator" *ngIf="totalItems === 0">
+  <span class="paginator-info">Nenhum registro encontrado</span>
+</div>

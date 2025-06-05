@@ -23,7 +23,7 @@ class AcademiaSerializer(serializers.ModelSerializer,):
 
     class Meta:
         model = Academia
-        fields = ['id', 'nome', 'endereco', 'telefone', 'email',]
+        fields = "__all__"
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -54,12 +54,12 @@ class FrequenciaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Frequencia
-        fields = ['id', 'academia', 'aluno', 'data']
+        fields = "__all__"
 
     def validate(self, data):
         aluno = data['aluno']
         academia = data['academia']
-        AcademiaActions.CheckInAluno(aluno, academia)
+        AcademiaActions.check_in_aluno(aluno, academia)
         return data
 
 

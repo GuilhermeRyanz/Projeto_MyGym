@@ -12,6 +12,7 @@ class VendaFilter(filters.FilterSet):
     data_after = filters.DateTimeFilter(field_name='data_venda', lookup_expr='gte')
     data_before = filters.DateTimeFilter(field_name='data_venda', lookup_expr='lte')
     search = filters.CharFilter(method='search_filter', label='Search' )
+    active = filters.BooleanFilter(field_name='active', lookup_expr='exact')
 
     def search_filter(self, queryset, name, value):
         if value:

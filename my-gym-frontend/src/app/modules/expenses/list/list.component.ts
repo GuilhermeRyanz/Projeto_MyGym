@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {CurrencyPipe, DatePipe, NgIf} from "@angular/common";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {
@@ -15,18 +15,18 @@ import {
   MatTableDataSource
 } from "@angular/material/table";
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
-import { MatIcon } from "@angular/material/icon";
-import { MatInput } from "@angular/material/input";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { URLS } from "../../../app.urls";
-import { Expense } from "../../../shared/interfaces/expense";
+import {MatIcon} from "@angular/material/icon";
+import {MatInput} from "@angular/material/input";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {URLS} from "../../../app.urls";
+import {Expense} from "../../../shared/interfaces/expense";
 import {debounceTime, elementAt, Subject} from "rxjs";
-import { MatPaginator } from "@angular/material/paginator";
-import { HttpMethodsService } from "../../../shared/services/httpMethods/http-methods.service";
-import { AuthService } from "../../../auth/services/auth.service";
-import { Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import { FormComponent } from "../form/form.component";
+import {MatPaginator} from "@angular/material/paginator";
+import {HttpMethodsService} from "../../../shared/services/httpMethods/http-methods.service";
+import {AuthService} from "../../../auth/services/auth.service";
+import {Router} from "@angular/router";
+import {MatDialog} from "@angular/material/dialog";
+import {FormComponent} from "../form/form.component";
 import {
   MatDatepickerToggle,
   MatDateRangeInput,
@@ -35,6 +35,8 @@ import {
   MatStartDate
 } from "@angular/material/datepicker";
 import {provideNativeDateAdapter} from "@angular/material/core";
+import {DialogConfirmComponent} from "../../../shared/components/dialog-confirm/dialog-confirm.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-list',
@@ -73,9 +75,7 @@ import {provideNativeDateAdapter} from "@angular/material/core";
   providers: [provideNativeDateAdapter()],
 })
 export class ListComponent implements OnInit {
-  private readonly pathUrl: string = URLS.EXPENSE;
   public Expenses: Expense[] = [];
-  protected dataSource: MatTableDataSource<Expense> = new MatTableDataSource<Expense>();
   public searchTerm: string = "";
   public currentPage: number = 0;
   public limit: number = 10;
@@ -83,16 +83,24 @@ export class ListComponent implements OnInit {
   public searchChanged = new Subject<string>();
   public startDate: Date | null = null;
   public endDate: Date | null = null;
-  protected readonly displayedColumns: string[] = ['categoria', 'descricao', 'valor', 'data','actions'];
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  protected dataSource: MatTableDataSource<Expense> = new MatTableDataSource<Expense>();
+  protected readonly displayedColumns: string[] = ['categoria', 'descricao', 'valor', 'data', 'actions'];
+  protected readonly elementAt = elementAt;
+  private readonly pathUrl: string = URLS.EXPENSE;
 
   constructor(
     private httpMethods: HttpMethodsService,
     private authService: AuthService,
     public router: Router,
     public dialog: MatDialog,
-  ) {}
+    public snackBar: MatSnackBar,
+  ) {
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalResults / this.limit);
+  }
 
   ngOnInit() {
     this.search();
@@ -104,10 +112,6 @@ export class ListComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this.totalResults / this.limit);
   }
 
   public search(): void {
@@ -126,10 +130,10 @@ export class ListComponent implements OnInit {
       params.search = term;
     }
 
-    if (this.startDate){
+    if (this.startDate) {
       params.data_after = this.startDate.toISOString().split('T')[0];
     }
-    if (this.endDate){
+    if (this.endDate) {
       params.data_before = this.endDate.toISOString().split('T')[0];
     }
 
@@ -177,7 +181,50 @@ export class ListComponent implements OnInit {
     this.search();
   }
 
-  public edit(element:any): void{
+  public delete(element: any): void {
+    const dialogRef = this.dialog.open(DialogConfirmComponent, {
+      width: '600px',
+      maxWidth: '90vw',
+      minHeight: '400px',
+      panelClass: 'custom-modal',
+      autoFocus: true,
+      data: {
+        title: 'Excluir registro',
+        mensager: "Deseja realmente excluir este registro?",
+      }
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (result === true) {
+          const body = {
+            id: element.id,
+          };
+
+          this.httpMethods.disable(this.pathUrl, body, "disable").subscribe({
+            next: () => {
+              this.snackBar.open('Registro excluído com sucesso!', 'Fechar', {
+                duration: 3000,
+                horizontalPosition: 'right',
+                verticalPosition: 'top'
+              });
+              this.searchExpenses(this.searchTerm, 0);
+            },
+            error: (error) => {
+              this.snackBar.open('Erro ao excluir registro!', 'Fechar', {
+                duration: 3000,
+                horizontalPosition: 'right',
+                verticalPosition: 'top'
+              });
+            }
+          });
+        }
+      }
+    });
+  }
+
+
+  public edit(element: any): void {
     const dialogRef = this.dialog.open(FormComponent, {
       width: '600px',
       maxWidth: '90vw',
@@ -231,6 +278,4 @@ export class ListComponent implements OnInit {
       }
     });
   }
-
-  protected readonly elementAt = elementAt;
 }

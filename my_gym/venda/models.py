@@ -3,7 +3,7 @@ from django.db import models
 from academia.models import Academia
 from aluno.models import Aluno
 from core.models import ModelBase
-from produto.models import Produto
+from produto.models import Produto, LoteProduto
 from usuario.models import Usuario
 
 
@@ -47,6 +47,12 @@ class ItemVenda(ModelBase):
     total = models.DecimalField(
         max_digits=10,
         decimal_places=2,
+    )
+    lote = models.ForeignKey(
+        LoteProduto,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
 
     def subtotal(self):

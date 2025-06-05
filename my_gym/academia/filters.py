@@ -28,6 +28,7 @@ class GastoFilter(filters.FilterSet):
     search = filters.CharFilter(method="filter_busca")
     data_after = filters.DateTimeFilter(field_name='data', lookup_expr='gte')
     data_before = filters.DateTimeFilter(field_name='data', lookup_expr='lte')
+    active = filters.BooleanFilter(field_name='active', lookup_expr='exact')
 
     def filter_busca(self, queryset, name, value):
         if value:
@@ -35,3 +36,7 @@ class GastoFilter(filters.FilterSet):
                 Q(tipo__icontains=value) | Q(descricao__icontains=value)
             )
         return queryset
+
+    class Meta:
+        model = models.Gasto
+        fields = ['academia', 'tipo', 'descricao', 'data', 'active']

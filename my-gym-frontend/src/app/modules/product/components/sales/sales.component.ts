@@ -32,6 +32,10 @@ import {
   MatStartDate
 } from "@angular/material/datepicker";
 import {provideNativeDateAdapter} from "@angular/material/core";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogConfirmComponent} from "../../../../shared/components/dialog-confirm/dialog-confirm.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatCardModule} from "@angular/material/card";
 
 @Component({
   selector: 'app-sales',
@@ -63,6 +67,7 @@ import {provideNativeDateAdapter} from "@angular/material/core";
     MatStartDate,
     MatSuffix,
     MatIconButton,
+    MatCardModule,
     NgIf
   ],
   standalone: true,
@@ -73,7 +78,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   public sales: Sale[] = [];
   public dataSource = new MatTableDataSource<Sale>(this.sales);
-  protected readonly displayedColumns: string[] = ['cliente', 'vendedor', 'valor_total', 'itens', 'data_venda'];
+  protected readonly displayedColumns: string[] = ['cliente', 'vendedor', 'valor_total', 'itens', 'data_venda', 'actions'];
   private pathUrlSales: string = URLS.SALE;
   public searchTerm: string = "";
   public currentPage: number = 1;
@@ -89,10 +94,12 @@ export class SalesComponent implements OnInit, AfterViewInit {
     private httpMethos: HttpMethodsService,
     private authService: AuthService,
     public router: Router,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
-    this.search(); // carrega os dados ao iniciar
+    this.search();
   }
 
   ngAfterViewInit(): void {
@@ -115,6 +122,41 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   public search(): void {
     this.searchRegisters(this.searchTerm, 0);
+  }
+
+  public disable(element: number): void{
+    const title = 'Excluir Registro'
+    const content = 'Deseja realmente excluir este registro?';
+    const dialogRef = this.dialog.open(DialogConfirmComponent, {
+      width: '400px',
+      maxWidth: '90vw',
+      minHeight: '200px',
+      panelClass: 'custom-modal',
+      autoFocus: true,
+      data: {
+        title,
+        content,
+        action: 'delete'
+      }
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let sucessMensage = "Registro apagado"
+        this.httpMethos.disable(this.pathUrlSales, element, "cancelar" ).subscribe(() => {
+          this.search()
+        })
+        this.snackBar.open(sucessMensage, "fechar", {
+          duration: 5000,
+          verticalPosition: 'top',
+        })
+      }
+      else {
+        return
+      }
+
+    })
+
   }
 
   public searchRegisters(term: string = '', offset: number = 0, limit: number = this.limit): void {

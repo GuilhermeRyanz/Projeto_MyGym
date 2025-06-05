@@ -89,42 +89,43 @@ class VendaSerializer(FlexFieldsModelSerializer):
             quantidade = item_data['quantidade']
             preco_unitario = item_data.get('preco_unitario') or produto.preco
 
-            self._descontar_estoque(produto, quantidade)
-            produto.quantidade_estoque -= quantidade
-            produto.save()
+            restante = quantidade
+            lotes = LoteProduto.objects.filter(produto=produto, quantidade__gt=0).order_by('data_validade')
 
-            ItemVenda.objects.create(
-                venda=venda,
-                produto=produto,
-                quantidade=quantidade,
-                preco_unitario=preco_unitario,
-                total=quantidade * preco_unitario,
-            )
+            for lote in lotes:
+                if restante == 0:
+                    break
+                if lote.quantidade >= restante:
+                    quantidade_para_lote = restante
+                    lote.quantidade -= quantidade_para_lote
+                    lote.save()
+                    restante = 0
+                else:
+                    quantidade_para_lote = lote.quantidade
+                    restante -= quantidade_para_lote
+                    lote.quantidade = 0
+                    lote.save()
+
+                ItemVenda.objects.create(
+                    venda=venda,
+                    produto=produto,
+                    lote=lote,
+                    quantidade=quantidade_para_lote,
+                    preco_unitario=preco_unitario,
+                    total=preco_unitario * quantidade_para_lote
+                )
+
+                produto.quantidade_estoque -= quantidade_para_lote
+                produto.save()
+
+            if restante > 0:
+                raise serializers.ValidationError(f"Estoque insuficiente para o produto '{produto.nome}'.")
 
         return venda
 
-    def _descontar_estoque(self, produto, quantidade):
-        lotes = LoteProduto.objects.filter(produto=produto, quantidade__gt=0).order_by('data_validade')
-        restante = quantidade
-
-        for lote in lotes:
-            if restante == 0:
-                break
-            if lote.quantidade <= restante:
-                restante -= lote.quantidade
-                lote.quantidade = 0
-            else:
-                lote.quantidade -= restante
-                restante = 0
-            lote.save()
-
-
-        if restante > 0:
-            raise serializers.ValidationError(f"Estoque insuficiente para o produto '{produto.nome}'.")
-
     class Meta:
         model = Venda
-        fields = ['id', 'academia', 'vendedor', 'cliente', 'valor_total', 'data_venda', 'itens']
+        fields = ['id', 'academia', 'vendedor', 'cliente', 'valor_total', 'data_venda', 'itens', 'active']
         expandable_fields = {
             'cliente': AlunoSerializer,
             'vendedor': UsuarioSerializer,

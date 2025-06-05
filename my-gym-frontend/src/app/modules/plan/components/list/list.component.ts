@@ -15,6 +15,10 @@ import {MatDialog} from "@angular/material/dialog";
 import {PlanDetailComponent} from "../plan-detail/plan-detail.component";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 import {fomateDayWeek} from "../../../../shared/util/FomateDayWeek";
+import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatInput} from "@angular/material/input";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {debounceTime, Subject} from "rxjs";
 
 @Component({
   selector: 'app-list',
@@ -24,7 +28,12 @@ import {fomateDayWeek} from "../../../../shared/util/FomateDayWeek";
     MatButton,
     MatListModule,
     MatCardModule,
-    PaginatorComponent
+    PaginatorComponent,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
@@ -38,10 +47,9 @@ export class ListComponent implements OnInit {
   public limit: number = 3;
   public totalResults: number = 1;
   public currentPage: number = 0;
+  public searchTerm: string = "";
+  public searchChange = new Subject<string>();
 
-  private getIdGym(): void {
-    this.gym_id = localStorage.getItem("academia")
-  }
 
   constructor(private httpMethods: HttpMethodsService,
               private router: Router,
@@ -51,16 +59,18 @@ export class ListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getIdGym()
-    this.search()
     this.getTypeUser()
+    this.search()
+    this.searchChange.pipe(debounceTime(300)).subscribe((term) => {
+      this.search(term, 0)
+    })
   }
 
   public getTypeUser() {
     this.typeUser = localStorage.getItem("tipo_usuario");
   }
 
-  public search(offset: number = 0, limit: number = this.limit): void {
+  public search(term: string = " " ,offset: number = 0, limit: number = this.limit): void {
     const params: any = {
       academia: this.gym_id,
       active: true,
@@ -68,24 +78,25 @@ export class ListComponent implements OnInit {
       offset
     };
 
+    if (term) {
+      params.search = term;
+    }
+
     this.httpMethods.getPaginated(this.pathUrlPlan, params)
       .subscribe((response: any) => {
-        if (response.results.length <= 0) {
-          const errosMensager = "Não há planos ativos cadastrados!"
-          this.snackBar.open(errosMensager, 'fechar', {
-            duration: 2000,
-            verticalPosition: 'top',
-          });
-        }
         this.plans = response.results;
         this.totalResults = response.count;
         this.currentPage = offset / limit;
       });
   }
 
+  onSearchChange(term: string): void {
+    this.searchTerm = term;
+    this.searchChange.next(term);
+  }
+
   onPageChange(page: number): void {
-    const offset = page * this.limit;
-    this.search(offset);
+    this.search();
   }
 
   public create(): void {

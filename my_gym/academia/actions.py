@@ -8,7 +8,7 @@ from plano.models import DiasSemana
 class AcademiaActions:
 
     @staticmethod
-    def CheckInAluno(aluno, academia):
+    def check_in_aluno(aluno, academia):
         pagamento = Pagamento.objects.filter(
             aluno_plano__aluno_id=aluno,
             aluno_plano__active=True

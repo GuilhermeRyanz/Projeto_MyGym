@@ -1,5 +1,4 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MatCard} from "@angular/material/card";
 import {MatError, MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -20,7 +19,6 @@ import {MatButton} from "@angular/material/button";
   selector: 'app-form',
   standalone: true,
   imports: [
-    MatCard,
     MatFormField,
     MatInput,
     MatLabel,

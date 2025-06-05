@@ -34,7 +34,7 @@ class AcademiaViewSet(viewsets.ModelViewSet):
             usuarioacademia__active=True
         )
 
-    @action(detail=True, methods=['POST'])
+    @action(detail=True, methods=['POST'], permission_classes=[permissions.IsAuthenticated, ])
     def desativar_academia(self, request, pk=None):
         try:
             academia = models.Academia.objects.get(pk=pk)
@@ -61,7 +61,7 @@ class AcademiaViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'erro': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    @action(detail=False, methods=['GET'])
+    @action(detail=False, methods=['GET'], permission_classes=[permissions.IsAuthenticated, ])
     def month_balance(self, request):
         data = request.query_params.get("data")
         academia = request.query_params.get("academia")
@@ -91,6 +91,7 @@ class AcademiaViewSet(viewsets.ModelViewSet):
             venda__academia__id=academia,
             venda__data_venda__year=ano,
             venda__data_venda__month=mes,
+            venda__active=True
         )
         total_vendas = to_decimal(itens_venda.aggregate(total=Sum('total'))['total'])
         detalhamento_vendas = itens_venda.values(
@@ -113,11 +114,11 @@ class AcademiaViewSet(viewsets.ModelViewSet):
 
         return Response({
             'mensalidades': {
-                'total': float(total_mensalidades),  # Convert to float for JSON serialization
+                'total': float(total_mensalidades),
                 'detalhamento': [
                     {
                         'aluno_plano__plano__nome': item['aluno_plano__plano__nome'],
-                        'total': float(item['total'])  # Convert to float for JSON
+                        'total': float(item['total'])
                     } for item in detalhamento_mensalidades
                 ]
             },
@@ -140,7 +141,7 @@ class AcademiaViewSet(viewsets.ModelViewSet):
                 ]
             },
             'balanço mensal': {
-                'total': float(total_mensalidades + total_vendas - total_gastos)  # Ensure Decimal math
+                'total': float(total_mensalidades + total_vendas - total_gastos)
             }
         })
 class FrequenciaViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
@@ -230,3 +231,8 @@ class GastoViewSets(viewsets.ModelViewSet):
             academia__usuarioacademia__usuario=self.request.user,
             academia__usuarioacademia__active=True
         )
+
+    @action(detail=True, methods=['POST'], permission_classes=[permissions.IsAuthenticated, ])
+    def disable(self, request, pk=None):
+        Gasto.objects.filter(pk=pk).update(active=False)
+        return Response({"status": "gastos desativado"})
