@@ -26,6 +26,8 @@ class FrequenciaFilter(filters.FilterSet):
 class GastoFilter(filters.FilterSet):
     academia = filters.NumberFilter(field_name='academia__id')
     search = filters.CharFilter(method="filter_busca")
+    data_after = filters.DateTimeFilter(field_name='data', lookup_expr='gte')
+    data_before = filters.DateTimeFilter(field_name='data', lookup_expr='lte')
 
     def filter_busca(self, queryset, name, value):
         if value:

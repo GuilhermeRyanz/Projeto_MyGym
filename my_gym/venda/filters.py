@@ -9,8 +9,8 @@ class VendaFilter(filters.FilterSet):
 
     academia = filters.NumberFilter(field_name='academia__id', lookup_expr='exact')
     vendedor = filters.NumberFilter(field_name='vendedor__id', lookup_expr='exact')
-    data = filters.DateRangeFilter(field_name='data_venda')
-
+    data_after = filters.DateTimeFilter(field_name='data_venda', lookup_expr='gte')
+    data_before = filters.DateTimeFilter(field_name='data_venda', lookup_expr='lte')
     search = filters.CharFilter(method='search_filter', label='Search' )
 
     def search_filter(self, queryset, name, value):
