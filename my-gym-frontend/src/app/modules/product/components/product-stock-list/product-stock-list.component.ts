@@ -4,7 +4,6 @@ import {AuthService} from "../../../../auth/services/auth.service";
 import {URLS} from "../../../../app.urls";
 import {Batch} from "../../../../shared/interfaces/batch";
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
-import {response} from "express";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -14,7 +13,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   templateUrl: './product-stock-list.component.html',
   styleUrl: './product-stock-list.component.css'
 })
-export class ProductStockListComponent implements OnInit{
+export class ProductStockListComponent implements OnInit {
 
   public pathUrl = URLS.BATCH
   public batches: Batch[] = []
@@ -23,14 +22,15 @@ export class ProductStockListComponent implements OnInit{
     private httpMethods: HttpMethodsService,
     private authMethods: AuthService,
     private snackBar: MatSnackBar,
-  @Inject(MAT_DIALOG_DATA) public data: any
-){}
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+  }
 
   ngOnInit() {
     this.search()
   }
 
-  public search(){
+  public search() {
     const queryParams = {
       active: true,
     }
@@ -42,7 +42,7 @@ export class ProductStockListComponent implements OnInit{
     )
   }
 
-  public delete(element: any){
+  public delete(element: any) {
 
     this.httpMethods.delete(this.pathUrl, element.id).subscribe(
       (response: any) => {
