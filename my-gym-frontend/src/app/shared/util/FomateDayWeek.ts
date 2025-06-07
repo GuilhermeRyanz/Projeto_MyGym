@@ -12,6 +12,6 @@ export function fomateDayWeek(dias_permitidos?: number[]): string[] | string {
   if (!dias_permitidos || dias_permitidos?.length === 0) {
     return "Todos os dias"
   } else {
-    return dias_permitidos.map(dia => diasSemana[dia]);
+    return dias_permitidos.map(dia => diasSemana[dia-1]);
   }
 }

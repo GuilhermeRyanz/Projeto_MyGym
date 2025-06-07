@@ -12,6 +12,7 @@ export const URLS = {
   MONTHLYEARNINGSCHARTS: 'api/pagamento/pagamentosPlano/',
   PLANSWITHNEWMEMBERS: 'api/plano/planos/novosAlunosPorPlano/',
   PRODUCT: 'api/produto/produtos/',
+  BATCH: 'api/produto/lotes',
   SALE: "api/venda/vendas/",
 
 }
