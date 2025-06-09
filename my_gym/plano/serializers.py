@@ -19,7 +19,7 @@ class PlanoSerializer(serializers.ModelSerializer):
     desconto = serializers.DecimalField(max_digits=10, decimal_places=2)
     dias_permitidos = serializers.ListField(
         child=serializers.IntegerField(
-            min_value=1, max_value=7,        ),
+            min_value=0, max_value=7,        ),
         required=False
     )
     total_alunos = serializers.IntegerField(read_only=True)

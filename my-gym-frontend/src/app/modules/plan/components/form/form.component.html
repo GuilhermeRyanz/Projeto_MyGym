@@ -76,12 +76,16 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Dias Permitidos</mat-label>
-      <mat-select formControlName="dias_permitidos" multiple>
+      <mat-select
+        multiple
+        formControlName="dias_permitidos"
+        (selectionChange)="toggleDiasPermitidos($event.value)">
         <mat-option *ngFor="let dia of diasSemana" [value]="dia.valor">
           {{ dia.label }}
         </mat-option>
       </mat-select>
     </mat-form-field>
+
 
     <mat-form-field appearance="fill">
       <mat-label>Desconto em produtos (%)</mat-label>

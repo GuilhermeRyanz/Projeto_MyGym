@@ -2,7 +2,7 @@ from attr.setters import validate
 from rest_framework import serializers
 
 from academia.actions import AcademiaActions
-from academia.models import Academia, Frequencia, Gasto
+from academia.models import Academia, Frequencia, Gasto, Exercice
 from aluno.models import Aluno, AlunoPlano
 from academia.models import UsuarioAcademia
 from pagamento.models import Pagamento
@@ -66,4 +66,9 @@ class FrequenciaSerializer(serializers.ModelSerializer):
 class GastoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gasto
+        fields = '__all__'
+
+class ExerciceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Exercice
         fields = '__all__'

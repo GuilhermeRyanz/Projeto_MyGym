@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
+    'django.contrib.postgres',
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
@@ -102,7 +103,7 @@ DATABASES = {
         'NAME': 'my_gym',
         'USER': 'my_gym',
         'PASSWORD': '123',
-        'HOST' : 'localhost',
+        'HOST' : os.getenv("DB_HOST"),
         'PORT' : '5438'
     }
 }
@@ -174,11 +175,11 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-MINIO_ACCESS_ENDPOINT="http://56.125.80.37:9000"
-MINIO_ENDPOINT = "http://minio:9000"
+MINIO_ACCESS_ENDPOINT=os.getenv("MINIO_ACCESS_ENDPOINT")
+MINIO_ENDPOINT =os.getenv("MINIO_ENDPOINT")
 MINIO_ACCESS_KEY = "minioadmin"
 MINIO_SECRET_KEY = "minioadmin"
-MINIO_BUCKET = "date-media"
+MINIO_BUCKET = "data-media"
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'

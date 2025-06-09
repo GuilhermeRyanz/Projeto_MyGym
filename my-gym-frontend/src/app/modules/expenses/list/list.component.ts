@@ -183,14 +183,11 @@ export class ListComponent implements OnInit {
 
   public delete(element: any): void {
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
-      width: '600px',
-      maxWidth: '90vw',
-      minHeight: '400px',
       panelClass: 'custom-modal',
       autoFocus: true,
       data: {
-        title: 'Excluir registro',
-        mensager: "Deseja realmente excluir este registro?",
+        title: 'Excluir registro de gasto',
+        message: "Deseja realmente excluir este registro?",
       }
     });
 

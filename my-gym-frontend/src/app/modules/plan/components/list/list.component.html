@@ -5,11 +5,11 @@
   <div class="justify-content-between align-content-center align-items-center flex w-full p-3">
     <mat-form-field appearance="outline" class="search w-30rem ml-4">
       <mat-label>Procurar plano</mat-label>
-      <input matInput="text" placeholder="Digite o nome ou matricula" [(ngModel)]="searchTerm"
+      <input matInput="text" placeholder="Buscar plano..." [(ngModel)]="searchTerm"
              (input)="onSearchChange(searchTerm)"/>
     </mat-form-field>
 
-    <div class="flex justify-content-end">
+    <div class="flex justify-content-end mr-3">
       <button
         mat-raised-button
         color="primary"

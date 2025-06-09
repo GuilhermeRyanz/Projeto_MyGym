@@ -11,6 +11,12 @@ class QuestionView(viewsets.ModelViewSet):
     queryset = Questions.objects.all()
     serializer_class = QuestionSerializer
 
+    def get_queryset(self):
+        print(self.request.user.id)
+        return Questions.objects.filter(
+            usuario=self.request.user.id,
+        )
+
     @action(detail=False, methods=['post'])
     def ask_gestor(self, request):
         behavior = ChatBehavior(request)

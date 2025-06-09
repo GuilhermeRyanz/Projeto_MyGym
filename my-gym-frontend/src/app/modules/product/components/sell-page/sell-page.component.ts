@@ -62,7 +62,7 @@ export class SellPageComponent implements OnInit {
     public httpMethods: HttpMethodsService
   ) {
     this.formGroup = this.formBuilder.group({
-      client: [null, Validators.required],
+      client: [null],
       formaPagamento: ['Dinheiro', Validators.required],
     });
   }
@@ -155,12 +155,6 @@ export class SellPageComponent implements OnInit {
   finalizeSale(): void {
     if (this.cartItems.length === 0) {
       this.snackBar.open('Adicione produtos ao carrinho antes de finalizar a venda.', 'Fechar', { duration: 3000 });
-      return;
-    }
-
-    if (this.formGroup.invalid || !this.formGroup.get('client')?.value) {
-      this.snackBar.open('Selecione um cliente e preencha todos os campos obrigatórios.', 'Fechar', { duration: 3000 });
-      this.formGroup.markAllAsTouched();
       return;
     }
 

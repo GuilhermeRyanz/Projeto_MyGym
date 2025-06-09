@@ -35,6 +35,10 @@ button.add_button {
 
 }
 
+.font-red{
+  color: #d82d2d;
+}
+
 bg-red {
   background-color: #d82d2d;
 }

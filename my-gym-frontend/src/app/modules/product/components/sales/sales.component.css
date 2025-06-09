@@ -45,3 +45,12 @@
   margin: 0 8px;
   color: #757575;
 }
+
+.mat-form-field .clear-button {
+  order: 1;
+  margin-right: 4px;
+}
+
+.mat-form-field .mat-datepicker-toggle {
+  order: 2;
+}

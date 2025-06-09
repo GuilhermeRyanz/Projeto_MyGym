@@ -1,8 +1,11 @@
+import datetime
+
 from django.db import transaction
 from django.db.models import Sum
 from rest_flex_fields import FlexFieldsModelSerializer
 
 import produto
+from academia.models import Gasto
 from my_gym.service import upload_data_to_minio
 from produto.actions import LoteActions
 from produto.models import Produto, LoteProduto
@@ -37,6 +40,15 @@ class LoteSerializer(serializers.ModelSerializer):
             validated_data['preco_unitario'] = preco_unitario
 
             produto.quantidade_estoque += quantidade
+
+            Gasto.objects.create(
+                tipo='produtos',
+                descricao=f"{quantidade} uni. de {produto.nome}",
+                academia=produto.academia,
+                valor=preco_total,
+                data=datetime.datetime.now()
+            )
+
             produto.save()
 
             return super().create(validated_data)
@@ -63,12 +75,6 @@ class ProdutoSerializer(FlexFieldsModelSerializer):
         expandable_fields = {
             'lotes': (LoteSerializer, {'source': 'lote_produto', 'many': True}),
         }
-
-    # def get_quantidade_estoque(self, obj):
-    #     return obj.lote_produto.aggregate(
-    #         total=Sum('quantidade')
-    #     )['total'] or 0
-
 
 
     def create(self, validated_data):

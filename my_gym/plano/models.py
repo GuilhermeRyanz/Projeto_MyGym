@@ -8,13 +8,13 @@ from core.models import ModelBase
 
 
 class DiasSemana(models.IntegerChoices):
-    SEGUNDA = 1, "Segunda-feira"
-    TERCA = 2, "Terça-feira"
-    QUARTA = 3, "Quarta-feira"
-    QUINTA = 4, "Quinta-feira"
-    SEXTA = 5, "Sexta-feira"
-    SABADO = 6, "Sábado"
-    DOMINGO = 7, "Domingo"
+    SEGUNDA = 0, "Segunda-feira"
+    TERCA = 1, "Terça-feira"
+    QUARTA = 2, "Quarta-feira"
+    QUINTA = 3, "Quinta-feira"
+    SEXTA = 4, "Sexta-feira"
+    SABADO = 5, "Sábado"
+    DOMINGO = 6, "Domingo"
 
 def dias_semana_default():
     return [

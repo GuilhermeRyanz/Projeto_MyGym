@@ -100,12 +100,12 @@ export class FormComponent implements OnInit {
   public saveOrUpdate(employee: Employee) {
     if (this.created) {
       this.httpMethods.get(this.pathUrlEmployee + `?email=${employee.username}`).subscribe((response: any) => {
-        if (response && response.length > 0) {
+        if (response && response.results.length > 0) {
 
           const dialogoRef = this.dialog.open(UserRelinkConfirmationComponent)
           dialogoRef.afterClosed().subscribe(result => {
             if(result){
-            const usuario = response[0].id
+            const usuario = response.results[0].id
 
             const newBody = { ...employee, usuario: usuario}
 

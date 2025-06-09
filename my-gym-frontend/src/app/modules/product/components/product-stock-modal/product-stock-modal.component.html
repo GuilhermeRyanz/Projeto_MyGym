@@ -16,15 +16,6 @@
       </mat-form-field>
     </div>
 
-    <div class="field w-full">
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Data de validade</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="data_validade" />
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-    </div>
-
     <div class="flex justify-content-end gap-2 mt-2">
       <button mat-raised-button type="button" class="add_button bg-red-alpha-70 text-yellow-100" (click)="dialogRef.close()">Cancelar</button>
       <button mat-raised-button color="primary" class="add_button bg-black-alpha-70 text-white-alpha-90 " (click)="submit()">Salvar</button>

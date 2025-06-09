@@ -29,7 +29,9 @@ class AcademiaActions:
         if not alunos_plano:
             raise serializers.ValidationError("Aluno não possui plano na academia ativo")
 
-        today = timezone.now().weekday() + 1
+        today = timezone.now().weekday()
+
+        print(today)
 
         if today not in alunos_plano.plano.dias_permitidos:
             dias_permitidos = [DiasSemana(dia).label for dia in alunos_plano.plano.dias_permitidos]

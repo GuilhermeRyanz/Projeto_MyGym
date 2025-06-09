@@ -126,16 +126,12 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   public disable(element: number): void{
     const title = 'Excluir Registro'
-    const content = 'Deseja realmente excluir este registro?';
+    const message = 'Deseja realmente excluir este registro?';
     const dialogRef = this.dialog.open(DialogConfirmComponent, {
-      width: '400px',
-      maxWidth: '90vw',
-      minHeight: '200px',
-      panelClass: 'custom-modal',
       autoFocus: true,
       data: {
         title,
-        content,
+        message,
         action: 'delete'
       }
     })

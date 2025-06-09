@@ -2,6 +2,7 @@ from django.db.models import Q
 from django_filters import rest_framework as filters
 
 from academia import models
+from academia.models import Exercice
 
 
 class AcademiaFilter(filters.FilterSet):
@@ -40,3 +41,11 @@ class GastoFilter(filters.FilterSet):
     class Meta:
         model = models.Gasto
         fields = ['academia', 'tipo', 'descricao', 'data', 'active']
+
+
+class ExerciceFilter(filters.FilterSet):
+    academia = filters.NumberFilter(field_name='academia__id')
+
+    class Meta:
+        model = Exercice
+        fields = "__all__"

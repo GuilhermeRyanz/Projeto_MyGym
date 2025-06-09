@@ -1,0 +1,115 @@
+.dialog-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 360px;
+  min-width: 260px;
+  margin: 16px;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease-out; /* Animação de entrada sutil */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dialog-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+}
+
+.dialog-icon {
+  color: #e53935; /* Vermelho suave */
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.dialog-content {
+  padding: 16px;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.dialog-content p {
+  margin: 0;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #f9f9f9;
+}
+
+.cancel-button {
+  color: #555;
+  font-size: 14px;
+}
+
+.cancel-button:hover {
+  background-color: #f0f0f0;
+}
+
+.confirm-button {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.confirm-button:hover {
+  filter: brightness(90%);
+}
+
+.confirm-button:active {
+  transform: scale(0.98);
+}
+
+/* Responsividade */
+@media (max-width: 400px) {
+  .dialog-card {
+    min-width: 240px;
+  }
+
+  mat-card-title {
+    font-size: 16px;
+  }
+
+  .dialog-content {
+    font-size: 13px;
+  }
+
+  .dialog-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cancel-button,
+  .confirm-button {
+    width: 100%;
+  }
+}
+
+/* Acessibilidade: Foco */
+.cancel-button:focus,
+.confirm-button:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}

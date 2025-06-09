@@ -18,7 +18,7 @@
 
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Descrição</mat-label>
-        <input matInput formControlName="descricao" placeholder="Descrição" required />
+        <input matInput formControlName="descricao" placeholder="Descrição" required/>
         @if (formGroup.get('descricao')?.hasError('required') && formGroup.get('descricao')?.touched) {
           <mat-error>Campo Obrigatório</mat-error>
         }
@@ -26,15 +26,15 @@
 
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Valor</mat-label>
-        <input matInput type="number" formControlName="valor" placeholder="Digite o valor do gasto" required />
+        <input matInput type="number" formControlName="valor" placeholder="Digite o valor do gasto" required/>
         @if (formGroup.get('valor')?.hasError('required') && formGroup.get('valor')?.touched) {
           <mat-error>Campo Obrigatório</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Data de Validade</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="data" />
+        <mat-label>Data</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="data"/>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         @if (formGroup.get('data')?.hasError('required') && formGroup.get('data')?.touched) {
@@ -43,8 +43,12 @@
       </mat-form-field>
 
       <div class="flex justify-content-end gap-2">
-        <button mat-button type="button" class="add_button bg-black-alpha-80 text-white" (click)="closeDialog()">Cancelar</button>
-        <button mat-raised-button color="primary" type="submit" class="add_button bg-black-alpha-80 text-white" [disabled]="formGroup.invalid">Salvar</button>
+        <button mat-button type="button" class="add_button bg-black-alpha-80 text-white" (click)="closeDialog()">
+          Cancelar
+        </button>
+        <button mat-raised-button color="primary" type="submit" class="add_button bg-black-alpha-80 text-white"
+                [disabled]="formGroup.invalid">Salvar
+        </button>
       </div>
     </form>
   </div>

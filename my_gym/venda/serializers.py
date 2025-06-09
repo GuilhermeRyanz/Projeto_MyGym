@@ -90,7 +90,7 @@ class VendaSerializer(FlexFieldsModelSerializer):
             preco_unitario = item_data.get('preco_unitario') or produto.preco
 
             restante = quantidade
-            lotes = LoteProduto.objects.filter(produto=produto, quantidade__gt=0).order_by('data_validade')
+            lotes = LoteProduto.objects.filter(produto=produto, quantidade__gt=0).order_by('created_at')
 
             for lote in lotes:
                 if restante == 0:

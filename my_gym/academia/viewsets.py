@@ -9,7 +9,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from academia import models, serializers, filters
 from academia.filters import FrequenciaFilter
-from academia.models import Frequencia, Academia, Gasto
+from academia.models import Frequencia, Academia, Gasto, Exercice
 from academia.serializers import FrequenciaSerializer, GastoSerializer
 from aluno.models import AlunoPlano
 from core.permissions import AcademiaPermissionMixin
@@ -236,3 +236,10 @@ class GastoViewSets(viewsets.ModelViewSet):
     def disable(self, request, pk=None):
         Gasto.objects.filter(pk=pk).update(active=False)
         return Response({"status": "gastos desativado"})
+
+
+class ExerciceViewSets(viewsets.ModelViewSet):
+    queryset = Exercice.objects.all()
+    serializer_class = serializers.ExerciceSerializer
+    filters
+    permission_classes = [permissions.IsAuthenticated, ]

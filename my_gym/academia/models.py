@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from django.db import models
+from django.db.models import DO_NOTHING
+
 from aluno.models import Aluno
 from core.models import ModelBase
 from usuario.models import Usuario
@@ -133,3 +135,21 @@ class Gasto(ModelBase):
 
     class Meta:
         db_table = 'gasto'
+
+class Exercice(ModelBase):
+    title = models.CharField(max_length=255)
+    academia = models.ForeignKey(Academia, on_delete=DO_NOTHING, related_name='exercices', null=True, blank=True)
+    description = models.TextField()
+    type = models.CharField(max_length=50)
+    muscle_group = models.CharField(max_length=100)
+    equipment = models.CharField(max_length=100)
+    level = models.CharField(max_length=50)
+    register_by = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True)
+    status = models.CharField(max_length=20, choices=[
+        ('pendente', 'Pendente'),
+        ('aprovado', 'Aprovado'),
+        ('reprovado', 'Reprovado')
+    ], default='pendente')
+
+    class Meta:
+        db_table = 'exercice'

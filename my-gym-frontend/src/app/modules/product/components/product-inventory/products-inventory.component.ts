@@ -13,6 +13,7 @@ import { ProductStockModalComponent } from '../product-stock-modal/product-stock
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
+import {AuthService} from "../../../../auth/services/auth.service";
 
 interface CategoryPagination {
   products: Product[];
@@ -68,15 +69,10 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
     private readonly httpMethods: HttpMethodsService,
     private router: Router,
     private dialog: MatDialog,
+    private authService: AuthService,
   ) {}
 
-  private getIdGym(): void {
-    this.gym_id = localStorage.getItem("academia");
-  }
-
   public ngOnInit() {
-    this.getIdGym();
-
     this.searchChange
       .pipe(
         debounceTime(300),
@@ -227,7 +223,7 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
 
     const params: any = {
       expand: ['lotes'],
-      academia: this.gym_id,
+      academia: this.authService.get_gym(),
       limit: this.limit,
       offset: this.currentPage,
       search: this.searchTerm,

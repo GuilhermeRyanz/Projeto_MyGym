@@ -9,7 +9,7 @@
              (input)="onSearchChange(searchTerm)" />
     </mat-form-field>
 
-    <mat-form-field class="w-3 ml-1" appearance="outline">
+    <mat-form-field class="w-5 ml-2" appearance="outline">
       <mat-label>Filtro por Data</mat-label>
       <mat-date-range-input [rangePicker]="picker">
         <input matStartDate placeholder="Data inicial"
@@ -20,13 +20,14 @@
                (dateChange)="onDateRangeChange({start: startDate, end: $event.value})">
       </mat-date-range-input>
 
-      <button class="gap-1" mat-icon-button matSuffix aria-label="Limpar filtro de data"
+      <button mat-icon-button matSuffix
+              class="clear-button"
+              aria-label="Limpar filtro de data"
               *ngIf="startDate || endDate"
               (click)="clearDateRange()">
         <mat-icon>close</mat-icon>
       </button>
-
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
 

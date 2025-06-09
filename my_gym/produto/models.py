@@ -41,7 +41,6 @@ class Produto(ModelBase):
 class LoteProduto(ModelBase):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name="lote_produto")
     quantidade = models.PositiveIntegerField()
-    data_validade = models.DateField()
     data_entrada = models.DateTimeField(auto_now_add=True)
     preco_total = models.DecimalField(max_digits=10, decimal_places=2)
     preco_unitario = models.DecimalField(max_digits=10, decimal_places=2)

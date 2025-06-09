@@ -39,13 +39,14 @@ export class FormComponent implements OnInit {
   public title: string = "Criação de Plano";
 
   diasSemana = [
-    { label: 'Domingo', valor: 1 },
-    { label: 'Segunda', valor: 2 },
-    { label: 'Terça', valor: 3 },
-    { label: 'Quarta', valor: 4 },
-    { label: 'Quinta', valor: 5 },
-    { label: 'Sexta', valor: 6 },
-    { label: 'Sábado', valor: 7 }
+    { label: 'Todos os dias', valor: -1 },
+    { label: 'Domingo', valor: 6 },
+    { label: 'Segunda', valor: 0 },
+    { label: 'Terça', valor: 1 },
+    { label: 'Quarta', valor: 2 },
+    { label: 'Quinta', valor: 3 },
+    { label: 'Sexta', valor: 4 },
+    { label: 'Sábado', valor: 5 }
   ];
 
   constructor(
@@ -62,11 +63,19 @@ export class FormComponent implements OnInit {
       descricao: ['', [Validators.required, Validators.maxLength(250)]],
       beneficios: this.formBuilder.array([]),
       desconto: [0, [Validators.min(0), Validators.max(100)]],
-      dias_permitidos: [[]],
+      dias_permitidos: [[-1]], // Default inicial: "Todos os dias"
       academia: ['']
     });
   }
 
+  toggleDiasPermitidos(selectedDays: number[]): void {
+    if (selectedDays.includes(-1)) {
+      this.formGroup.get('dias_permitidos')?.setValue([-1]);
+    } else {
+      const filteredDays = selectedDays.filter(day => day !== -1);
+      this.formGroup.get('dias_permitidos')?.setValue(filteredDays);
+    }
+  }
   get benefits() {
     return this.formGroup.get("beneficios") as FormArray<FormGroup>;
   }
@@ -135,12 +144,15 @@ export class FormComponent implements OnInit {
       .map((b: any) => b.beneficio)
       .filter((beneficio: string) => beneficio.trim() !== "");
 
+    const diasPermitidos = this.formGroup.get('dias_permitidos')?.value;
     const payload = {
       ...plan,
       academia: Number(this.gymId),
       preco: parseFloat(plan.preco.toString()),
       desconto: parseFloat(plan.desconto.toString()),
-      dias_permitidos: plan.dias_permitidos?.map(Number)
+      dias_permitidos: diasPermitidos.includes(-1)
+        ? [0, 1, 2, 3, 4, 5, 6]
+        : diasPermitidos.map(Number)
     };
 
     if (this.created) {

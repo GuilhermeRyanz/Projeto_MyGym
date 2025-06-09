@@ -1,13 +1,29 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>
-      <mat-icon>warning</mat-icon>
+  <mat-card-header class="dialog-header">
+    <mat-card-title id="dialog-title">
+      <mat-icon class="dialog-icon">warning</mat-icon>
       {{ data.title }}
     </mat-card-title>
   </mat-card-header>
-  <mat-card-content>
-    <p>{{ data.message }}</p>
+  <mat-card-content class="dialog-content">
+    <p id="dialog-message">{{ data.message }}</p>
   </mat-card-content>
-  <button mat-button [mat-dialog-close]="false">Cancelar</button>
-  <button mat-button color="warn" [mat-dialog-close]="true">Confirmar</button>
-</mat-card>
+  <div class="dialog-actions">
+    <button
+      mat-button
+      class="cancel-button"
+      [mat-dialog-close]="false"
+      aria-label="Cancelar a ação"
+      #cancelButton
+    >
+      Cancelar
+    </button>
+    <button
+      mat-flat-button
+      class="confirm-button"
+      color="warn"
+      [mat-dialog-close]="true"
+      aria-label="Confirmar a ação"
+    >
+      Confirmar
+    </button>
+  </div>

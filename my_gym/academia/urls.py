@@ -6,4 +6,6 @@ router.register('academias', viewsets.AcademiaViewSet)
 router.register('frequencias', viewsets.FrequenciaViewSet)
 router.register('frequenciaDiaHora', viewsets.FrequenciaDiaHoraViewSet, basename='frequencia_dia_hora')
 router.register("gastos", viewsets.GastoViewSets)
+
+router.register('exercice', viewsets.ExerciceViewSets)
 urlpatterns = router.urls

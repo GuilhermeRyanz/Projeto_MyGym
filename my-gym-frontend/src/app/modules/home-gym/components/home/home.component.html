@@ -1,21 +1,24 @@
 <h2>Bem-vindo ao MyGym</h2>
 <div class="home-page">
   <div class="navigation-cards">
-    @for(option of navigationOptions; track option){
-      <mat-card (click)="navigateTo(option.route)">
+    @for (option of navigationOptions; track option.title) {
+      <mat-card
+        (click)="navigateTo(option.route)"
+        (keyup.enter)="navigateTo(option.route)"
+        tabindex="0"
+        role="button"
+        [matTooltip]="option.tooltip"
+        attr.aria-label="{{option.title}} - {{option.description}}"
+        class="card-{{tipo_usuario?.toLowerCase()}}"
+      >
         <mat-card-header>
-          <mat-card-title>
-            {{option.title}}
-          </mat-card-title>
+          <mat-icon class="card-icon">{{option.icon}}</mat-icon>
+          <mat-card-title>{{option.title}}</mat-card-title>
         </mat-card-header>
-      <mat-card-content>
-        <p>{{option.description}}</p>
-      </mat-card-content>
+        <mat-card-content>
+          <p>{{option.description}}</p>
+        </mat-card-content>
       </mat-card>
     }
   </div>
 </div>
-
-
-
-
