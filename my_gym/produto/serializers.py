@@ -90,14 +90,15 @@ class ProdutoSerializer(FlexFieldsModelSerializer):
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-
         request = self.context.get('request')
         foto_send = request.FILES.get('foto')
 
-        if foto_send:
+        if foto_send is not None:
             foto_url = upload_data_to_minio(foto_send, instance.nome, "data-media")
             validated_data['foto'] = foto_url
+        elif 'foto' in validated_data:
+            pass
         else:
-            validated_data['foto'] = None
+            validated_data['foto'] = instance.foto
 
         return super().update(instance, validated_data)
