@@ -5,7 +5,6 @@ import { HttpMethodsService } from '../../../../shared/services/httpMethods/http
 import { URLS } from '../../../../app.urls';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { MatCard, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
 import { MatInput } from '@angular/material/input';
