@@ -10,6 +10,7 @@ import {MatButton} from "@angular/material/button";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {fomateDayWeek} from "../../../../shared/util/FomateDayWeek";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
+import {AuthService} from "../../../../auth/services/auth.service";
 
 @Component({
   selector: 'app-member-plan',
@@ -34,25 +35,21 @@ export class MemberPlanComponent implements OnInit {
   protected plans: Plan[] | undefined;
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
-  public limit: number = 6;
+  public limit: number = 5;
   public currentPage: number = 0;
   public totalResults: number = 0;
 
 
   constructor(private httpMethods: HttpMethodsService,
               private router: Router,
-              private snackBar: MatSnackBar
+              private snackBar: MatSnackBar,
+              private authService: AuthService,
   ) {
   }
 
   ngOnInit() {
-    this.getIdGym()
     this.search()
     this.getTypeUser()
-  }
-
-  private getIdGym(): void {
-    this.gym_id = localStorage.getItem("academia")
   }
 
   getTypeUser() {
@@ -61,7 +58,7 @@ export class MemberPlanComponent implements OnInit {
 
   public search(offset: number = 0, limit: number = this.limit): void {
     const params: any = {
-      academia: this.gym_id,
+      academia: this.authService.get_gym(),
       active: true,
       limit,
       offset,
@@ -82,22 +79,6 @@ export class MemberPlanComponent implements OnInit {
         this.currentPage = offset / limit;
       });
   }
-
-  public nextPage() {
-    const maxPage = Math.ceil(this.totalResults / this.limit) - 1;
-    if (this.currentPage < maxPage) {
-      const nextOffset = (this.currentPage + 1) * this.limit;
-      this.search(nextOffset)
-    }
-  }
-
-  public prevPage(): void {
-    if (this.currentPage > 0) {
-      const prevOffset = (this.currentPage - 1) * this.limit;
-      this.search(prevOffset);
-    }
-  }
-
   public editPlan(plan: Plan): void {
 
     const new_body = {
@@ -118,7 +99,8 @@ export class MemberPlanComponent implements OnInit {
   }
 
   onPageChange(page: number): void {
-    this.search();
+    const offset = page * this.limit;
+    this.search(offset);
   }
 
   protected readonly fomateDayWeek = fomateDayWeek;

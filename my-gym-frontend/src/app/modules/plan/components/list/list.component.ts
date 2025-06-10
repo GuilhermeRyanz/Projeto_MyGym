@@ -44,7 +44,7 @@ export class ListComponent implements OnInit {
   protected plans: Plan[] | undefined;
   public gym_id: string | null = "";
   protected typeUser: string | null = "";
-  public limit: number = 3;
+  public limit: number = 4;
   public totalResults: number = 1;
   public currentPage: number = 0;
   public searchTerm: string = "";
@@ -96,7 +96,8 @@ export class ListComponent implements OnInit {
   }
 
   onPageChange(page: number): void {
-    this.search();
+    const offset = page * this.limit;
+    this.search(this.searchTerm, offset);
   }
 
   public create(): void {

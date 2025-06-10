@@ -15,7 +15,7 @@ import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confi
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {debounceTime, Subject} from "rxjs";
 import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
-import {MatOption, MatSelect} from "@angular/material/select";
+import {MatOption} from "@angular/material/select";
 import {Plan} from "../../../../shared/interfaces/plan";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {AuthService} from "../../../../auth/services/auth.service";
@@ -164,8 +164,8 @@ export class ListComponent implements OnInit {
   }
 
   onSelectedPlan(event: any): void {
-    this.selectedPlan = event.option.value.id; // Ajuste para o campo correto do plano, como 'id' ou outro identificador
-    this.searchMember(this.searchTerm, 0); // Reaplica a busca com o plano selecionado
+    this.selectedPlan = event.option.value.id;
+    this.searchMember(this.searchTerm, 0);
   }
 
   onPageChange(page: number): void {
