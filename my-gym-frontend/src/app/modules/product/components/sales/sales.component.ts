@@ -117,7 +117,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   get totalPages(): number {
-    return Math.ceil(this.totalResults / this.limit);
+    return Math.max(Math.ceil(this.totalResults / this.limit), 1);
   }
 
   public search(): void {

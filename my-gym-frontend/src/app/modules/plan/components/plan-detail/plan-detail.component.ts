@@ -9,6 +9,7 @@ import {
 import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatCard, MatCardContent} from "@angular/material/card";
+import {fomateDayWeek} from "../../../../shared/util/FomateDayWeek";
 
 @Component({
   selector: 'app-plan-detail',
@@ -36,4 +37,5 @@ export class PlanDetailComponent {
     this.dialogRef.close();
   }
 
+  protected readonly fomateDayWeek = fomateDayWeek;
 }

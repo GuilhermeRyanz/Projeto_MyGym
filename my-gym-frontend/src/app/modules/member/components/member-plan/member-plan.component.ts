@@ -8,8 +8,8 @@ import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton} from "@angular/material/button";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {DecimalPipe} from "@angular/common";
 import {fomateDayWeek} from "../../../../shared/util/FomateDayWeek";
+import {PaginatorComponent} from "../../../../shared/components/paginator/paginator.component";
 
 @Component({
   selector: 'app-member-plan',
@@ -19,7 +19,7 @@ import {fomateDayWeek} from "../../../../shared/util/FomateDayWeek";
     MatCard,
     MatIcon,
     MatButton,
-    DecimalPipe,
+    PaginatorComponent,
 
   ],
   templateUrl: './member-plan.component.html',
@@ -115,6 +115,10 @@ export class MemberPlanComponent implements OnInit {
       this.router.navigate(['/member/list/']);
 
     })
+  }
+
+  onPageChange(page: number): void {
+    this.search();
   }
 
   protected readonly fomateDayWeek = fomateDayWeek;

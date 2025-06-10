@@ -1,33 +1,34 @@
-<main>
-  <div class="h-15rem w-25rem w-full aspect-square flex items-center justify-center overflow-hidden">
+  <div class="h-15rem w-full flex align-items-center justify-content-center overflow-hidden">
     <img [src]="prod.foto_url" alt="Imagem do produto"
-         class="w-full h-full object-contain p-2"/>
+         class="w-full h-full object-contain p-2" />
   </div>
 
-    <mat-card-content class="p-4">
-      <div class="flex justify-content-between">
-        <div class=" font-semibold text-2xl ">{{ prod.nome }}</div>
-        <div class="text-2xl font-bold whitespace-nowrap">R$ {{ prod.preco }}</div>
+  <mat-card-content class="p-2">
+    <div class="flex justify-content-between gap-2">
+      <div class="font-bold text-xl overflow-hidden text-overflow-ellipsis white-space-nowrap" style="max-width: 60%;">
+        {{ prod.nome }}
       </div>
-
-      @if(prod.categoria){
-        <div class="flex items-center text-1xl gap-1 font-gray">
-          <mat-icon fontIcon="local_offer" class="text-1xl text-gray-400"></mat-icon>
-          {{ prod.categoria || 'Produto' }}
-        </div>
-      }
-
-      <div class="text-xl font-gray"  >
-        <strong>Marca:</strong> {{ prod.marca || 'Desconhecida' }}
+      <div class="text-xl font-bold text-right overflow-hidden text-overflow-ellipsis white-space-nowrap" style="max-width: 40%;">
+        R$ {{ prod.preco }}
       </div>
+    </div>
 
-      <p class="text-xl font-gray ">{{ prod.descricao }}</p>
-
-      <div>
-        <mat-card appearance="outlined" class="text-xl font-gray p-1">
-          Em estoque: {{ prod.quantidade_estoque }} unidade{{ prod.quantidade_estoque === 1 ? '' : 's' }}
-        </mat-card>
+    @if(prod.categoria){
+      <div class="flex align-items-center text-sm gap-1 text-color-secondary mt-2">
+        <mat-icon fontIcon="local_offer" class="text-sm text-color-secondary"></mat-icon>
+        <span class="overflow-hidden text-overflow-ellipsis white-space-nowrap">{{ prod.categoria || 'Produto' }}</span>
       </div>
+    }
 
-    </mat-card-content>
-</main>
+    <div class="text-sm text-color-secondary overflow-hidden text-overflow-ellipsis white-space-nowrap mt-2">
+      <strong>Marca:</strong> {{ prod.marca || 'Desconhecida' }}
+    </div>
+
+    <p class="text-sm text-color-secondary mt-2 line-clamp-2" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+      {{ prod.descricao }}
+    </p>
+
+    <mat-card appearance="outlined" class="text-sm text-color mt-2 p-1 overflow-hidden text-overflow-ellipsis white-space-nowrap">
+      Em estoque: {{ prod.quantidade_estoque }} unidade{{ prod.quantidade_estoque === 1 ? '' : 's' }}
+    </mat-card>
+  </mat-card-content>

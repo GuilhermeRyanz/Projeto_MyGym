@@ -45,7 +45,7 @@
           <div class="flex flex-col gap-4 mb-6" id="category-{{ category }}">
             <div class="flex overflow-x-auto gap-4 styled-scroll p-2" (scroll)="onScroll(category)">
               @for(prod of categoryPanation[category].products; track prod.id) {
-                <mat-card class="min-w-[16rem]  flex-shrink-0 overflow-hidden border bg-white flex flex-col p-3">
+                <mat-card class="min-w-[19rem] max-w-[18rem]  flex-shrink-0 overflow-hidden border bg-white flex flex-col p-3">
                   <app-product-item [prod]="prod"></app-product-item>
                   <div class="grid justify-content-between">
                     <button mat-raised-button class="add_button" type="button" (click)="restock(prod)">
@@ -67,7 +67,7 @@
         <section class="flex flex-column">
             <div class="flex overflow-x-auto gap-4 styled-scroll p-2" (scroll)="onScroll()">
               @for(prod of products; track products) {
-                <mat-card class="min-w-[16rem]  flex-shrink-0 overflow-hidden border bg-white flex flex-col p-3">
+                <mat-card class="min-w-[20rem]  flex-shrink-0 overflow-hidden border bg-white flex flex-col p-3">
                   <app-product-item [prod]="prod"></app-product-item>
                   <div class="grid justify-content-between">
                     <button mat-raised-button class="add_button" type="button" (click)="restock(prod)">

@@ -23,7 +23,6 @@ import {CurrencyPipe, DatePipe, NgClass, NgIf, TitleCasePipe} from '@angular/com
     MatCard,
     MatCardHeader,
     MatCardTitle,
-    MatIcon,
     MatFormField,
     MatLabel,
     MatSuffix,
