@@ -24,7 +24,7 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
 })
 export class LoginComponent implements OnInit {
   formGroup: FormGroup;
-  selectedTab: number = 0; // 0 = Usuário, 1 = Aluno
+  selectedTab: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit {
   }
 
   public authentic(credentials: { username: string; password: string }): void {
-    // Payload para usuários
     const payload = {
       username: credentials.username,
       password: credentials.password

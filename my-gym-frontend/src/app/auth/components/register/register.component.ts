@@ -11,20 +11,20 @@ import {HttpMethodsService} from "../../services/http-methods.service";
 @Component({
   selector: 'app-register',
   standalone: true,
-    imports: [
-        FormsModule,
-        MatButton,
-        MatFormField,
-        MatInput,
-        MatLabel,
-        ReactiveFormsModule,
-        RouterLink,
-        MatError
-    ],
+  imports: [
+    FormsModule,
+    MatButton,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    ReactiveFormsModule,
+    RouterLink,
+    MatError
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent implements OnInit{
+export class RegisterComponent implements OnInit {
 
   private pathUrlUser: string = URLS.USERS
   formGroup: FormGroup;
@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit{
     this.formGroup = this.formBuilder.group({
       nome: ['', Validators.required],
       username: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6),Validators.pattern('^(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$'),
+      password: ['', [Validators.required, Validators.minLength(6), Validators.pattern('^(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$'),
       ]],
       tipo_usuario: ['D', Validators.required],
     });

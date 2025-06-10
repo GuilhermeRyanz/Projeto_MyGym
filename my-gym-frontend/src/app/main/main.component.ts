@@ -86,7 +86,6 @@ export class MainComponent implements DoCheck {
     }
   }
 
-
   userInfor() {
     this.user = localStorage.getItem('nome_usuario');
     this.email = localStorage.getItem('email');
