@@ -19,6 +19,7 @@ import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {debounceTime, Subject} from "rxjs";
+import {AuthService} from "../../../../auth/services/auth.service";
 
 @Component({
   selector: 'app-list',
@@ -55,6 +56,7 @@ export class ListComponent implements OnInit {
               private router: Router,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
+              private authService: AuthService,
   ) {
   }
 
@@ -72,7 +74,7 @@ export class ListComponent implements OnInit {
 
   public search(term: string = " " ,offset: number = 0, limit: number = this.limit): void {
     const params: any = {
-      academia: this.gym_id,
+      academia: this.authService.get_gym(),
       active: true,
       limit,
       offset
