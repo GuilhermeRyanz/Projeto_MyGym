@@ -1,3 +1,5 @@
+from celery import shared_task
+
 import chat_gym.chat
 from academia.models import UsuarioAcademia
 from aluno.models import Aluno

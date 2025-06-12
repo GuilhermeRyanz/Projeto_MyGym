@@ -3,7 +3,6 @@ import os
 from typing import Optional, Union
 
 from django.db.models import QuerySet
-from pydantic import BaseModel, Field
 import pandas as pd
 from dotenv import load_dotenv
 from aluno.models import AlunoPlano
@@ -13,28 +12,11 @@ from .models import Questions
 
 load_dotenv()
 
-
-# Definição de Modelos de Resposta
-class ExerciceResponse(BaseModel):
-    exercice: str = Field(description="The exercise name.")
-    response: str = Field(description="A natural language response to the user's question in Brazilian Portuguese.")
-
-
-class MemberData(BaseModel):
-    data: str = Field(description="The member data.")
-    response: str = Field(description="A natural language response to the user's question in Brazilian Portuguese.")
-
-
-class NormalResponseData(BaseModel):
-    response: str = Field(description="A natural language response to the user's question in Brazilian Portuguese.")
-
-
 class IaPersona:
     def __init__(self, user_question: str, member_id: int, aluno_id: int):
-        self.user_question = user_question.lower()  # Normalizar para facilitar análise
+        self.user_question = user_question.lower()
         self.member_id = member_id
         self.aluno_id = aluno_id
-        self.conversation_history = []  # Armazenar histórico da conversa
 
     def get_last_questions(self, limit: int = 3) -> Optional[str]:
         """
@@ -45,7 +27,7 @@ class IaPersona:
 
         Returns:
             Optional[str]: String com as perguntas e respostas formatadas, ou None se não houver dados.
-        """            # Consultar as últimas perguntas do usuário, ordenadas por created_at (mais recente primeiro)
+        """
         data: QuerySet = Questions.objects.filter(
             usuario=self.member_id,
             active=True
@@ -79,23 +61,13 @@ class IaPersona:
         except Exception as e:
             return f"Erro ao buscar dados do aluno: {str(e)}"
 
-    def chooseResponse(self, function_name: str) -> Union[ExerciceResponse, MemberData, NormalResponseData]:
-        if function_name == "get_exercice":
-            return ExerciceResponse
-        elif function_name == "get_member_data":
-            return MemberData
-        else:
-            return NormalResponseData
-
     def generate_query_with_academia_context(self) -> str:
-        # Obter informações do aluno para contexto
         member_data = self.get_member_data()
         context = (
             "You are a helpful personal trainer responsible for assisting gym members who use the MyGym management system. "
             f"Member data: {member_data}. "
             "Use this information to personalize responses when relevant. "
             "Respond in Brazilian Portuguese and only call functions when explicitly required by the question. "
-            f"Conversation history: {self.conversation_history[-5:] if self.conversation_history else 'None'}. "
             "Now, respond to the following question:"
             f"last 3 chats with user {self.get_last_questions()}"
         )
@@ -104,8 +76,7 @@ class IaPersona:
     def _call_function(self, name: str, args: dict) -> Optional[str]:
         try:
             if name == "get_exercice":
-                # Validar argumentos
-                if not any(args.values()):  # Verifica se todos os argumentos estão vazios
+                if not any(args.values()):
                     return "Por favor, especifique o nome do exercício, grupo muscular ou equipamento."
                 return get_exercice(**args)
             elif name == "get_member_data":
@@ -116,7 +87,6 @@ class IaPersona:
             return f"Erro ao executar função {name}: {str(e)}"
 
     def _preprocess_question(self) -> Optional[str]:
-        """Pré-processa a pergunta para sugerir a função correta com base em palavras-chave."""
         exercise_keywords = ["exercício", "como fazer", "treino", "músculo", "equipamento", "fazer", "treinar"]
         member_keywords = ["plano", "benefícios", "dias", "minha conta", "cadastro"]
 
@@ -179,7 +149,6 @@ class IaPersona:
         ]
 
         try:
-            # Pré-processar a pergunta para sugerir função
             suggested_function = self._preprocess_question()
 
             completion = llm.chat.completions.create(
@@ -191,12 +160,10 @@ class IaPersona:
             )
 
             message = completion.choices[0].message
-            self.conversation_history.append({"user": self.user_question, "response": None})  # Atualizar histórico
 
             if message.tool_calls:
                 for tool_call in message.tool_calls:
                     name = tool_call.function.name
-                    respType = self.chooseResponse(name)
                     args = json.loads(tool_call.function.arguments)
                     messages.append(message)
 
@@ -205,27 +172,22 @@ class IaPersona:
                         {"role": "tool", "tool_call_id": tool_call.id, "content": json.dumps(result)}
                     )
 
-                completion_2 = llm.beta.chat.completions.parse(
+                completion_2 = llm.chat.completions.create(
                     model=os.getenv("OPENROUTER_MODEL_NAME"),
                     messages=messages,
                     tools=self.tools,
-                    response_format=respType
                 )
-                final_response = completion_2.choices[0].message.parsed
-                self.conversation_history[-1]["response"] = final_response.response
-                return final_response.response
+                final_response = completion_2.choices[0].message
+                return final_response.content
             else:
-                completion_2 = llm.beta.chat.completions.parse(
+                completion_2 = llm.chat.completions.create(
                     model=os.getenv("OPENROUTER_MODEL_NAME"),
                     messages=messages,
                     tools=self.tools,
-                    response_format=NormalResponseData
                 )
-                final_response = completion_2.choices[0].message.parsed
-                self.conversation_history[-1]["response"] = final_response.response
-                return final_response.response
+                final_response = completion_2.choices[0].message
+                return final_response.content
 
         except Exception as e:
             error_message = f"Desculpe, ocorreu um erro: {str(e)}"
-            self.conversation_history.append({"user": self.user_question, "response": error_message})
             return error_message

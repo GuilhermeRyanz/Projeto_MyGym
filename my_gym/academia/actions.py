@@ -1,9 +1,12 @@
 from django.utils import timezone
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
+from academia import models
 from aluno.models import AlunoPlano
 from pagamento.models import Pagamento
-from plano.models import DiasSemana
+from plano.models import DiasSemana, Plano
+
 
 class AcademiaActions:
 
@@ -38,3 +41,24 @@ class AcademiaActions:
             raise serializers.ValidationError(
                 f"Dia não permitido para este plano. Dias permitidos: {', '.join(dias_permitidos)}"
             )
+
+    @staticmethod
+    def disable(academia):
+            try:
+                usuario_academia = models.UsuarioAcademia.objects.filter(academia=academia, active=True)
+                usuario_academia.update(active=False)
+                planos = Plano.objects.filter(academia=academia, active=True)
+                for plano in planos:
+                    aluno_plano = AlunoPlano.objects.filter(plano=plano, active=True)
+                    aluno_plano.update(active=False)
+                    plano.active = False
+                    plano.save()
+
+                return Response(
+                    {
+                        'status': 'Academia desativada',
+                    },
+                    status=status.HTTP_200_OK
+                )
+            except models.Academia.DoesNotExist:
+                return Response({'erro': "Academia não existe"})
