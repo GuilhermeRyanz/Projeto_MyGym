@@ -8,6 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {DatePipe, NgClass} from '@angular/common';
 import {HttpMethodsService} from '../../../shared/services/httpMethods/http-methods.service';
+import {MatProgressSpinner, MatProgressSpinnerModule, ProgressSpinnerMode} from "@angular/material/progress-spinner";
 
 interface ChatMessage {
   id: number;
@@ -34,7 +35,9 @@ interface ChatMessage {
     MatIconModule,
     MatSnackBarModule,
     NgClass,
-    DatePipe
+    DatePipe,
+    MatProgressSpinner,
+    MatProgressSpinnerModule
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
@@ -46,6 +49,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   @ViewChild('chatMessages') chatMessagesContainer!: ElementRef;
   @Input() IsMember: boolean = false;
 
+  public mode: ProgressSpinnerMode = 'determinate';
   private messageIdCounter = 0;
   private apiUrl3 = 'api/chat/quest/';
   private apiUrl = ""

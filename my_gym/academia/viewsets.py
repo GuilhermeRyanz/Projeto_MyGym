@@ -134,10 +134,43 @@ class GastoViewSets(viewsets.ModelViewSet):
             academia__usuarioacademia__active=True
         )
 
-    @action(detail=True, methods=['POST'], permission_classes=[permissions.IsAuthenticated, ])
+    @action(detail=True, methods=['POST'], permission_classes=[permissions.IsAuthenticated])
     def disable(self, request, pk=None):
-        Gasto.objects.filter(pk=pk).update(active=False)
-        return Response({"status": "gastos desativado"})
+        gasto = self.get_object()
+
+        if not gasto.active:
+            return Response({"status": "gasto já está desativado"}, status=400)
+
+        gasto.active = False
+        gasto.save()
+
+        # Se for um gasto de produto, desative o lote correspondente
+        if gasto.tipo == 'produtos':
+            from produto.models import LoteProduto
+
+            try:
+                partes = gasto.descricao.split(" uni. de ")
+                if len(partes) == 2:
+                    quantidade = int(partes[0])
+                    nome_produto = partes[1]
+
+                    lote = LoteProduto.objects.filter(
+                        produto__nome=nome_produto,
+                        quantidade=quantidade,
+                        preco_unitario__gt=0,
+                        active=True
+                    ).order_by('-created_at').first()
+
+                    if lote:
+                        lote.active = False
+                        lote.produto.quantidade_estoque -= quantidade
+                        lote.produto.save()
+                        lote.save()
+            except Exception as e:
+                # (Opcional) Log do erro
+                print("Erro ao tentar desativar lote relacionado ao gasto:", e)
+
+        return Response({"status": "gasto desativado"})
 
 
 class ExerciceViewSets(viewsets.ModelViewSet):

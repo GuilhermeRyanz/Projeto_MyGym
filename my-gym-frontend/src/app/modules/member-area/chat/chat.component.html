@@ -1,32 +1,58 @@
 <main class="chat-container">
-  <mat-toolbar color="primary" class="chat-toolbar">
-    <span>Chat com MyGym IA</span>
-  </mat-toolbar>
+
+  <header class="chat-header">
+    <div class="header-icon">
+      <i class="fas fa-dumbbell"></i>
+    </div>
+    <div class="header-text">
+      <h1>FitBot</h1>
+      <p>Seu assistente de academia</p>
+    </div>
+    <div class="header-status">
+      <span class="status-dot"></span>
+      <span class="status-text">Online</span>
+    </div>
+  </header>
 
   <div class="chat-messages" #chatMessages>
     @for (message of messages; track message.id) {
-      <div class="message mt-3" [ngClass]="{'user-message': message.isUser, 'ia-message': !message.isUser}">
+      <div class="message message-animation" [ngClass]="{'user-message': message.isUser, 'ia-message': !message.isUser}">
+        <div class="message-icon">
+          <i [ngClass]="message.isUser ? 'fas fa-user' : 'fas fa-dumbbell'"></i>
+        </div>
         <div class="message-content">
-          <span class="message-text">{{ message.text }}</span>
+          <span class="message-text" [innerHTML]="message.text"></span>
           <span class="message-time">{{ message.time | date:'shortTime' }}</span>
         </div>
       </div>
     }
-    @if (!messages.length) {
+    @if (loading) {
+      <div class="message message-animation ia-message">
+        <div class="message-icon">
+          <i class="fas fa-dumbbell"></i>
+        </div>
+        <div class="message-content typing-indicator">
+          <mat-spinner></mat-spinner>
+        </div>
+      </div>
+    }
+    @if (!messages.length && !loading) {
       <div class="empty-state">
         <p>Faça uma pergunta para começar a conversar com a IA!</p>
       </div>
     }
   </div>
 
-  <form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="grid justify-content-center justify-content-start chat-input">
-    <mat-form-field appearance="fill" class="col-8 align-self-center justify-content-start align-items-center align-content-center">
-      <mat-label>Digite sua pergunta</mat-label>
-      <input matInput formControlName="quest">
-    </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" [disabled]="!chatForm.valid || loading" class="align-self-center">
-      <mat-icon>send</mat-icon>
-      {{ loading ? 'Enviando...' : 'Enviar' }}
-    </button>
-  </form>
+  <footer class="chat-footer align-content-center align-items-center">
+    <form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="chat-input">
+      <mat-form-field appearance="outline" class="input-field">
+        <mat-label>Digite sua pergunta</mat-label>
+        <input matInput formControlName="quest" placeholder="Digite sua mensagem...">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" class="send-button add_button mb-3 h-3rem" [disabled]="!chatForm.valid || loading">
+        <mat-icon>send</mat-icon>
+        {{ loading ? 'Enviando...' : 'Enviar' }}
+      </button>
+    </form>
+  </footer>
 </main>
