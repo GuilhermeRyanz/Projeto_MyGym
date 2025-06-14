@@ -5,23 +5,23 @@
 
     <div class=" p-1 overflow-hidden flex align-items-center justify-content-between align-content-center">
 
-        <mat-form-field appearance="outline" class="search w-30rem">
-          <mat-label>Buscar Funcionario</mat-label>
-          <input matInput="text" placeholder="Digite o nome ou email" [(ngModel)]="searchTerm"
-                 (input)="onSearchChange(searchTerm)"/>
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="search w-30rem">
+        <mat-label>Buscar Funcionario</mat-label>
+        <input matInput="text" placeholder="Digite o nome ou email" [(ngModel)]="searchTerm"
+               (input)="onSearchChange(searchTerm)"/>
+      </mat-form-field>
 
-        <mat-form-field class="w-3" appearance="outline">
-          <mat-label>Data Contratação</mat-label>
-          <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate placeholder="Data inicial"
-                   (dateChange)="onDateRangeChange({start: $event.value, end: endDate})">
-            <input matEndDate placeholder="Data final"
-                   (dateChange)="onDateRangeChange({start: startDate, end: $event.value})">
-          </mat-date-range-input>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
-        </mat-form-field>
+      <mat-form-field class="w-3" appearance="outline">
+        <mat-label>Data Contratação</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Data inicial"
+                 (dateChange)="onDateRangeChange({start: $event.value, end: endDate})">
+          <input matEndDate placeholder="Data final"
+                 (dateChange)="onDateRangeChange({start: startDate, end: $event.value})">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
 
     </div>
 

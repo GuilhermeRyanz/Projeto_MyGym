@@ -1,8 +1,5 @@
-from celery import shared_task
-
 import chat_gym.chat
 from academia.models import UsuarioAcademia
-from aluno.models import Aluno
 from chat_gym.models import Questions
 from usuario.models import Usuario
 
@@ -12,32 +9,32 @@ class ChatBehavior:
         self.data = resquest.data
         self.request = resquest
 
-    # def validate_gestor(self, user, academia):
-    #     relation = UsuarioAcademia.objects.filter(
-    #         usuario=user,
-    #         active=True
-    #     ).exists()
-    #     return relation
+    def validate_gestor(self, user, academia):
+        relation = UsuarioAcademia.objects.filter(
+            usuario=user,
+            active=True
+        ).exists()
+        return relation
 
-    # def ask_gestor(self):
-    #     quest = self.data.get('quest')
-    #     academia = self.data.get('academia')
-    #     user = self.request.user
-    #
-    #     if self.validate_gestor(user, academia):
-    #         ia = chat_gym.chat.IaGestor(academia_id=academia, user_question=quest)
-    #         rs = ia.run()
-    #
-    #         Questions.objects.create(
-    #             question=quest,
-    #             answer=rs[0].content,
-    #             usuario=user
-    #         )
-    #
-    #         return str(rs[0])
-    #
-    #     else:
-    #         return "Você não tem permissão para acessar essa informação."
+    def ask_gestor(self):
+        quest = self.data.get('quest')
+        academia = self.data.get('academia')
+        user = self.request.user
+
+        if self.validate_gestor(user, academia):
+            ia = chat_gym.chat.IaGestor(academia_id=academia, user_question=quest, user_id=user.id)
+            rs = ia.run()
+
+            Questions.objects.create(
+                question=quest,
+                answer=rs["answer"],
+                usuario=user
+            )
+
+            return rs
+
+        else:
+            return "Você não tem permissão para acessar essa informação."
 
     def ask_persona(self):
         quest = self.data.get('quest')

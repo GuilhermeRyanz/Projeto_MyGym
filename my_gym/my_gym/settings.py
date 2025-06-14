@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'venda',
     'chat_gym',
     'django_celery_results',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -71,7 +72,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
+
 ]
 
 ROOT_URLCONF = 'my_gym.urls'
@@ -104,7 +107,7 @@ DATABASES = {
         'USER': 'my_gym',
         'PASSWORD': '123',
         'HOST' : os.getenv("DB_HOST"),
-        'PORT' : '5432'
+        'PORT' : '5438'
     }
 }
 
@@ -181,8 +184,8 @@ MINIO_ACCESS_KEY = "minioadmin"
 MINIO_SECRET_KEY = "minioadmin"
 MINIO_BUCKET = "data-media"
 
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

@@ -6,16 +6,16 @@ from usuario.models import Usuario
 
 class UsuarioSerializer(serializers.ModelSerializer):
     academia = serializers.PrimaryKeyRelatedField(queryset=Academia.objects.all(), write_only=True, required=False)
-    username = serializers.EmailField(max_length=100, )
+    username = serializers.EmailField(max_length=100)
     nome = serializers.CharField(max_length=100)
     data_de_contratacao = serializers.SerializerMethodField()
-
 
     class Meta:
         model = Usuario
         fields = ['id', 'nome', 'username', 'password', 'tipo_usuario', 'academia', 'data_de_contratacao']
-
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {
+            'password': {'write_only': True, 'required': False},
+        }
 
     def get_data_de_contratacao(self, obj):
         request = self.context.get('request')
@@ -38,8 +38,10 @@ class UsuarioSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         academia = validated_data.pop('academia', None)
 
-        if validated_data['tipo_usuario'] in [Usuario.TipoUsuario.ATENDENTE,
-                                              Usuario.TipoUsuario.GERENTE] and not academia:
+        if 'password' not in validated_data:
+            raise serializers.ValidationError({"password": "O campo 'password' é obrigatório para criar um usuário."})
+
+        if validated_data['tipo_usuario'] in [Usuario.TipoUsuario.ATENDENTE, Usuario.TipoUsuario.GERENTE] and not academia:
             raise serializers.ValidationError("O campo 'academia' é obrigatório para usuários desse tipo.")
 
         try:
@@ -56,29 +58,28 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
         except IntegrityError as e:
             if 'auth_user_username_key' in str(e):
-                raise serializers.ValidationError("email", "Este email já está sendo utilizado.")
+                raise serializers.ValidationError({"username": "Este email já está sendo utilizado."})
             raise serializers.ValidationError(f"Erro inesperado: {str(e)}")
 
         return usuario
 
     def update(self, instance, validated_data):
-
         request = self.context.get('request')
 
         usuario = self.instance
 
         if usuario.tipo_usuario == Usuario.TipoUsuario.DONO:
-            raise serializers.ValidationError("Erro tipo dono não pode ser alterado.")
+            raise serializers.ValidationError("Erro: tipo dono não pode ser alterado.")
 
         try:
-
             if request.user.tipo_usuario == Usuario.TipoUsuario.ATENDENTE:
-                raise serializers.ValidationError("error","Esse tipo de usuario nao pode editar outros")
+                raise serializers.ValidationError({"error": "Esse tipo de usuário não pode editar outros"})
 
             instance.username = validated_data.get('username', instance.username)
 
-            if 'password' in validated_data:
-                instance.set_password(validated_data['password'])
+            password = validated_data.get('password')
+            if password:
+                instance.set_password(password)
 
             if 'tipo_usuario' in validated_data:
                 instance.tipo_usuario = validated_data.get('tipo_usuario', instance.tipo_usuario)
@@ -90,7 +91,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
         except IntegrityError as e:
             if 'auth_user_username_key' in str(e):
-                raise serializers.ValidationError("Este email já está sendo utilizado.")
+                raise serializers.ValidationError({"username": "Este email já está sendo utilizado."})
             raise serializers.ValidationError(f"Erro inesperado: {str(e)}")
 
         return instance

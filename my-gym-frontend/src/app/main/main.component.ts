@@ -37,7 +37,7 @@ export class MainComponent implements DoCheck {
   public showBanner: boolean = false;
   public showNav: boolean = false;
   public opened = false;
-  public gym_name: string | null = '';
+  public gym_name: string = 'MyGym';
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
 
@@ -76,17 +76,12 @@ export class MainComponent implements DoCheck {
         this.showBanner = !event.url.includes('auth/')
         this.opened = !event.url.includes('auth/');
       }
-
-      if (event instanceof NavigationEnd) {
-        this.showBanner = !event.url.includes('MemberArea/')
-        this.opened = !event.url.includes('MemberArea/');
-      }
     });
   }
 
   ngDoCheck() {
     const currentGymName = localStorage.getItem('academia_nome');
-    if (this.gym_name !== currentGymName) {
+    if (this.gym_name !== currentGymName && currentGymName !== null) {
       this.gym_name = currentGymName;
     }
   }
@@ -95,7 +90,7 @@ export class MainComponent implements DoCheck {
     this.user = localStorage.getItem('nome_usuario');
     this.email = localStorage.getItem('email');
     this.tipo_usuario = localStorage.getItem('tipo_usuario');
-    this.gym_name = localStorage.getItem('academia_nome');
+    this.gym_name = localStorage.getItem('academia_nome') || 'MyGym';
   }
 
   logout() {

@@ -101,14 +101,21 @@
       </table>
 
     </div>
+
     <div class="pagination-controls">
-      <button (click)="prevPage()" [disabled]="currentPage === 0">
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-      <span>Página {{currentPage + 1}} de {{totalPages}}</span>
-      <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">
-        <mat-icon>chevron_right</mat-icon>
-      </button>
+      @if(totalResults == 0){
+        <span class="paginator-info">Nenhum registro encontrado</span>
+      } @else {
+        <button (click)="prevPage()" [disabled]="currentPage === 0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <span>Items {{ totalResults == 0 ? "0" : startIndex}} - {{ endIndex}} de {{ totalResults}}</span>
+        <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      }
+
     </div>
+
   </div>
 </main>

@@ -1,8 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from rest_framework import serializers
 from rest_flex_fields import FlexFieldsModelSerializer
-
+from rest_framework import serializers
 
 from academia.models import UsuarioAcademia
 from aluno.models import AlunoPlano, Aluno
@@ -50,78 +49,79 @@ class VendaSerializer(FlexFieldsModelSerializer):
     valor_total = serializers.DecimalField(required=False, max_digits=10, decimal_places=2)
 
     def create(self, validated_data):
-        request = self.context.get('request')
-        itens_data = validated_data.pop('itens')
-        academia = validated_data['academia']
-        vendedor = request.user
-        cliente = validated_data.get('cliente')
+        with transaction.atomic():
+            request = self.context.get('request')
+            itens_data = validated_data.pop('itens')
+            academia = validated_data['academia']
+            vendedor = request.user
+            cliente = validated_data.get('cliente')
 
-        try:
-            if not UsuarioAcademia.objects.get(active=True, academia=academia, usuario=vendedor):
-                raise serializers.ValidationError("Usuário não possui credenciais para a academia.")
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError("Usuário não possui vínculo com a academia.")
+            try:
+                if not UsuarioAcademia.objects.get(active=True, academia=academia, usuario=vendedor):
+                    raise serializers.ValidationError("Usuário não possui credenciais para a academia.")
+            except ObjectDoesNotExist:
+                raise serializers.ValidationError("Usuário não possui vínculo com a academia.")
 
-        total = 0
-        for item_data in itens_data:
-            produto = item_data['produto']
-            quantidade = item_data['quantidade']
-            preco_unitario = item_data.get('preco_unitario') or produto.preco
-            subtotal = preco_unitario * quantidade
-            total += subtotal
+            total = 0
+            for item_data in itens_data:
+                produto = item_data['produto']
+                quantidade = item_data['quantidade']
+                preco_unitario = item_data.get('preco_unitario') or produto.preco
+                subtotal = preco_unitario * quantidade
+                total += subtotal
 
-        if cliente:
-            alunoPlano = AlunoPlano.objects.filter(aluno=cliente).select_related('plano').first()
-            if alunoPlano and alunoPlano.plano and alunoPlano.plano.desconto:
-                desconto = alunoPlano.plano.desconto or 0
-                total -= total * (desconto / 100)
+            if cliente:
+                alunoPlano = AlunoPlano.objects.filter(aluno=cliente).select_related('plano').first()
+                if alunoPlano and alunoPlano.plano and alunoPlano.plano.desconto:
+                    desconto = alunoPlano.plano.desconto or 0
+                    total -= total * (desconto / 100)
 
-        total = round(total, 2)
+            total = round(total, 2)
 
-        venda = Venda.objects.create(
-            **validated_data,
-            vendedor=vendedor,
-            valor_total=total,
-        )
+            venda = Venda.objects.create(
+                **validated_data,
+                vendedor=vendedor,
+                valor_total=total,
+            )
 
-        for item_data in itens_data:
-            produto = item_data['produto']
-            quantidade = item_data['quantidade']
-            preco_unitario = item_data.get('preco_unitario') or produto.preco
+            for item_data in itens_data:
+                produto = item_data['produto']
+                quantidade = item_data['quantidade']
+                preco_unitario = item_data.get('preco_unitario') or produto.preco
 
-            restante = quantidade
-            lotes = LoteProduto.objects.filter(produto=produto, quantidade__gt=0).order_by('created_at')
+                restante = quantidade
+                lotes = LoteProduto.objects.filter(produto=produto, quantidade__gt=0).order_by('created_at')
 
-            for lote in lotes:
-                if restante == 0:
-                    break
-                if lote.quantidade >= restante:
-                    quantidade_para_lote = restante
-                    lote.quantidade -= quantidade_para_lote
-                    lote.save()
-                    restante = 0
-                else:
-                    quantidade_para_lote = lote.quantidade
-                    restante -= quantidade_para_lote
-                    lote.quantidade = 0
-                    lote.save()
+                for lote in lotes:
+                    if restante == 0:
+                        break
+                    if lote.quantidade >= restante:
+                        quantidade_para_lote = restante
+                        lote.quantidade -= quantidade_para_lote
+                        lote.save()
+                        restante = 0
+                    else:
+                        quantidade_para_lote = lote.quantidade
+                        restante -= quantidade_para_lote
+                        lote.quantidade = 0
+                        lote.save()
 
-                ItemVenda.objects.create(
-                    venda=venda,
-                    produto=produto,
-                    lote=lote,
-                    quantidade=quantidade_para_lote,
-                    preco_unitario=preco_unitario,
-                    total=preco_unitario * quantidade_para_lote
-                )
+                    ItemVenda.objects.create(
+                        venda=venda,
+                        produto=produto,
+                        lote=lote,
+                        quantidade=quantidade_para_lote,
+                        preco_unitario=preco_unitario,
+                        total=preco_unitario * quantidade_para_lote
+                    )
 
-                produto.quantidade_estoque -= quantidade_para_lote
-                produto.save()
+                    produto.quantidade_estoque -= quantidade_para_lote
+                    produto.save()
 
-            if restante > 0:
-                raise serializers.ValidationError(f"Estoque insuficiente para o produto '{produto.nome}'.")
+                if restante > 0:
+                    raise serializers.ValidationError(f"Estoque insuficiente para o produto '{produto.nome}'.")
 
-        return venda
+            return venda
 
     class Meta:
         model = Venda

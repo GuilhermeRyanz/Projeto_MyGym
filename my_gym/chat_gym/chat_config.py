@@ -11,3 +11,10 @@ class IaConfig:
         base_url=os.getenv("OPENROUTER_API_BASE"),
         api_key=os.getenv("OPENROUTER_API_KEY"),
     )
+
+class IaLangChainConfig:
+    llm = ChatOpenAI(
+        openai_api_base=os.getenv("OPENROUTER_API_BASE"),
+        openai_api_key=os.getenv("OPENROUTER_API_KEY"),
+        model_name=os.getenv("OPENROUTER_MODEL_NAME"),
+    )

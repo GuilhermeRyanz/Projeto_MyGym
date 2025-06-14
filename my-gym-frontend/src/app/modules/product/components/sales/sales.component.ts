@@ -106,6 +106,22 @@ export class SalesComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  get endIndex(): number {
+    return Math.min(
+      (this.currentPage + 1) * this.limit,
+      this.totalResults
+    );
+  }
+
+  get startIndex(): number {
+    if (this.totalResults === 0) return 0;
+    return this.currentPage * this.limit + 1;
+  }
+
+  get total(): number {
+    return this.totalResults;
+  }
+
   onDateRangeChange(dateRange: any): void {
     if (dateRange.start) {
       this.startDate = dateRange.start;

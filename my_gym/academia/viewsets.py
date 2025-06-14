@@ -1,23 +1,17 @@
 from datetime import datetime, timedelta
-from decimal import Decimal
 
-from django.db.models import Count, Sum, F, ExpressionWrapper, DecimalField
+from django.db.models import Count
 from django.db.models.functions import ExtractWeekDay, ExtractHour
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from rest_framework import viewsets, permissions
+from rest_framework.decorators import action
 from rest_framework.response import Response
+
 from academia import models, serializers, filters, actions, managers
 from academia.filters import FrequenciaFilter
 from academia.models import Frequencia, Academia, Gasto, Exercice
 from academia.serializers import FrequenciaSerializer, GastoSerializer
-from aluno.models import AlunoPlano
 from core.permissions import AcademiaPermissionMixin
-from rest_framework.decorators import action
-from rest_framework import status
-from venda.models import Venda, ItemVenda
-
-from pagamento.models import Pagamento
-from plano.models import Plano
 
 
 class AcademiaViewSet(viewsets.ModelViewSet):

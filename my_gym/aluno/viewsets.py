@@ -6,7 +6,7 @@ from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from aluno import params_serializer, models
+from aluno import params_serializer, models, actions
 from aluno.filters import AlunoPlanoFilter, AlunoFilter
 from aluno.models import Aluno
 from aluno.serializers import AlunoSerializer, AlunoPlanoSerializer
@@ -33,60 +33,14 @@ class AlunoPlanoViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def alterar_plano(self, request, *args, **kwargs):
-        ps = params_serializer.AlterarPlanoParamSerializer(data=request.data)
-        ps.is_valid(raise_exception=True)
-        plano, aluno = ps.validated_data.values()
-
-        models.AlunoPlano.objects.filter(
-            aluno=aluno,
-            plano__academia=plano.academia,
-            active=True
-        ).update(active=False)
-
-        models.AlunoPlano.objects.update_or_create(
-            aluno=aluno,
-            plano=plano,
-            defaults={
-                'active': True
-            }
-        )
-        return Response(data={'status': 'Aluno cadastrado em plano'}, status=status.HTTP_200_OK)
+        rs = actions.AlunoPlanoActions.alter_plan(request)
+        return Response(rs.data, status=rs.status_code)
 
     @action(detail=True, methods=['post'])
     def desativar_aluno(self, request, pk=None):
-        try:
-            aluno = models.Aluno.objects.get(id=pk)
-
-            try:
-                aluno_plano = models.AlunoPlano.objects.get(aluno=aluno, active=True,
-                                                            plano__academia=request.data['academia'])
-
-                aluno_plano.active = False
-                aluno_plano.save()
-
-                return Response(
-                    {
-                        'status': 'Aluno desativado com sucesso!',
-                        'aluno_plano': AlunoPlanoSerializer(aluno_plano).data
-                    },
-                    status=status.HTTP_200_OK
-                )
-
-            except models.AlunoPlano.DoesNotExist:
-                return Response(
-                    {'erro': "Aluno não possui um plano ativo."},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-
-        except models.Aluno.DoesNotExist:
-            return Response(
-                {'erro': "Aluno não encontrado."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        except Exception as e:
-            return Response({'erro': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+        aluno = models.Aluno.objects.get(id=pk)
+        rs = actions.AlunoActions.disable(aluno, request.data['academia'])
+        return Response(rs.data, status=rs.status_code)
 
 class AuthTokenViewAluno(APIView):
     permission_classes = [permissions.AllowAny]

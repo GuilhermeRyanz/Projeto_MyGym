@@ -1,19 +1,4 @@
 <main class="chat-container">
-
-  <header class="chat-header">
-    <div class="header-icon">
-      <i class="fas fa-dumbbell"></i>
-    </div>
-    <div class="header-text">
-      <h1>FitBot</h1>
-      <p>Seu assistente de academia</p>
-    </div>
-    <div class="header-status">
-      <span class="status-dot"></span>
-      <span class="status-text">Online</span>
-    </div>
-  </header>
-
   <div class="chat-messages" #chatMessages>
     @for (message of messages; track message.id) {
       <div class="message message-animation" [ngClass]="{'user-message': message.isUser, 'ia-message': !message.isUser}">

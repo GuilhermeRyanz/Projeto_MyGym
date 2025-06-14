@@ -85,7 +85,7 @@ export class ListComponent implements OnInit {
   public endDate: Date | null = null;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   protected dataSource: MatTableDataSource<Expense> = new MatTableDataSource<Expense>();
-  protected readonly displayedColumns: string[] = ['categoria', 'descricao', 'valor', 'data', 'actions'];
+  protected readonly displayedColumns: string[] = ['Categoria', 'Descrição', 'Valor', 'Data', 'Ações'];
   protected readonly elementAt = elementAt;
   private readonly pathUrl: string = URLS.EXPENSE;
 
@@ -100,6 +100,22 @@ export class ListComponent implements OnInit {
 
   get totalPages(): number {
     return Math.ceil(this.totalResults / this.limit);
+  }
+
+  get endIndex(): number {
+    return Math.min(
+      (this.currentPage + 1) * this.limit,
+      this.totalResults
+    );
+  }
+
+  get startIndex(): number {
+    if (this.totalResults === 0) return 0;
+    return this.currentPage * this.limit + 1;
+  }
+
+  get total(): number {
+    return this.totalResults;
   }
 
   ngOnInit() {

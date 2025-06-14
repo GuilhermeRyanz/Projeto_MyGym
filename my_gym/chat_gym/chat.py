@@ -1,16 +1,206 @@
 import json
 import os
-from typing import Optional, Union
+import re
+from typing import Optional, Union, TypedDict
 
-from django.db.models import QuerySet
 import pandas as pd
+from django.db.models import QuerySet
 from dotenv import load_dotenv
+from langchain_community.utilities import SQLDatabase
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_experimental.sql import SQLDatabaseChain
+
+from academia.models import UsuarioAcademia
 from aluno.models import AlunoPlano
 from chat_gym import chat_config
+from usuario.models import Usuario
 from .agent_functions import get_exercice
 from .models import Questions
 
 load_dotenv()
+
+
+class State(TypedDict):
+    question: str
+    query: str
+    result: str
+    answer: str
+
+
+system_message = """
+Dada uma pergunta de entrada, crie uma consulta SQL sintaticamente correta no dialeto {dialect}
+para ajudar a encontrar a resposta. Limite sua consulta para no máximo {top_k} resultados,
+a menos que o usuário peça explicitamente mais resultados. 
+
+NUNCA selecione todas as colunas de uma tabela. Escolha apenas as relevantes de acordo com a pergunta.
+NUNCA faça consultaS que possam retornar dados de academia com id diferentes da fornecida pelo usuario.
+SE a tabela necessaria para responder a pergunta nao se ligar diretamente a academia informada, tente usar joins em tabelas que se relacionem diretamente com academia.
+
+EXEMPLO DE CONSULTAS USANDO JOINS:
+
+SELECT AVG(p.valor)
+FROM pagamento p
+JOIN aluno_plano ap ON p.aluno_plano = ap.id
+JOIN plano pl ON ap.plano = pl.id
+WHERE pl.academia = 1
+  AND DATE_TRUNC('month', p.data_pagamento) = DATE_TRUNC('month', CURRENT_DATE);
+
+
+Use apenas as tabelas a seguir:
+{table_info}
+"""
+
+user_prompt = "Pergunta: {input}"
+
+query_prompt_template = ChatPromptTemplate(
+    [("system", system_message), ("user", user_prompt)]
+)
+
+
+
+def sanitize_query(query: str) -> str:
+    """
+    Extrai apenas a consulta SQL do texto gerado, removendo explicações e blocos markdown.
+    """
+    # Tenta extrair o bloco entre ```sql ... ```
+    match = re.search(r"```sql\s*(.*?)\s*```", query, re.DOTALL | re.IGNORECASE)
+    if match:
+        return match.group(1).strip()
+    # Se não encontrar bloco, tenta pegar a primeira linha que parece SQL
+    lines = query.splitlines()
+    sql_lines = []
+    start = False
+    for line in lines:
+        if re.match(r"^\s*(SELECT|WITH|INSERT|UPDATE|DELETE)\b", line, re.IGNORECASE):
+            start = True
+        if start:
+            sql_lines.append(line)
+    return "\n".join(sql_lines).strip()
+
+class IaGestor:
+    def __init__(self, user_id: int, academia_id: int, user_question: str):
+        self.user_id = user_id
+        self.academia_id = academia_id
+        self.user_question = user_question
+
+        self.db_uri = os.getenv("DATABASE_URI", "postgresql+psycopg2://my_gym:123@localhost:5438/my_gym")
+        self.db = self.init_database()
+        self.llm = chat_config.IaLangChainConfig.llm
+
+    def check_user_access(self) -> bool:
+        """
+        Verifica se o usuário tem acesso à academia.
+        Retorna True se tiver acesso, False caso contrário.
+        """
+        try:
+            user = Usuario.objects.get(id=self.user_id)
+            return UsuarioAcademia.objects.filter(id=self.academia_id, usuario=user, active=True).exists()
+        except Exception:
+            return False
+
+    def init_database(self) -> SQLDatabase:
+        """Inicializa e retorna a conexão com o banco de dados."""
+        try:
+            return SQLDatabase.from_uri(
+                self.db_uri,
+                include_tables=[
+                    'aluno',
+                    'plano',
+                    'aluno_plano',
+                    'produto',
+                    'venda',
+                    'pagamento',
+                    'usuario',
+                    'academia',
+                    'item_venda',
+                ],
+                sample_rows_in_table_info=10,
+            )
+        except Exception as e:
+            raise ValueError(f"Erro ao conectar ao banco de dados: {str(e)}")
+
+    def generate_query_prompt(self, state: State) -> str:
+        """Gera o prompt para o modelo de linguagem baseado na pergunta."""
+        try:
+            print(f"Gerando prompt para a questão: {state['question']}")
+            if not self.db:
+                raise ValueError("Banco de dados não está inicializado ou acessível.")
+
+            db_dialect = self.db.dialect
+            print(f"Dialeto do banco: {db_dialect}")
+
+            table_info = self.db.get_table_info()
+            print(f"Informações das tabelas disponíveis: {table_info}")
+
+            # Gera o prompt e extrai o texto corretamente
+            prompt_obj = query_prompt_template.invoke({
+                "dialect": db_dialect,
+                "top_k": 10,
+                "table_info": table_info,
+                "input": state["question"],
+                "academia_id": self.academia_id,
+            })
+            # Tente acessar .to_string() ou .content
+            prompt_str = getattr(prompt_obj, "to_string", None)
+            if callable(prompt_str):
+                prompt_str = prompt_obj.to_string()
+            else:
+                prompt_str = getattr(prompt_obj, "content", str(prompt_obj))
+
+            print(f"Prompt gerado pelo modelo: {prompt_str}")
+            sanitized_query = sanitize_query(prompt_str)
+            print(f"Prompt sanitizado: {sanitized_query}")
+
+            return sanitized_query
+        except Exception as e:
+            raise ValueError(f"Erro ao gerar o prompt de consulta SQL: {str(e)}")
+
+    def run_query(self, query: str) -> dict:
+        """Executa uma consulta SQL gerada."""
+        try:
+            print("Criando db_chain...")
+            db_chain = SQLDatabaseChain.from_llm(self.llm, self.db, verbose=True)
+            print("Invocando query:", query)
+            result = db_chain.invoke(query, return_intermediate_steps=True)
+            print("Resultado:", result)
+            return result
+        except Exception as e:
+            raise ValueError(f"Erro ao executar a consulta SQL: {str(e)}")
+
+    def generate_answer(self, state: State) -> str:
+        """Gera uma resposta baseada na consulta SQL e resultado."""
+        try:
+            prompt = (
+                "Dada a pergunta do usuário, a consulta SQL correspondente e o resultado SQL, responda a pergunta.\n\n"
+                f'Pergunta: {state["question"]}\n'
+                f'Consulta SQL: {state["query"]}\n'
+                f'Resultado SQL: {state["result"]}'
+            )
+            response = self.llm.invoke(prompt)
+            return response.content
+        except Exception as e:
+            return f"Erro ao gerar resposta: {str(e)}"
+
+    def run(self) -> Union[str, dict]:
+        try:
+            if not self.check_user_access():
+                return {"error": "Usuário não tem acesso a esta academia."}
+
+            state = State(
+                question=self.user_question,
+                query="",
+                result="",
+                answer=""
+            )
+
+            state["query"] = self.generate_query_prompt(state)
+            query_result = self.run_query(state["query"])
+            state["result"] = query_result
+            state["answer"] = self.generate_answer(state)
+            return state
+        except Exception as e:
+            return {"error": f"Erro ao processar requisição: {str(e)}"}
+
 
 class IaPersona:
     def __init__(self, user_question: str, member_id: int, aluno_id: int):
@@ -41,7 +231,6 @@ class IaPersona:
             return str(data)
         else:
             return None
-
 
     def get_member_data(self):
         try:

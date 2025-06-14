@@ -1,13 +1,19 @@
 <main>
-<h2 mat-dialog-title class="dialog-title text-center">Detalhes do Plano</h2>
+  <div mat-dialog-title class="dialog-title text-center">Detalhes do Plano</div>
 
-<mat-dialog-content class="dialog-content p-4">
-  <mat-card class="plan-card p-3">
+<mat-dialog-content class="dialog-content">
     <mat-card-content class="flex flex-column gap-3">
 
      <div class="flex align-items-center justify-content-between">
         <div class="text-2xl font-bold">{{ plan.nome }}</div>
-        <div class="text-2xl text-green-500">R$ {{ plan.preco }} / {{plan.duracao}}Meses</div>
+        <div class="text-2xl text-green-500">R$ {{ plan.preco }} / {{plan.duracao}}
+          @if(plan.duracao > 1){
+            meses
+          } @else {
+            mês
+          }
+        </div>
+
       </div>
 
       <div class="text-gray-700 text-sm mb-2 overflow-hidden text-overflow-ellipsis line-clamp-3">
@@ -28,9 +34,13 @@
       <div class="flex flex-column gap-2">
         <div class="flex justify-content-between text-sm font-medium">
           <div>Duração:</div>
-          <div class="text-primary font-bold">{{ plan.duracao }} @if(plan.duracao > 1){Mes} @else {
-            Meses
-          } </div>
+          <div class="text-primary font-bold">{{ plan.duracao }}
+            @if(plan.duracao > 1){
+              meses
+            } @else {
+              mês
+            }
+          </div>
         </div>
         <div class="flex justify-content-between text-sm font-medium">
           <div>Dias disponíveis:</div>
@@ -39,12 +49,6 @@
       </div>
 
     </mat-card-content>
-  </mat-card>
 </mat-dialog-content>
 
-<mat-dialog-actions class="dialog-actions flex justify-content-center p-3">
-  <button mat-stroked-button class="close-button w-full" (click)="close()">
-    <mat-icon>close</mat-icon> Fechar
-  </button>
-</mat-dialog-actions>
 </main>
