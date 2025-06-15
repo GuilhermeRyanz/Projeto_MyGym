@@ -14,7 +14,7 @@ from academia.models import UsuarioAcademia
 from aluno.models import AlunoPlano
 from chat_gym import chat_config
 from usuario.models import Usuario
-from .agent_functions import get_exercice
+from .agent_functions import get_exercise
 from .models import Questions
 
 load_dotenv()
@@ -66,7 +66,6 @@ def sanitize_query(query: str) -> str:
     match = re.search(r"```sql\s*(.*?)\s*```", query, re.DOTALL | re.IGNORECASE)
     if match:
         return match.group(1).strip()
-    # Se não encontrar bloco, tenta pegar a primeira linha que parece SQL
     lines = query.splitlines()
     sql_lines = []
     start = False
@@ -255,8 +254,10 @@ class IaPersona:
         context = (
             "You are a helpful personal trainer responsible for assisting gym members who use the MyGym management system. "
             f"Member data: {member_data}. "
-            "Use this information to personalize responses when relevant. "
+            "Use this information to sugerir ou montar planos de treino personalizados, caso a pergunta envolva rotinas de treino. "
+            "Evite responder com informações genéricas. "
             "Respond in Brazilian Portuguese and only call functions when explicitly required by the question. "
+            "The days of weeke in member data follow this order 0=Domingo, 1=Segunda, 2=Terça, 3=Quarta, 4=Quinta, 5=Sexta, 6=Sabado"
             "Now, respond to the following question:"
             f"last 3 chats with user {self.get_last_questions()}"
         )
@@ -264,10 +265,10 @@ class IaPersona:
 
     def _call_function(self, name: str, args: dict) -> Optional[str]:
         try:
-            if name == "get_exercice":
+            if name == "get_exercise":
                 if not any(args.values()):
                     return "Por favor, especifique o nome do exercício, grupo muscular ou equipamento."
-                return get_exercice(**args)
+                return get_exercise(**args)
             elif name == "get_member_data":
                 return self.get_member_data()
             else:
@@ -277,10 +278,10 @@ class IaPersona:
 
     def _preprocess_question(self) -> Optional[str]:
         exercise_keywords = ["exercício", "como fazer", "treino", "músculo", "equipamento", "fazer", "treinar"]
-        member_keywords = ["plano", "benefícios", "dias", "minha conta", "cadastro"]
+        member_keywords = ["meu plano", "minha conta", "benefícios do meu plano", "dias permitidos"]
 
         if any(keyword in self.user_question for keyword in exercise_keywords):
-            return "get_exercice"
+            return "get_exercise"
         elif any(keyword in self.user_question for keyword in member_keywords):
             return "get_member_data"
         return None
@@ -289,7 +290,7 @@ class IaPersona:
         {
             "type": "function",
             "function": {
-                "name": "get_exercice",
+                "name": "get_exercise",
                 "description": (
                     "Fetches exercise data from the MyGym database. Use ONLY for questions requesting exercise recommendations or "
                     "details based on exercise title, muscle group, or equipment. "
@@ -300,7 +301,7 @@ class IaPersona:
                     "type": "object",
                     "properties": {
                         "title": {"type": "string",
-                                  "description": "Exercice name in Portuguese (sem acentos, ex.: Elevacao Pelvica)"},
+                                  "description": "Exercise name in Portuguese (sem acentos, ex.: Elevacao Pelvica)"},
                         "muscle_group": {"type": "string",
                                          "description": "Muscle Group in Portuguese (sem acentos, ex.: Gluteos)"},
                         "equipment": {"type": "string"},
@@ -311,23 +312,6 @@ class IaPersona:
                 "strict": True
             }
         },
-        {
-            "type": "function",
-            "function": {
-                "name": "get_member_data",
-                "description": (
-                    "Fetches data about the member who asked the question, including name, plan, allowed days, and benefits. "
-                    "Use ONLY for questions related to the student's personal plan details or membership information."
-                ),
-                "parameters": {
-                    "type": "object",
-                    "properties": {},
-                    "required": [],
-                    "additionalProperties": False
-                },
-                "strict": True
-            }
-        }
     ]
 
     def run(self):
@@ -364,7 +348,6 @@ class IaPersona:
                 completion_2 = llm.chat.completions.create(
                     model=os.getenv("OPENROUTER_MODEL_NAME"),
                     messages=messages,
-                    tools=self.tools,
                 )
                 final_response = completion_2.choices[0].message
                 return final_response.content

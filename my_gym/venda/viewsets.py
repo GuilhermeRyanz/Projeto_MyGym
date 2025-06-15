@@ -23,7 +23,7 @@ class VendaViewSet(viewsets.ModelViewSet):
     def cancelar(self, request, pk=None):
         venda = self.get_object()
 
-        if hasattr(venda, 'cancelada') and venda.cancelada:
+        if hasattr(venda, 'cancelada') and venda.active == False:
             return Response({"detail": "Venda já foi cancelada."}, status=status.HTTP_400_BAD_REQUEST)
 
         itens = venda.itens.all()

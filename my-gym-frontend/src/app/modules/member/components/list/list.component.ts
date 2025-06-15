@@ -240,7 +240,7 @@ export class ListComponent implements OnInit {
   public clearPlanFilter(): void {
     this.selectedPlan = null;
     this.searchPlanTerm = '';
-    this.searchMember(this.searchTerm, 0); // Reaplica a busca sem o filtro de plano
+    this.searchMember(this.searchTerm, 0);
   }
 
 

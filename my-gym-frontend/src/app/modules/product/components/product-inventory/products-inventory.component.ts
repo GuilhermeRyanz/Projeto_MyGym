@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from "@angular/router";
-import { URLS } from "../../../../app.urls";
-import { HttpMethodsService } from "../../../../shared/services/httpMethods/http-methods.service";
-import { Product } from "../../../../shared/interfaces/product";
-import { FormsModule } from "@angular/forms";
-import { MatButton } from "@angular/material/button";
-import { MatCard } from "@angular/material/card";
-import { MatIcon } from "@angular/material/icon";
-import { ProductItemComponent } from "../../../../shared/components/product-item/product-item.component";
-import { MatDialog } from '@angular/material/dialog';
-import { ProductStockModalComponent } from '../product-stock-modal/product-stock-modal.component';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
+import {URLS} from "../../../../app.urls";
+import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
+import {Product} from "../../../../shared/interfaces/product";
+import {FormsModule} from "@angular/forms";
+import {MatButton} from "@angular/material/button";
+import {MatCard} from "@angular/material/card";
+import {MatIcon} from "@angular/material/icon";
+import {ProductItemComponent} from "../../../../shared/components/product-item/product-item.component";
+import {MatDialog} from '@angular/material/dialog';
+import {ProductStockModalComponent} from '../product-stock-modal/product-stock-modal.component';
 import {debounceTime, Subject, takeUntil} from 'rxjs';
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
@@ -55,7 +55,8 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
     'ROUPA',
     'BEBIDA',
     'ALIMENTO',
-    'OUTROS'
+    'OUTROS',
+    'EQUIPAMENTO'
   ];
 
   public categoryPanation: {
@@ -70,7 +71,8 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialog: MatDialog,
     private authService: AuthService,
-  ) {}
+  ) {
+  }
 
   public ngOnInit() {
     this.searchChange
@@ -102,7 +104,7 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
 
   public restock(prod: Product) {
     const dialogRef = this.dialog.open(ProductStockModalComponent, {
-      data: { produtoId: prod.id },
+      data: {produtoId: prod.id},
       width: '100%',
       maxWidth: '500px',
       autoFocus: false,
@@ -244,7 +246,6 @@ export class ProductInventoryComponent implements OnInit, OnDestroy {
         }
       });
   }
-
 
 
 }

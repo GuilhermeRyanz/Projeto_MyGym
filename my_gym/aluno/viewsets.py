@@ -3,16 +3,20 @@ from rest_framework import status, permissions
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from aluno import params_serializer, models, actions
-from aluno.filters import AlunoPlanoFilter, AlunoFilter
+from aluno.filters import AlunoPlanoFilter, AlunoFilter, WorkoutPlanFilters
 from aluno.models import Aluno
 from aluno.serializers import AlunoSerializer, AlunoPlanoSerializer
 from core.auth import get_tokens_for_user
 from core.permissions import AcademiaPermissionMixin
 from usuario.models import Usuario
+
+from .models import WorkOutPlan, WorkoutDay, WorkoutExercise
+from .serializers import WorkoutDaySerializer, WorkoutExerciseSerializer, WorkoutPlanSerializer
 
 
 class AlunoViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
@@ -41,6 +45,26 @@ class AlunoPlanoViewSet(viewsets.ModelViewSet):
         aluno = models.Aluno.objects.get(id=pk)
         rs = actions.AlunoActions.disable(aluno, request.data['academia'])
         return Response(rs.data, status=rs.status_code)
+
+
+class WorkOutPlanViewSet(viewsets.ModelViewSet):
+    queryset = WorkOutPlan.objects.all().select_related('member_plan').prefetch_related('workout_days__exercises')
+    serializer_class = WorkoutPlanSerializer
+    permission_classes = [IsAuthenticated]
+    filterset_class = WorkoutPlanFilters
+
+
+class WorkoutDayViewSet(viewsets.ModelViewSet):
+    queryset = WorkoutDay.objects.all().select_related('workout_plan')
+    serializer_class = WorkoutDaySerializer
+    permission_classes = [IsAuthenticated]
+
+
+class WorkoutExerciseViewSet(viewsets.ModelViewSet):
+    queryset = WorkoutExercise.objects.all().select_related('workout_day', 'exercise')
+    serializer_class = WorkoutExerciseSerializer
+    permission_classes = [IsAuthenticated]
+
 
 class AuthTokenViewAluno(APIView):
     permission_classes = [permissions.AllowAny]

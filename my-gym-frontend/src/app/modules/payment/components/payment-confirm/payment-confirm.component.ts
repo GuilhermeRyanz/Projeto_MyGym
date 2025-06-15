@@ -8,7 +8,7 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {CurrencyPipe} from "@angular/common";
+import {CurrencyPipe, NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-payment-confirm',
@@ -23,7 +23,8 @@ import {CurrencyPipe} from "@angular/common";
     MatCardActions,
     MatRadioButton,
     MatRadioGroup,
-    CurrencyPipe
+    CurrencyPipe,
+    NgClass
   ],
   templateUrl: './payment-confirm.component.html',
   styleUrl: './payment-confirm.component.css'

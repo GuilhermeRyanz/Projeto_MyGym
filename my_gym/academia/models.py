@@ -136,9 +136,9 @@ class Gasto(ModelBase):
     class Meta:
         db_table = 'gasto'
 
-class Exercice(ModelBase):
+class Exercise(ModelBase):
     title = models.CharField(max_length=255)
-    academia = models.ForeignKey(Academia, on_delete=DO_NOTHING, related_name='exercices', null=True, blank=True)
+    academia = models.ForeignKey(Academia, on_delete=DO_NOTHING, related_name='exercises', null=True, blank=True)
     description = models.TextField()
     type = models.CharField(max_length=50)
     muscle_group = models.CharField(max_length=100)
@@ -152,4 +152,4 @@ class Exercice(ModelBase):
     ], default='pendente')
 
     class Meta:
-        db_table = 'exercice'
+        db_table = 'exercise'

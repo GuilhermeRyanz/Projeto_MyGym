@@ -32,11 +32,12 @@ export class ProductFormComponent implements OnInit {
 
   public categorias = [
     { value: 'SUPLEMENTO', label: 'Suplemento' },
-    { value: 'Acessorio', label: 'Acessório' },
+    { value: 'ACESSORIO', label: 'Acessório' },
     { value: 'ROUPA', label: 'Roupa' },
     { value: 'BEBIDA', label: 'Bebida' },
     { value: 'ALIMENTO', label: 'Alimento' },
     { value: 'OUTROS', label: 'Outros' },
+    {value: 'EQUIPAMENTO', label: "Equipamento"},
   ];
 
 
@@ -60,7 +61,7 @@ export class ProductFormComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       id: [],
       nome: ['', Validators.required],
-      preco: ['', Validators.required],
+      preco: ['', [Validators.required, Validators.min(1)]],
       descricao: ['', Validators.required],
       academia: [''],
       categoria: ['', Validators.required],

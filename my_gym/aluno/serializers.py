@@ -1,12 +1,10 @@
 from datetime import date
 
-from django.contrib.auth.models import User
 from rest_flex_fields import FlexFieldsModelSerializer
 from rest_framework import serializers
-from tutorial.quickstart.serializers import UserSerializer
 
 from aluno import models
-from aluno.models import Aluno
+from aluno.models import Aluno, WorkoutExercise, WorkoutDay, WorkOutPlan
 from plano import models as plano_models
 from plano.serializers import PlanoSerializer
 
@@ -67,3 +65,56 @@ class AlunoPlanoSerializer(FlexFieldsModelSerializer):
             active=True
         ).update(active=False)
         return super().create(validated_data)
+
+
+class WorkoutExerciseSerializer(FlexFieldsModelSerializer):
+    exercise_name = serializers.ReadOnlyField(source='exercise.title')
+
+    class Meta:
+        model = WorkoutExercise
+        fields = ['id', 'exercise', 'exercise_name', 'sets', 'repetitions', 'observations']
+
+class WorkoutDaySerializer(FlexFieldsModelSerializer):
+    exercises = WorkoutExerciseSerializer(many=True, required=False)
+    day = serializers.SerializerMethodField()
+
+    class Meta:
+        model = WorkoutDay
+        fields = ['id', 'workout_plan', 'days_of_week', 'day', 'exercises']
+
+    def get_day(self, obj):
+        day_mapping = {
+            'segunda': 0,
+            'terca': 1,
+            'quarta': 2,
+            'quinta': 3,
+            'sexta': 4,
+            'sabado': 5,
+            'domingo': 6
+        }
+        return day_mapping.get(obj.days_of_week, -1)
+
+    def create(self, validated_data):
+        exercises_data = validated_data.pop('exercises', [])
+        workout_day = WorkoutDay.objects.create(**validated_data)
+        for ex_data in exercises_data:
+            WorkoutExercise.objects.create(workout_day=workout_day, **ex_data)
+        return workout_day
+
+    def update(self, instance, validated_data):
+        exercises_data = validated_data.pop('exercises', [])
+        instance.workout_plan = validated_data.get('workout_plan', instance.workout_plan)
+        instance.days_of_week = validated_data.get('days_of_week', instance.days_of_week)
+        instance.save()
+
+        instance.exercises.all().delete()
+
+        for ex_data in exercises_data:
+            WorkoutExercise.objects.create(workout_day=instance, **ex_data)
+
+        return instance
+
+class WorkoutPlanSerializer(FlexFieldsModelSerializer):
+    class Meta:
+        model = WorkOutPlan
+        fields = '__all__'

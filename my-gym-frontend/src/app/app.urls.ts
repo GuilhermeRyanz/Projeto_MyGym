@@ -14,5 +14,9 @@ export const URLS = {
   PRODUCT: 'api/produto/produtos/',
   BATCH: 'api/produto/lotes',
   SALE: "api/venda/vendas/",
+  EXERCISE: "api/academia/exercise/",
+  WORKOUTPLAN: "api/aluno/workoutPlan/",
+  DAYS: "api/aluno/days/",
+  WORKOUTEXERCISE: "api/aluno/workoutExercise/"
 
 }

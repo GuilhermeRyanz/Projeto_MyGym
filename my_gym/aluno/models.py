@@ -9,7 +9,6 @@ from usuario.models import Usuario
 
 
 class Aluno(ModelBase):
-
     user = models.OneToOneField(Usuario, on_delete=models.CASCADE, null=True, blank=True, related_name='aluno')
 
     nome = models.CharField(
@@ -39,7 +38,7 @@ class Aluno(ModelBase):
         db_column='matricula',
         max_length=20,
         unique=True,
-        blank= True,
+        blank=True,
         validators=[RegexValidator(r'^[0-9]*$')]
     )
 
@@ -62,7 +61,7 @@ class Aluno(ModelBase):
                 tipo_usuario="M",
             )
             self.user_id = usuario.id
-            super().save(update_fields=['matricula','user_id'])
+            super().save(update_fields=['matricula', 'user_id'])
 
     def __str__(self):
         return self.nome
@@ -86,3 +85,34 @@ class AlunoPlano(ModelBase):
     class Meta:
         db_table = 'aluno_plano'
         unique_together = ('aluno', 'plano')
+
+
+class WorkOutPlan(ModelBase):
+    member_plan = models.ForeignKey('AlunoPlano', on_delete=models.CASCADE, db_column='member_plan',
+                                    related_name='work_out_plans')
+
+class WorkoutDay(ModelBase):
+    dia_semana = [
+        ('segunda', 'Segunda'),
+        ('terca', 'Terça'),
+        ('quarta', 'Quarta'),
+        ('quinta', 'Quinta'),
+        ('sexta', 'Sexta'),
+        ('sabado', 'Sábado'),
+        ('domingo', 'Domingo'),
+    ]
+
+    workout_plan = models.ForeignKey(WorkOutPlan, on_delete=models.CASCADE, db_column='workout_plan',
+                                     related_name='workout_days')
+    days_of_week = models.CharField(max_length=10, choices=dia_semana)
+
+    class Meta:
+        unique_together = ('workout_plan', 'days_of_week')
+
+
+class WorkoutExercise(ModelBase):
+    workout_day = models.ForeignKey(WorkoutDay, on_delete=models.CASCADE, related_name='exercises')
+    exercise = models.ForeignKey('academia.Exercise', on_delete=models.PROTECT)
+    sets = models.PositiveIntegerField()
+    repetitions = models.PositiveIntegerField()
+    observations = models.TextField(blank=True)

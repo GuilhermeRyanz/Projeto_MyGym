@@ -177,7 +177,7 @@ export class SellPageComponent implements OnInit {
         this.formGroup.reset({ formaPagamento: 'Dinheiro' });
         this.selectedMember = null;
         this.desc = 0;
-        this.router.navigate(['/sales']);
+        this.goBack();
       },
       error: (err) => {
         console.error('Erro ao finalizar venda:', err);
@@ -200,7 +200,7 @@ export class SellPageComponent implements OnInit {
     if (selectedMember) {
       this.selectedMember = selectedMember;
       this.desc = selectedMember.plano?.desconto || 0;
-      this.formGroup.get('client')?.setValue(selectedMember.aluno.id); // Usar aluno.id
+      this.formGroup.get('client')?.setValue(selectedMember.aluno.id);
       console.log('Aluno selecionado:', selectedMember);
     } else {
       this.selectedMember = null;

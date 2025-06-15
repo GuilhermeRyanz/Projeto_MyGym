@@ -13,6 +13,8 @@ export class AuthService {
   showBannerEmmiter = new EventEmitter<boolean>();
   userUpdateEmitter = new EventEmitter<void>();
   private pathUrl: string = environment.baseUrl;
+  navVisibilityEmitter = new EventEmitter<boolean>();
+
 
   constructor(
     private http: HttpClient,
@@ -58,7 +60,6 @@ export class AuthService {
       tap((response: any) => {
         this.setToken(response.access_token, response.refresh_token);
         localStorage.setItem('tipo_usuario', response.tipo_usuario);
-        localStorage.setItem('email', response.email);
         localStorage.setItem('nome_usuario', response.name)
 
         this.showBannerEmmiter.emit(true);
@@ -153,6 +154,7 @@ export class AuthService {
   }
 
   public logout() {
+    this.navVisibilityEmitter.emit(false);
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('tipo_usuario');

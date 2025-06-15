@@ -9,11 +9,12 @@ from cloudinary.models import CloudinaryField
 class Produto(ModelBase):
     CATEGORIA = [
         ('SUPLEMENTO', 'suplemento'),
-        ('Acessorio', 'acessorio'),
+        ('ACESSORIO', 'acessorio'),
         ('ROUPA', 'roupa'),
         ('BEBIDA', 'bebida'),
         ('ALIMENTO', 'alimento'),
         ('OUTROS', 'outros'),
+        ('EQUIPAMENTO', "equipamento")
     ]
 
     marca = models.CharField(max_length=200, null=True, blank=True)

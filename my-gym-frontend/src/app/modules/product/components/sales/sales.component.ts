@@ -78,7 +78,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
 
   public sales: Sale[] = [];
   public dataSource = new MatTableDataSource<Sale>(this.sales);
-  protected readonly displayedColumns: string[] = ['cliente', 'vendedor', 'valor_total', 'itens', 'data_venda', 'actions'];
+  protected readonly displayedColumns: string[] = ['cliente', 'vendedor', 'valor_total', 'itens', 'data_venda', 'Actions'];
   private pathUrlSales: string = URLS.SALE;
   public searchTerm: string = "";
   public currentPage: number = 1;

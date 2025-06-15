@@ -1,9 +1,9 @@
-from academia.models import Exercice
+from academia.models import Exercise
 from unidecode import unidecode
 from django.db.models import Q
 
-def get_exercice(title: str = "", muscle_group: str = "", equipment: str = ""):
-    query = Exercice.objects.filter(active=True, status="aprovado")
+def get_exercise(title: str = "", muscle_group: str = "", equipment: str = ""):
+    query = Exercise.objects.filter(active=True, status="aprovado")
 
     if title:
         normalized_title = unidecode(title)

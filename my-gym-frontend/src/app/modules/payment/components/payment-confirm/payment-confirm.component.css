@@ -1,3 +1,9 @@
+.payment-card {
+  width: 60%;
+  background: #f8f8f8;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 .avatar {
   width: 40px;
   height: 40px;
@@ -12,3 +18,35 @@
   text-transform: uppercase;
 }
 
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.email {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.extra-info {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.footer {
+  background: #ededed;
+  font-size: 0.9rem;
+  color: #969696;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 9px 9px;
+}

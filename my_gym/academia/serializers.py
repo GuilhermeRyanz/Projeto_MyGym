@@ -1,14 +1,9 @@
-from attr.setters import validate
 from rest_framework import serializers
 
 from academia.actions import AcademiaActions
-from academia.models import Academia, Frequencia, Gasto, Exercice
-from aluno.models import Aluno, AlunoPlano
+from academia.models import Academia, Frequencia, Gasto, Exercise
 from academia.models import UsuarioAcademia
-from pagamento.models import Pagamento
-from django.utils import timezone
-
-from plano.models import dias_semana_default, DiasSemana
+from aluno.models import Aluno
 
 
 class AcademiaSerializer(serializers.ModelSerializer,):
@@ -68,7 +63,7 @@ class GastoSerializer(serializers.ModelSerializer):
         model = Gasto
         fields = '__all__'
 
-class ExerciceSerializer(serializers.ModelSerializer):
+class ExerciseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Exercice
+        model = Exercise
         fields = '__all__'

@@ -22,6 +22,7 @@ class AlunoFilter(filters.FilterSet):
 
 
 class AlunoPlanoFilter(filters.FilterSet):
+    id = filters.NumberFilter(field_name='id', lookup_expr='exact')
     academia = filters.NumberFilter(field_name='plano__academia__id', lookup_expr='exact')
     aluno = filters.NumberFilter(field_name='aluno__id', lookup_expr='exact')
     nome = filters.CharFilter(field_name='aluno__nome', lookup_expr='icontains')
@@ -48,3 +49,6 @@ class AlunoPlanoFilter(filters.FilterSet):
     class Meta:
         model = AlunoPlano
         fields = ['active', 'academia', 'aluno', ]
+
+class WorkoutPlanFilters(filters.FilterSet):
+    member = filters.NumberFilter(field_name='member_plan_id', lookup_expr='exact')

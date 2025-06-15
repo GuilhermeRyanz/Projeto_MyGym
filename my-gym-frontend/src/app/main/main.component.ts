@@ -50,7 +50,6 @@ export class MainComponent implements DoCheck {
       this.userInfor();
     }
 
-
     if (this.authService.userIsAuthGy()) {
       this.showNav = true;
     }
@@ -66,15 +65,19 @@ export class MainComponent implements DoCheck {
       }
     });
 
-    this.router.events.subscribe((event) => {
+    this.authService.navVisibilityEmitter.subscribe((visible: boolean) => {
+      this.showNav = visible;
+      this.opened = visible;
+    });
 
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.showNav = !event.url.includes('adm/');
-        this.opened = !event.url.includes('adm/');
-      }
-      if (event instanceof NavigationEnd) {
-        this.showBanner = !event.url.includes('auth/')
-        this.opened = !event.url.includes('auth/');
+        const url = event.url.toLowerCase();
+
+        this.showNav = !(url.includes('adm/') || url.includes('memberarea'));
+        this.opened = this.showNav;
+
+        this.showBanner = !url.includes('auth/');
       }
     });
   }
@@ -95,8 +98,11 @@ export class MainComponent implements DoCheck {
 
   logout() {
     this.authService.showBannerEmmiter.emit(false);
+    this.authService.navVisibilityEmitter.emit(false);
+    this.showNav = false;
+    this.opened = false;
+    this.showBanner = false;
     this.authService.logout();
-    this.router.navigate(['/auth/login']);
   }
 
 }

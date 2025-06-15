@@ -1,0 +1,65 @@
+@for (day of diasDaSemana; track day.value) {
+  @if (isDayAllowed(day.value)) {
+    <h3>{{ day.label }}</h3>
+    <form [formGroup]="exerciseForms[day.value]" (ngSubmit)="saveWorkoutDay(day.value)">
+      <div formArrayName="exercises">
+        @for (exercise of getExercises(day.value).controls; track $index; let i = $index) {
+          <div [formGroupName]="i">
+            <mat-form-field>
+              <mat-label>Exercício</mat-label>
+              <mat-select formControlName="exercise">
+                @for (ex of exercises; track ex.id) {
+                  <mat-option [value]="ex.id">{{ ex.title }}</mat-option>
+                }
+              </mat-select>
+              @if (exercise.get('exercise')?.touched && exercise.get('exercise')?.errors?.['required']) {
+                <mat-error>O exercício é obrigatório.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Séries</mat-label>
+              <input matInput type="number" formControlName="sets" />
+              @if (exercise.get('sets')?.touched && exercise.get('sets')?.errors?.['required']) {
+                <mat-error>O número de séries é obrigatório.</mat-error>
+              }
+              @if (exercise.get('sets')?.touched && exercise.get('sets')?.errors?.['min']) {
+                <mat-error>O número de séries deve ser maior que 0.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Repetições</mat-label>
+              <input matInput type="number" formControlName="repetitions" />
+              @if (exercise.get('repetitions')?.touched && exercise.get('repetitions')?.errors?.['required']) {
+                <mat-error>O número de repetições é obrigatório.</mat-error>
+              }
+              @if (exercise.get('repetitions')?.touched && exercise.get('repetitions')?.errors?.['min']) {
+                <mat-error>O número de repetições deve ser maior que 0.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Observações</mat-label>
+              <input matInput formControlName="observations" />
+            </mat-form-field>
+            <button mat-button type="button" (click)="removeExercise(day.value, i)">Remover</button>
+          </div>
+        }
+        @if (getExercises(day.value).touched && getExercises(day.value).errors?.['required']) {
+          <mat-error>Pelo menos um exercício é obrigatório.</mat-error>
+        }
+      </div>
+      <button mat-button type="button" (click)="addExerciseToForm(day.value)">Adicionar Exercício</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="exerciseForms[day.value].invalid">Salvar Dia</button>
+    </form>
+    <h4>Exercícios Existentes</h4>
+    <mat-list>
+      @for (ex of getExercisesByDay(day.value); track trackByExercise($index, ex)) {
+        <mat-list-item>
+          {{ ex.exercise_name }} - {{ ex.sets }} séries, {{ ex.repetitions }} repetições
+          @if (ex.observations) {
+            <span> ({{ ex.observations }})</span>
+          }
+        </mat-list-item>
+      }
+    </mat-list>
+  }
+}

@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 from academia import models, serializers, filters, actions, managers
 from academia.filters import FrequenciaFilter
-from academia.models import Frequencia, Academia, Gasto, Exercice
+from academia.models import Frequencia, Academia, Gasto, Exercise
 from academia.serializers import FrequenciaSerializer, GastoSerializer
 from core.permissions import AcademiaPermissionMixin
 
@@ -138,7 +138,6 @@ class GastoViewSets(viewsets.ModelViewSet):
         gasto.active = False
         gasto.save()
 
-        # Se for um gasto de produto, desative o lote correspondente
         if gasto.tipo == 'produtos':
             from produto.models import LoteProduto
 
@@ -161,14 +160,12 @@ class GastoViewSets(viewsets.ModelViewSet):
                         lote.produto.save()
                         lote.save()
             except Exception as e:
-                # (Opcional) Log do erro
                 print("Erro ao tentar desativar lote relacionado ao gasto:", e)
 
         return Response({"status": "gasto desativado"})
 
 
-class ExerciceViewSets(viewsets.ModelViewSet):
-    queryset = Exercice.objects.all()
-    serializer_class = serializers.ExerciceSerializer
-    filters
+class ExerciseSerializer(viewsets.ModelViewSet):
+    queryset = Exercise.objects.all()
+    serializer_class = serializers.ExerciseSerializer
     permission_classes = [permissions.IsAuthenticated, ]
