@@ -1,0 +1,24 @@
+.totem-container {
+  position: relative;
+  display: inline-block;
+}
+
+video {
+  border-radius: 8px;
+  width: 100%;
+  height: auto;
+}
+
+.overlay-message {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 128, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  display: none;
+  z-index: 2;
+}

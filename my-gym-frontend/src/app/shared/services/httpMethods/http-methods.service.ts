@@ -12,6 +12,7 @@ import {AuthService} from "../../../auth/services/auth.service";
 })
 export class HttpMethodsService {
   private baseUrl: string = environment.baseUrl;
+  private facialApiUrl = 'http://localhost:8001/api';
 
 
   constructor(private http: HttpClient,
@@ -158,6 +159,47 @@ export class HttpMethodsService {
           catchError((error) => this.handleError(error))
         )
       )
+    );
+  }
+
+  uploadFacialData(studentId: number, gymId:string | null, faceImages: File[]): Observable<any> {
+    console.log( studentId, 'estudante');
+    console.log('Gym ID: ', gymId);
+    if(gymId != null) {
+      console.log('gym ID no if: ', gymId);
+      const formData = new FormData();
+      formData.append('student_id', studentId.toString());
+      formData.append('gym_id', gymId.toString())
+      faceImages.forEach((file, index) => {
+        formData.append('face_images', file, `face_${index}.jpg`);
+      });
+
+      // Usa o HttpClient diretamente, pois a URL é diferente e não precisa de token.
+      return this.http.post(`${this.facialApiUrl}/upload/`, formData).pipe(
+        catchError((error) => this.handleError(error))
+      );
+    }else {
+      // CORRIGIDO: Retorna um Observable de erro se gymId for nulo.
+      const errorMsg = 'ID da academia é nulo. Não é possível fazer o upload dos dados faciais.';
+      this.snackBar.open(errorMsg, 'Fechar', { duration: 5000, verticalPosition: 'top' });
+      return throwError(() => new Error(errorMsg));
+    }
+
+  }
+
+  recognizeFace(gymId: string, faceImage: File): Observable<any> {
+    if (!gymId) {
+      const errorMsg = 'ID da academia é obrigatório para reconhecimento facial.';
+      this.snackBar.open(errorMsg, 'Fechar', { duration: 5000, verticalPosition: 'top' });
+      return throwError(() => new Error(errorMsg));
+    }
+
+    const formData = new FormData();
+    formData.append('gym_id', gymId);
+    formData.append('face_image', faceImage, 'capture.jpg');
+
+    return this.http.post(`${this.facialApiUrl}/recognize/`, formData).pipe(
+      catchError((error) => this.handleError(error))
     );
   }
 
