@@ -1,0 +1,15 @@
+<div class="capture-container">
+  <h3>Cadastro Facial Automático</h3>
+  @if (feedbackMessage) {
+    <div class="feedback-message">{{ feedbackMessage }}</div>
+  }
+  @if (errorMessage) {
+    <div class="error-message">{{ errorMessage }}</div>
+  }
+  <div class="video-wrapper">
+    <video id="video-capture" autoplay muted playsinline></video>
+    @if (isProcessing) {
+      <div class="overlay"><p>Processando...</p></div>
+    }
+  </div>
+</div>

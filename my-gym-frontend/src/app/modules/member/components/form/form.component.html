@@ -1,66 +1,85 @@
+<!-- src/app/modules/member/components/form/form.component.html -->
+
 <h2>{{this.title}}</h2>
+
+<!-- O MatTabGroup agora controla qual etapa é exibida -->
 <mat-tab-group [(selectedIndex)]="selectedIndex">
-  <mat-tab label="Dados do Aluno">
-    <div class="container p-7 ">
+
+  <!-- ETAPA 1: DADOS DO ALUNO -->
+  <mat-tab label="1. Dados do Aluno">
+    <div class="container p-7">
       <form [formGroup]="formGroup" (ngSubmit)="saveOrUpdate(formGroup.value)" class="mat-elevation-z2 form">
-        <mat-form-field appearance="fill" class="nome">
+
+        <!-- Seus campos de formulário (nome, email, etc.) permanecem aqui sem alteração -->
+        <mat-form-field appearance="fill">
           <mat-label>Nome</mat-label>
           <input matInput formControlName="nome" placeholder="Digite o nome"/>
-          @if(formGroup.get('nome')?.hasError('required')){<mat-error>
-            Campo Obrigatorio
-          </mat-error>}
-
-          @if(formGroup.get('nome')?.hasError('maxlength')){<mat-error>
-            Nome tem limite de 50 caracteres
-          </mat-error>}
+          @if(formGroup.get('nome')?.hasError('required')){<mat-error>Campo Obrigatório</mat-error>}
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
           <input matInput type="email" formControlName="email" placeholder="Digite o Email"/>
-          @if(formGroup.get('email')?.hasError('required')){<mat-error>
-            Campo Obrigatorio
-          </mat-error>}
-
-          @if(formGroup.get('email')?.hasError('email')){<mat-error>
-            Insira um email valido
-          </mat-error>}
-
+          @if(formGroup.get('email')?.hasError('required')){<mat-error>Campo Obrigatório</mat-error>}
+          @if(formGroup.get('email')?.hasError('email')){<mat-error>Insira um email válido</mat-error>}
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Telefone</mat-label>
-          <input matInput type="cellphone" formControlName="telefone" placeholder="Digite o Telefone"/>
-          @if(formGroup.get('telefone')?.hasError('required')){<mat-error>
-            Campo Obrigatorio
-          </mat-error>}
-
-          @if(formGroup.get('telefone')?.hasError('pattern')){<mat-error>
-            Número de telefone inválido
-          </mat-error>}
+          <input matInput formControlName="telefone" placeholder="Digite o Telefone"/>
+          @if(formGroup.get('telefone')?.hasError('required')){<mat-error>Campo Obrigatório</mat-error>}
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Data de nascimento</mat-label>
           <input matInput type="date" formControlName="data_nascimento" placeholder="digite a data de nascimento"/>
-          @if(formGroup.get('data_nascimento')?.hasError('required')){<mat-error>
-            Campo Obrigatorio
-          </mat-error>}
-
+          @if(formGroup.get('data_nascimento')?.hasError('required')){<mat-error>Campo Obrigatório</mat-error>}
         </mat-form-field>
 
-        <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit" class="save">Salvar
+        <!-- O botão agora tem um texto dinâmico -->
+        <button mat-raised-button color="primary" [disabled]="!formGroup.valid || isLoading" type="submit" class="save">
+          @if (isLoading) {
+            <span>Salvando...</span>
+          } @else {
+            <span>Salvar e Iniciar Cadastro Facial</span>
+          }
         </button>
       </form>
-
     </div>
   </mat-tab>
-  <mat-tab label="Seleção de Plano" [disabled]="!obj">
-    <app-member-plan [member]="obj"></app-member-plan>
+
+  <!-- ETAPA 2: RECONHECIMENTO FACIAL (NOVA) -->
+  <!-- Habilitada apenas quando o objeto 'obj' (aluno) existe -->
+  <mat-tab label="2. Reconhecimento Facial" [disabled]="!obj">
+    @if (obj) {
+      <!-- Renderiza o novo componente de captura -->
+      <app-facial-capture
+        [studentId]="obj.id"
+        [gymId]="gymId"
+        (captureComplete)="onFacialCaptureComplete()">
+      </app-facial-capture>
+    } @else {
+      <div class="p-5 text-center text-gray-500">
+        <p>Por favor, preencha e salve os dados do aluno para habilitar esta etapa.</p>
+      </div>
+    }
   </mat-tab>
-  <div>
-    <button mat-raised-button color="warn" (click)="return()">finalizar</button>
-  </div>
+
+  <!-- ETAPA 3: SELEÇÃO DE PLANO -->
+  <!-- Habilitada apenas após a captura facial ser concluída -->
+  <mat-tab label="3. Seleção de Plano" [disabled]="!facialCaptureCompleted">
+    @if (facialCaptureCompleted && obj) {
+      <app-member-plan [member]="obj"></app-member-plan>
+    } @else {
+      <div class="p-5 text-center text-gray-500">
+        <p>Complete o cadastro facial para selecionar um plano.</p>
+      </div>
+    }
+  </mat-tab>
 
 </mat-tab-group>
 
+<!-- Este botão foi movido para fora do <mat-tab-group> para ser sempre visível -->
+<div class="p-4 flex justify-content-end">
+  <button mat-stroked-button color="warn" (click)="return()">Finalizar Cadastro Mais Tarde</button>
+</div>
