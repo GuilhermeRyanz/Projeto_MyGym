@@ -1,21 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { MatButton } from "@angular/material/button";
-import { MatError, MatFormField, MatLabel } from "@angular/material/form-field";
-import { MatInput } from "@angular/material/input";
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { MatTab, MatTabGroup } from "@angular/material/tabs";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { Member } from "../../../../shared/interfaces/member";
-import { URLS } from "../../../../app.urls";
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { HttpMethodsService } from "../../../../shared/services/httpMethods/http-methods.service";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MatButton} from "@angular/material/button";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatInput} from "@angular/material/input";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
+import {MatTab, MatTabGroup} from "@angular/material/tabs";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Member} from "../../../../shared/interfaces/member";
+import {URLS} from "../../../../app.urls";
+import {map} from 'rxjs/operators';
+import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
 
 // --- NOVOS IMPORTS ---
 // Adicione a importação do novo componente que você criou
-import { FacialCaptureComponent } from '../facial-capture/facial-capture.component';
-import { MemberPlanComponent } from "../member-plan/member-plan.component";
+import {FacialCaptureComponent} from '../facial-capture/facial-capture.component';
+import {MemberPlanComponent} from "../member-plan/member-plan.component";
 
 
 @Component({

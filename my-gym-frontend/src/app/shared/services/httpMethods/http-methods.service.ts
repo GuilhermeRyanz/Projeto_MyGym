@@ -173,13 +173,10 @@ export class HttpMethodsService {
       faceImages.forEach((file, index) => {
         formData.append('face_images', file, `face_${index}.jpg`);
       });
-
-      // Usa o HttpClient diretamente, pois a URL é diferente e não precisa de token.
       return this.http.post(`${this.facialApiUrl}/upload/`, formData).pipe(
         catchError((error) => this.handleError(error))
       );
     }else {
-      // CORRIGIDO: Retorna um Observable de erro se gymId for nulo.
       const errorMsg = 'ID da academia é nulo. Não é possível fazer o upload dos dados faciais.';
       this.snackBar.open(errorMsg, 'Fechar', { duration: 5000, verticalPosition: 'top' });
       return throwError(() => new Error(errorMsg));

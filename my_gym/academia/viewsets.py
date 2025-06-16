@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.db.models import Count
 from django.db.models.functions import ExtractWeekDay, ExtractHour
 from django_filters.rest_framework.backends import DjangoFilterBackend
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -138,6 +138,7 @@ class GastoViewSets(viewsets.ModelViewSet):
         gasto.active = False
         gasto.save()
 
+        # Se for um gasto de produto, desative o lote correspondente
         if gasto.tipo == 'produtos':
             from produto.models import LoteProduto
 

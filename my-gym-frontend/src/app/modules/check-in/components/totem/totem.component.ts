@@ -1,11 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import * as faceapi from 'face-api.js';
 import { MatSnackBar } from "@angular/material/snack-bar";
-
-import {HttpClient} from "@angular/common/http";
-import {URLS} from "../../../../app.urls";
-import {AuthService} from "../../../../auth/services/auth.service";
-import {HttpMethodsService} from "../../../../shared/services/httpMethods/http-methods.service";
+import { HttpClient } from "@angular/common/http";
+import { URLS } from "../../../../app.urls";
+import { AuthService } from "../../../../auth/services/auth.service";
+import { HttpMethodsService } from "../../../../shared/services/httpMethods/http-methods.service";
 
 @Component({
   selector: 'app-totem',
@@ -20,6 +19,7 @@ export class TotemComponent implements OnInit, OnDestroy {
   foundStudent: any = null;
 
   recognitionApiUrl = 'http://localhost:8001/api/recognize/';
+  checkinVerificationUrl = 'http://localhost:8000/frequencias/verificar_checkin/';
 
   constructor(
     private http: HttpClient,
@@ -89,7 +89,7 @@ export class TotemComponent implements OnInit, OnDestroy {
         const drawBox = new faceapi.draw.DrawBox(box, { label: 'Detectado' });
         drawBox.draw(canvas);
 
-        // Tira um snapshot da face e envia como imagem
+        // Snapshot
         const snapshotCanvas = document.createElement('canvas');
         snapshotCanvas.width = this.video.videoWidth;
         snapshotCanvas.height = this.video.videoHeight;
@@ -108,7 +108,7 @@ export class TotemComponent implements OnInit, OnDestroy {
           next: (response: any) => {
             if (response.student_id && (!this.foundStudent || this.foundStudent !== response.student_id)) {
               this.foundStudent = response.student_id;
-              this.registerCheckIn(response.student_id);
+              this.verifyAndRegisterCheckIn(response.student_id);
             }
           },
           error: (err) => {
@@ -116,10 +116,42 @@ export class TotemComponent implements OnInit, OnDestroy {
           }
         });
 
-        break; // envia apenas o primeiro rosto detectado
+        break; // só o primeiro rosto
       }
 
     }, 3000);
+  }
+
+  /**
+   * NOVA FUNÇÃO:
+   * Verifica se o aluno pode fazer check-in e registra apenas se for permitido.
+   */
+  private verifyAndRegisterCheckIn(studentId: number): void {
+    const gymId = this.authService.get_gym();
+    if (!gymId) {
+      console.error('ID da academia não encontrado.');
+      return;
+    }
+
+    const params = {
+      aluno: studentId,
+      academia: gymId
+    };
+
+    this.http.get(this.checkinVerificationUrl, { params }).subscribe({
+      next: (response: any) => {
+        if (response.checkin_recente) {
+          console.log(`Check-in já registrado para o aluno ${studentId}. Ignorando.`);
+          this.showWelcomeMessage(`Olá novamente! Já registrado.`);
+        } else {
+          // Se não tiver check-in recente, faz o check-in normalmente
+          this.registerCheckIn(studentId);
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao verificar check-in:', err);
+      }
+    });
   }
 
   private registerCheckIn(studentId: number): void {
