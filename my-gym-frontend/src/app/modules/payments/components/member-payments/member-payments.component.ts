@@ -65,7 +65,7 @@ export class MemberPaymentsComponent implements OnInit {
   }
 
   public payments_seach(): void {
-    this.httpMethods.get(this.urlPathPayments+ `?aluno=${this.memberInfo?.aluno?.id}&academia=${this.memberInfo?.plano?.academia}`).subscribe((response: any) => {
+    this.httpMethods.get(this.urlPathPayments+ `?aluno=${this.memberInfo?.aluno?.id}&academia=${this.memberInfo?.plano?.academia}&limit=100&offset=100`).subscribe((response: any) => {
       this.payments = response;
     });
   };

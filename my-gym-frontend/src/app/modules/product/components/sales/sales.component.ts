@@ -86,7 +86,6 @@ export class SalesComponent implements OnInit, AfterViewInit {
   public totalResults: number = 0;
   public startDate: Date | null = null;
   public endDate: Date | null = null;
-  public searchChanged = new Subject<string>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 

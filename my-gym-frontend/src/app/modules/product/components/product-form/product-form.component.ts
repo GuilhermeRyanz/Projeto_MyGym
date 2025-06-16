@@ -10,6 +10,7 @@ import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import {NgIf} from "@angular/common";
 import {MatOption, MatSelect} from "@angular/material/select";
+import {ProductStockAjusteComponent} from "../product-stock-ajuste/product-stock-ajuste.component";
 
 @Component({
   selector: 'app-product-form',
@@ -42,7 +43,7 @@ export class ProductFormComponent implements OnInit {
 
 
   public action: String = "";
-  private created: boolean = true;
+  public created: boolean = true;
   public pathUrlProd: string = URLS.PRODUCT;
   protected formGroup: FormGroup;
   private gymId: string | null = "";
@@ -61,8 +62,8 @@ export class ProductFormComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       id: [],
       nome: ['', Validators.required],
-      preco: ['', [Validators.required, Validators.min(1)]],
-      descricao: ['', Validators.required],
+      preco: ['', [Validators.required, Validators.min(0)]],
+      descricao: ['', [Validators.required, Validators.maxLength(100)]],
       academia: [''],
       categoria: ['', Validators.required],
       created_at: [''],
@@ -143,7 +144,6 @@ export class ProductFormComponent implements OnInit {
         this.title = "Edição de produto";
         this.httpMethods.get(this.pathUrlProd + this.action + '/').subscribe((response) => {
           this.imagePreviewUrl = response.foto;
-          console.log(response);
           this.formGroup.patchValue({
             id: response.id,
             nome: response.nome,
@@ -186,4 +186,22 @@ export class ProductFormComponent implements OnInit {
       this.router.navigate(['/product/productInventory']);
     });
   }
+
+  openAdjustStockModal() {
+    const dialogRef = this.dialog.open(ProductStockAjusteComponent, {
+      data: { produtoId: this.formGroup.get('id')?.value }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.estoqueAjustado) {
+        this.snackBar.open('Estoque ajustado com sucesso!', 'OK', {
+          duration: 3000,
+          verticalPosition: 'top',
+        });
+      }
+    });
+  }
+
+
+
 }

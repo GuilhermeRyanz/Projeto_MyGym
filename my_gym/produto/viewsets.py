@@ -28,14 +28,17 @@ class ProdutoViewSet(viewsets.ModelViewSet):
             active=True
         )
 
-    @action(detail=False, methods=['post'],permission_classes = [IsAuthenticated])
-    def baixar_estoque(self, request, pk=None):
-        produto = self.get_object()
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    def baixar_estoque(self, request):
+        produto_id = request.data.get('produto_id')
         quantidade = int(request.data.get('quantidade', 0))
 
         try:
+            produto = Produto.objects.get(pk=produto_id)
             actions.LoteActions.baixar_estoque(produto, quantidade)
             return Response({'quantidade_estoque': produto.quantidade_estoque})
+        except Produto.DoesNotExist:
+            return Response({'erro': 'Produto não encontrado'}, status=status.HTTP_404_NOT_FOUND)
         except ValidationError as e:
             return Response({'erro': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

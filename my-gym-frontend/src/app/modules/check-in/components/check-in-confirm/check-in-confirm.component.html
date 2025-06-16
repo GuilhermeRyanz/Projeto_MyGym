@@ -1,21 +1,18 @@
 <div class="flex align-items-center justify-content-center p-5 " xmlns="http://www.w3.org/1999/html">
-  <mat-card class="p-4 w-6 h-10 flex align-content-start" appearance="raised">
+  <mat-card class="check-in-card p-4 w-3 h-15 flex align-content-start" appearance="raised">
     <mat-card-header>
-      <div class="flex flex-column shadow-log">
-        <span class="text-xl mb-1 font-bold"> Confirmar Check-in </span>
-        <span class="text-sm text-500 mb-3"> Confirme as informacoes do aluno </span>
+      <div class="flex shadow-log align-content-center align-items-center justify-content-center">
+        <span class="text-xl w-full mb-1 font-bold"> Confirmar Check-in </span>
       </div>
     </mat-card-header>
     <mat-card-content>
-      <div class="flex align-items-center gap-3">
-        <div>
-          <div class="avatar align-items-center">
-            {{ getInitials(memberPlan?.aluno?.nome || '') }}
-          </div>
+      <div class="member-info flex align-items-center overflow-hidden text-overflow-ellipsis mb-3">
+        <div class="avatar align-items-center">
+          {{ getInitials(memberPlan?.aluno?.nome || '') }}
         </div>
-        <div>
-          <span class="text-lg font-bold"> {{ memberPlan?.aluno?.nome }}</span><br>
-          <span class="text-sm text-gray"> {{ memberPlan?.aluno?.email }}</span>
+        <div class="flex-column">
+          <div class="name font-bold">{{ memberPlan?.aluno?.nome }}</div>
+          <div class="email">{{ memberPlan?.aluno?.email }}</div>
         </div>
       </div>
       <div class="flex align-items-start justify-content-start mt-3 text-sm ">

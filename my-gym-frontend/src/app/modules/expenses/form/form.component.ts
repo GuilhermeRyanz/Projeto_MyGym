@@ -60,8 +60,8 @@ export class FormComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       id: [""],
       tipo: [data.expense?.categoria || null, Validators.required],
-      descricao: [data.expense?.descricao || null, Validators.required],
-      valor: [data.expense?.valor || null, Validators.required],
+      descricao: [data.expense?.descricao || null, [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
+      valor: [data.expense?.valor || null, [Validators.required, Validators.min(1)]],
       academia: [this.authService.get_gym()],
       data: [data.expense?.data || null]
     });

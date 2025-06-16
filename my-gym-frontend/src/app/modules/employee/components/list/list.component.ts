@@ -10,8 +10,8 @@ import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponentComponent} from "../confirm-dialog-component/confirm-dialog-component.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {NgForOf} from "@angular/common";
-import {MatFormField, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {NgForOf, NgIf} from "@angular/common";
+import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {debounceTime, Subject} from "rxjs";
@@ -44,9 +44,9 @@ import {provideNativeDateAdapter} from "@angular/material/core";
     MatDatepickerToggle,
     MatDateRangeInput,
     MatDateRangePicker,
-    MatHint,
     MatStartDate,
-    MatEndDate
+    MatEndDate,
+    NgIf
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css',
@@ -144,6 +144,12 @@ export class ListComponent implements OnInit {
         this.totalResults = response.count;
         this.currentPage = offset / limit;
       });
+  }
+
+  public clearDateRange(): void {
+    this.startDate = null;
+    this.endDate = null;
+    this.search();
   }
 
   onSearchChange(term: string): void {

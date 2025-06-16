@@ -1,23 +1,40 @@
-<div class="container">
+<div class="container align-items-center">
+
   <form [formGroup]="formGroup" (ngSubmit)="saveOrUpdate(formGroup.value)" class="mat-elevation-z2 form">
     <h2 class="form-title">{{ title }}</h2>
 
     <mat-form-field appearance="fill">
       <mat-label>Nome</mat-label>
-      <input matInput formControlName="nome" placeholder="Digite o nome do produto" />
-      <mat-error *ngIf="formGroup.get('nome')?.hasError('required')">Campo obrigatório</mat-error>
-    </mat-form-field>
+      <input matInput formControlName="nome" placeholder="Digite o nome do produto"/>
+      @if (formGroup.get('nome')?.hasError('required')) {
+        <mat-error>
+          Campo obrigatório
+        </mat-error>
+      }    </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Preço</mat-label>
-      <input matInput formControlName="preco" type="number" placeholder="Digite o preço" />
-      <mat-error *ngIf="formGroup.get('preco')?.hasError('required')">Campo obrigatório</mat-error>
+      <input matInput formControlName="preco" type="number" placeholder="Digite o preço"/>
+      @if (formGroup.get('preco')?.hasError('required')) {
+        <mat-error>
+          Campo obrigatório
+        </mat-error>
+      }
+      @if (formGroup.get('preco')?.hasError('min')) {
+        <mat-error>
+          Campo obrigatório
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Marca</mat-label>
-      <input matInput formControlName="marca" placeholder="Marca do produto" />
-      <mat-error *ngIf="formGroup.get('marca')?.hasError('required')">Campo obrigatório</mat-error>
+      <input matInput formControlName="marca" placeholder="Marca do produto"/>
+      @if (formGroup.get('marca')?.hasError('required')) {
+        <mat-error>
+          Campo obrigatório
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -27,26 +44,44 @@
           <mat-option [value]="cat.value">{{ cat.label }}</mat-option>
         }
       </mat-select>
-      <mat-error *ngIf="formGroup.get('categoria')?.hasError('required')">
-        Campo obrigatório
-      </mat-error>
+      @if (formGroup.get('categoria')?.hasError('required')) {
+        <mat-error>
+          Campo obrigatório
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Descrição</mat-label>
       <textarea matInput formControlName="descricao" placeholder="Descrição do produto"></textarea>
-      <mat-error *ngIf="formGroup.get('descricao')?.hasError('required')">Campo obrigatório</mat-error>
+      @if (formGroup.get('descricao')?.hasError('required')) {
+        <mat-error>
+          Campo obrigatório
+        </mat-error>
+      }
     </mat-form-field>
 
     <div class="form-group">
-      <input type="file" (change)="onFileSelected($event)" />
+      <input type="file" (change)="onFileSelected($event)"/>
     </div>
+
+    <button
+      mat-raised-button
+      color="accent"
+      type="button"
+      class="mb-1"
+      (click)="openAdjustStockModal()"
+      [disabled]="!formGroup.get('id')?.value"
+    >
+      Diminuir Estoque
+    </button>
 
     <div *ngIf="imagePreviewUrl" class="image-preview">
       <p>Imagem atual:</p>
-      <img [src]="imagePreviewUrl" width="200" alt="Preview do produto" />
+      <img [src]="imagePreviewUrl" width="200" alt="Preview do produto"/>
     </div>
 
     <button mat-raised-button color="primary" [disabled]="!formGroup.valid" type="submit">Salvar</button>
   </form>
+
 </div>

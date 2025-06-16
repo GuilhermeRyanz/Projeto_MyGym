@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { NgxEchartsDirective } from 'ngx-echarts';
-import type { EChartsOption } from 'echarts';
-import { HttpMethodsService } from '../../../../shared/services/httpMethods/http-methods.service';
-import { URLS } from '../../../../app.urls';
-import { AuthService } from '../../../../auth/services/auth.service';
-import { MatCard, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import {Component, OnInit} from '@angular/core';
+import {NgxEchartsDirective} from 'ngx-echarts';
+import type {EChartsOption} from 'echarts';
+import {HttpMethodsService} from '../../../../shared/services/httpMethods/http-methods.service';
+import {URLS} from '../../../../app.urls';
+import {AuthService} from '../../../../auth/services/auth.service';
+import {MatCard, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
-import { MatInput } from '@angular/material/input';
+import {MatInput} from '@angular/material/input';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
-import { DateAdapter } from '@angular/material/core';
+import {DateAdapter} from '@angular/material/core';
 import {CurrencyPipe, DatePipe, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 
 @Component({
@@ -41,11 +41,12 @@ export class MonthBalanceComponent implements OnInit {
   mainChartOptions: EChartsOption = {};
   detailChartOptions: EChartsOption = {};
   dateControl = new FormControl(new Date());
+  lastCategoryClicked: string | null = null;
   data: any = {
-    mensalidades: { total: 0, detalhamento: [] },
-    vendas: { total: 0, detalhamento: [] },
-    gastos: { total: 0, detalhamento: [] },
-    'balanço mensal': { total: 0 }
+    mensalidades: {total: 0, detalhamento: []},
+    vendas: {total: 0, detalhamento: []},
+    gastos: {total: 0, detalhamento: []},
+    'balanço mensal': {total: 0}
   };
 
   constructor(
@@ -53,7 +54,7 @@ export class MonthBalanceComponent implements OnInit {
     private authService: AuthService,
     private dateAdapter: DateAdapter<Date>
   ) {
-    this.dateAdapter.setLocale('pt-BR'); // Configura locale para pt-BR
+    this.dateAdapter.setLocale('pt-BR');
   }
 
   ngOnInit() {
@@ -69,10 +70,10 @@ export class MonthBalanceComponent implements OnInit {
     this.httpMethods.get(`${URLS.GYM}month_balance/?data=${monthYear}&academia=${academia}`).subscribe({
       next: (data: any) => {
         this.data = {
-          mensalidades: data.mensalidades || { total: 0, detalhamento: [] },
-          vendas: data.vendas || { total: 0, detalhamento: [] },
-          gastos: data.gastos || { total: 0, detalhamento: [] },
-          'balanço mensal': data['balanço mensal'] || { total: 0 }
+          mensalidades: data.mensalidades || {total: 0, detalhamento: []},
+          vendas: data.vendas || {total: 0, detalhamento: []},
+          gastos: data.gastos || {total: 0, detalhamento: []},
+          'balanço mensal': data['balanço mensal'] || {total: 0}
         };
         this.updateMainChart();
       },
@@ -84,13 +85,13 @@ export class MonthBalanceComponent implements OnInit {
 
   updateMainChart() {
     this.mainChartOptions = {
-      title: { text: 'Resumo Financeiro' },
-      tooltip: { trigger: 'axis' },
+      title: {text: 'Resumo Financeiro'},
+      tooltip: {trigger: 'axis'},
       xAxis: {
         type: 'category',
         data: ['Mensalidades', 'Vendas', 'Gastos']
       },
-      yAxis: { type: 'value' },
+      yAxis: {type: 'value'},
       series: [
         {
           name: 'Total',
@@ -106,10 +107,20 @@ export class MonthBalanceComponent implements OnInit {
         }
       ]
     };
+
+    if (this.lastCategoryClicked) {
+      this.updateDetailChart(this.lastCategoryClicked);
+    }
+
   }
 
   onChartClick(event: any) {
     const category = event.name.toLowerCase();
+    this.lastCategoryClicked = category; // ✅ salva categoria
+    this.updateDetailChart(category);
+  }
+
+  updateDetailChart(category: string) {
     let detailData: any[] = [];
     let labels: string[] = [];
     let title = '';
@@ -129,16 +140,16 @@ export class MonthBalanceComponent implements OnInit {
     }
 
     this.detailChartOptions = {
-      title: { text: detailData.length ? title : `${title} (Sem Dados)` },
-      tooltip: { trigger: 'axis' },
-      xAxis: { type: 'category', data: labels },
-      yAxis: { type: 'value' },
+      title: {text: detailData.length ? title : `${title} (Sem Dados)`},
+      tooltip: {trigger: 'axis'},
+      xAxis: {type: 'category', data: labels},
+      yAxis: {type: 'value'},
       series: [
         {
           name: 'Total',
           type: 'bar',
           data: detailData.map((item) => item.total || 0),
-          itemStyle: { color: '#1890ff' }
+          itemStyle: {color: '#1890ff'}
         }
       ]
     };
@@ -151,7 +162,4 @@ export class MonthBalanceComponent implements OnInit {
     this.fetchData();
   }
 
-  onDateChange() {
-    this.fetchData();
-  }
 }

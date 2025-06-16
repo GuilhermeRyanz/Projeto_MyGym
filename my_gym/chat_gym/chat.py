@@ -131,7 +131,6 @@ class IaGestor:
             table_info = self.db.get_table_info()
             print(f"Informações das tabelas disponíveis: {table_info}")
 
-            # Gera o prompt e extrai o texto corretamente
             prompt_obj = query_prompt_template.invoke({
                 "dialect": db_dialect,
                 "top_k": 10,
@@ -139,7 +138,6 @@ class IaGestor:
                 "input": state["question"],
                 "academia_id": self.academia_id,
             })
-            # Tente acessar .to_string() ou .content
             prompt_str = getattr(prompt_obj, "to_string", None)
             if callable(prompt_str):
                 prompt_str = prompt_obj.to_string()

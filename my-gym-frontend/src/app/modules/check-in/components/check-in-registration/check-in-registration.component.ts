@@ -57,7 +57,7 @@ export class CheckInRegistrationComponent implements OnInit {
     this.search();
 
     this.searchChanged.pipe(debounceTime(300)).subscribe((term) => {
-      this.searchMember(term, 0); // volta pra primeira página a cada nova busca
+      this.searchMember(term, 0);
     });
   }
 

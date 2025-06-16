@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Reduzir Estoque</h2>
+
+<form [formGroup]="form" (ngSubmit)="onConfirmClick()" class="modal-form">
+
+  <mat-form-field appearance="fill" style="width: 100%;">
+    <mat-label>Quantidade a reduzir</mat-label>
+    <input matInput type="number" formControlName="quantidade" min="1" />
+    <mat-error *ngIf="form.get('quantidade')?.hasError('required')">Quantidade é obrigatória</mat-error>
+    <mat-error *ngIf="form.get('quantidade')?.hasError('min')">A quantidade deve ser pelo menos 1</mat-error>
+  </mat-form-field>
+
+  <p style="color: gray; font-style: italic; margin-top: 0;">
+    Clique {{ maxClicks - clickCount }} vez(es) para confirmar a redução do estoque.
+  </p>
+
+  <div mat-dialog-actions>
+    <button mat-button type="button" (click)="onCancel()" [disabled]="loading">Cancelar</button>
+    <button mat-raised-button color="warn" type="submit" [disabled]="form.invalid || loading">
+      {{ loading ? 'Processando...' : 'Reduzir estoque' }}
+    </button>
+  </div>
+
+</form>

@@ -21,7 +21,9 @@
         <input matInput formControlName="descricao" placeholder="Descrição" required/>
         @if (formGroup.get('descricao')?.hasError('required') && formGroup.get('descricao')?.touched) {
           <mat-error>Campo Obrigatório</mat-error>
-        }
+        }@if (formGroup.get('descricao')?.hasError('maxlength') && formGroup.get('descricao')?.touched) {
+        <mat-error>Maximo de 100 caracteres</mat-error>
+      }
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="w-full">
@@ -29,7 +31,9 @@
         <input matInput type="number" formControlName="valor" placeholder="Digite o valor do gasto" required/>
         @if (formGroup.get('valor')?.hasError('required') && formGroup.get('valor')?.touched) {
           <mat-error>Campo Obrigatório</mat-error>
-        }
+        }@if (formGroup.get('valor')?.hasError('min') && formGroup.get('valor')?.touched) {
+        <mat-error>Valor deve ser maior que 0</mat-error>
+      }
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="w-full">
