@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.db.models import Count
 from django.db.models.functions import ExtractWeekDay, ExtractHour
 from django_filters.rest_framework.backends import DjangoFilterBackend
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -172,3 +172,44 @@ class ExerciceViewSets(viewsets.ModelViewSet):
     serializer_class = serializers.ExerciceSerializer
     filters
     permission_classes = [permissions.IsAuthenticated, ]
+
+class FrequenciaViewSet(AcademiaPermissionMixin, viewsets.ModelViewSet):
+    queryset = models.Frequencia.objects.all()
+    serializer_class = serializers.FrequenciaSerializer
+    filter_backends = [DjangoFilterBackend, ]
+    filterset_class = filters.FrequenciaFilter
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def get_queryset(self):
+        return models.Frequencia.objects.filter(
+            academia__usuarioacademia__usuario=self.request.user
+        )
+
+    @action(detail=False, methods=['GET'], permission_classes=[permissions.IsAuthenticated])
+    def verificar_checkin(self, request):
+        """
+        Verifica se o aluno já fez check-in nos últimos 5 minutos.
+        Exemplo de uso:
+        GET /frequencias/verificar_checkin/?aluno=1&academia=2
+        """
+        aluno_id = request.query_params.get('aluno')
+        academia_id = request.query_params.get('academia')
+
+        if not aluno_id or not academia_id:
+            return Response(
+                {'error': 'Aluno e academia são obrigatórios.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        cinco_minutos_atras = datetime.now() - timedelta(minutes=5)
+        existe_recente = models.Frequencia.objects.filter(
+            aluno_id=aluno_id,
+            academia_id=academia_id,
+            data__gte=cinco_minutos_atras
+        ).exists()
+
+        return Response({
+            'aluno_id': aluno_id,
+            'academia_id': academia_id,
+            'checkin_recente': existe_recente
+        })

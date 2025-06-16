@@ -1,8 +1,8 @@
 // src/app/modules/member/components/facial-capture/facial-capture.component.ts
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, NgZone } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import * as faceapi from 'face-api.js';
-import { HttpMethodsService } from '../../../../shared/services/httpMethods/http-methods.service';
+import {HttpMethodsService} from '../../../../shared/services/httpMethods/http-methods.service';
 import {AuthService} from "../../../../auth/services/auth.service";
 
 const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
@@ -113,7 +113,7 @@ export class FacialCaptureComponent implements OnInit, OnDestroy {
         this.stopCamera();
         this.captureComplete.emit();
       },
-      error: (err) => {
+      error: () => {
         // Seu HttpMethodsService já mostra o erro no snackbar
         this.errorMessage = 'Falha ao enviar dados faciais. Verifique o console e tente novamente.';
         this.isProcessing = false;
