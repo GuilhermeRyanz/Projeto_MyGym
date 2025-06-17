@@ -7,6 +7,5 @@ export interface Employee extends Base{
   password?: string;
   tipo_usuario: string;
   data_de_contratacao?: string;
-  password?: string;
 
 }

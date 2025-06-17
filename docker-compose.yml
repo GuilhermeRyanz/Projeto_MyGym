@@ -42,20 +42,22 @@ services:
     ports:
       - "8001:8001"
     env_file:
-      - ./facial_gym/.env
+      - .env
     volumes:
       - ./facial_gym:/app
+    depends_on:
+      - minio
 
 
   backend:
-    image: ryankazz/mygym-backend:1.0
+#    image: ryankazz/mygym-backend:1.0
     build: ./my_gym
     container_name: mygym-backend
     env_file:
       - .env
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py runserver"
+             gunicorn my_gym.wsgi:application --bind 0.0.0.0:8000 --workers=1 --threads=1 --timeout=120"
     ports:
       - "8000:8000"
     depends_on:
@@ -69,7 +71,7 @@ services:
       - DB_PORT=5432
 
   frontend:
-    image: ryankazz/mygym-frontend:1.0
+#    image: ryankazz/mygym-frontend:1.0
     build: ./my-gym-frontend
     container_name: mygym-frontend
     ports:

@@ -19,7 +19,7 @@ export class TotemComponent implements OnInit, OnDestroy {
   welcomeMessage: string = '';
   foundStudent: any = null;
 
-  recognitionApiUrl = 'http://localhost:8001/api/recognize/';
+  recognitionApiUrl = 'http://192.168.2.194:8001/api/recognize/';
 
   constructor(
     private http: HttpClient,
@@ -154,7 +154,7 @@ export class TotemComponent implements OnInit, OnDestroy {
     this.httpMethods.post(URLS.FREQUENCY, payload).subscribe({
       next: (response) => {
         console.log('Check-in registrado:', response);
-        this.showWelcomeMessage(`Bem-vindo aluno ${studentId}!`);
+        this.showWelcomeMessage(`Bem-vindo}!`);
       },
       error: (err) => {
         console.error('Erro ao registrar check-in:', err);
