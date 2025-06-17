@@ -61,14 +61,14 @@ export class ProductFormComponent implements OnInit {
   ) {
     this.formGroup = this.formBuilder.group({
       id: [],
-      nome: ['', Validators.required],
+      nome: ['', [Validators.required, Validators.maxLength(100)]],
       preco: ['', [Validators.required, Validators.min(0)]],
       descricao: ['', [Validators.required, Validators.maxLength(100)]],
       academia: [''],
       categoria: ['', Validators.required],
       created_at: [''],
       modified_at: [''],
-      marca: ['', Validators.required],
+      marca: ['', [Validators.required, Validators.maxLength(100)]],
     });
   }
 

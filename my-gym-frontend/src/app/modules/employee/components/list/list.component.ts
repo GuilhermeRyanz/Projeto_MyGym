@@ -205,7 +205,7 @@ export class ListComponent implements OnInit {
 
     if (employee.tipo_usuario === 'D') {
       this.snackBar.open(
-        "Não é ppssivel excluir o dono do estabelecimento", "Fechar",
+        "Não é possivel excluir o dono do estabelecimento", "Fechar",
         {
           duration: 5000,
           verticalPosition: 'top',

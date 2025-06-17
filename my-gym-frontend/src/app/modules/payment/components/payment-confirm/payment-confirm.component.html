@@ -20,7 +20,9 @@
           <span>Preço:</span> <strong>{{ memberPlan?.plano?.preco | currency:'BRL' }}</strong>
         </div>
         <div class="info-row">
-          <span>Duração:</span> <strong>{{ memberPlan?.plano?.duracao }} meses</strong>
+          @if(memberPlan?.plano?.duracao == 1){
+          <span>Duração:</span> <strong>{{ memberPlan?.plano?.duracao }} mês </strong>
+          }
         </div>
       </div>
 
