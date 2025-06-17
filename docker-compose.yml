@@ -36,6 +36,17 @@ services:
     command: [ "redis-server", "--appendonly", "yes" ]
 
 
+  gym_face_service:
+    build: ./facial_gym
+    container_name: gym_face_service
+    ports:
+      - "8001:8001"
+    env_file:
+      - ./facial_gym/.env
+    volumes:
+      - ./facial_gym:/app
+
+
   backend:
     image: ryankazz/mygym-backend:1.0
     build: ./my_gym
