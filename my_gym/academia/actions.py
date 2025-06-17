@@ -1,7 +1,7 @@
-from datetime import timedelta
 from django.utils import timezone
 from rest_framework import serializers, status
 from rest_framework.response import Response
+from datetime import timedelta
 
 from academia import models
 from aluno.models import AlunoPlano
@@ -18,38 +18,36 @@ class AcademiaActions:
             aluno_plano__active=True
         ).order_by('-data_vencimento').first()
 
-        last_check_in = models.Frequencia.objects.filter(
-            aluno=aluno,
-            academia=academia,
-            data__date=timezone.now().date()
-        ).order_by('-data').first()
+        if not pagamento:
+            raise serializers.ValidationError("Não há pagamentos válidos registrados para o plano atual do aluno.")
 
-        if last_check_in:
-            tempo_decorrido = timezone.now() - last_check_in.data
-            if tempo_decorrido < timedelta(minutes=1):
-                raise serializers.ValidationError("Aguarde 1 minuto para realizar um novo check-in.")
+        if pagamento.data_vencimento < timezone.now().date():
+            raise serializers.ValidationError("Seu pagamento está expirado!")
 
-        if pagamento:
-            if pagamento.data_vencimento < timezone.now().date():
-                raise serializers.ValidationError("Pagamento expirado!")
-        else:
-            raise serializers.ValidationError("Não há pagamentos válidos registrado para esse aluno no plano atual.")
-
-        alunos_plano = AlunoPlano.objects.filter(
+         aluno_plano = AlunoPlano.objects.filter(
             aluno=aluno,
             active=True,
             plano__academia=academia
         ).first()
 
-        if not alunos_plano:
-            raise serializers.ValidationError("Aluno não possui plano na academia ativo")
+        if not aluno_plano:
+            raise serializers.ValidationError("Aluno não possui um plano ativo nesta academia.")
 
-        today = timezone.now().weekday()
+        cinco_minutos_atras = timezone.now() - timedelta(minutes=5)
+        existe_frequencia_recente = models.Frequencia.objects.filter(
+            aluno=aluno,
+            academia=academia,
+            data__gte=cinco_minutos_atras
+        ).exists()
 
-        if today not in alunos_plano.plano.dias_permitidos:
-            dias_permitidos = [DiasSemana(dia).label for dia in alunos_plano.plano.dias_permitidos]
+        if existe_frequencia_recente:
+            raise serializers.ValidationError("Check-in já realizado nos últimos 5 minutos. Por favor, aguarde.")
+
+        today = timezone.now().weekday()  # Segunda é 0 e Domingo é 6
+        if today not in aluno_plano.plano.dias_permitidos:
+            dias_permitidos_labels = [DiasSemana(dia).label for dia in aluno_plano.plano.dias_permitidos]
             raise serializers.ValidationError(
-                f"Dia não permitido para este plano. Dias permitidos: {', '.join(dias_permitidos)}"
+                f"Dia não permitido para este plano. Dias permitidos: {', '.join(dias_permitidos_labels)}"
             )
 
     @staticmethod
