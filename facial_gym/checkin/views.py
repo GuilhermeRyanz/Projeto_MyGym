@@ -65,15 +65,15 @@ class FacialDataUploadView(APIView):
         try:
             s3_client = boto3.client(
                 's3',
-                endpoint_url=settings.MINIO_STORAGE_ENDPOINT,
-                aws_access_key_id=settings.MINIO_STORAGE_ACCESS_KEY,
-                aws_secret_access_key=settings.MINIO_STORAGE_SECRET_KEY,
+                endpoint_url=settings.MINIO_ENDPOINT,
+                aws_access_key_id=settings.MINIO_ACCESS_KEY,
+                aws_secret_access_key=settings.MINIO_SECRET_KEY,
             )
 
             object_name = f"academias/{gym_id}/alunos/{student_id}/encodings.parquet"
 
             s3_client.put_object(
-                Bucket=settings.MINIO_STORAGE_BUCKET_NAME,
+                Bucket=settings.MINIO_BUCKET,
                 Key=object_name,
                 Body=parquet_buffer,
                 ContentType='application/octet-stream'
@@ -126,12 +126,12 @@ class FacialRecognitionView(APIView):
             # Conecta no MinIO
             s3_client = boto3.client(
                 's3',
-                endpoint_url=settings.MINIO_STORAGE_ENDPOINT,
-                aws_access_key_id=settings.MINIO_STORAGE_ACCESS_KEY,
-                aws_secret_access_key=settings.MINIO_STORAGE_SECRET_KEY,
+                endpoint_url=settings.MINIO_ENDPOINT,
+                aws_access_key_id=settings.MINIO_ACCESS_KEY,
+                aws_secret_access_key=settings.MINIO_SECRET_KEY,
             )
 
-            bucket_name = settings.MINIO_STORAGE_BUCKET_NAME
+            bucket_name = settings.MINIO_BUCKET
             prefix = f"academias/{gym_id}/alunos/"
             response = s3_client.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
 

@@ -68,15 +68,13 @@ USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # --- CONFIGURAÇÕES DO MINIO ---
-MINIO_STORAGE_ENDPOINT = os.getenv('MINIO_ENDPOINT_URL')
-MINIO_STORAGE_ACCESS_KEY = os.getenv('MINIO_ACCESS_KEY')
-MINIO_STORAGE_SECRET_KEY = os.getenv('MINIO_SECRET_KEY')
-MINIO_STORAGE_BUCKET_NAME = os.getenv('MINIO_BUCKET_NAME')
+MINIO_ENDPOINT =os.getenv("MINIO_ENDPOINT")
+MINIO_ACCESS_KEY = "minioadmin"
+MINIO_SECRET_KEY = "minioadmin"
+MINIO_BUCKET = "data-media"
 
 LOGGING = {
     'version': 1,
