@@ -105,7 +105,6 @@ export class FormComponent implements OnInit {
   }
 
   public saveOrUpdate(employee: Employee) {
-    // Criar uma cópia do employee e remover password se vazio na edição
     let payload = { ...employee };
     if (!this.created && !payload.password) {
       delete payload.password; // Remove o campo password do payload se vazio na edição
