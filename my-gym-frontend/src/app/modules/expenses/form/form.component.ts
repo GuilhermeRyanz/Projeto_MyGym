@@ -12,7 +12,7 @@ import {provideEcharts} from "ngx-echarts";
 import {MAT_DATE_FORMATS, MAT_DATE_LOCALE, provideNativeDateAdapter} from "@angular/material/core";
 import {MY_DATE_FORMATS} from "../../dashboards/components/date-format";
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {TitleCasePipe} from "@angular/common";
+import {NgForOf, TitleCasePipe} from "@angular/common";
 import {MatButton} from "@angular/material/button";
 
 @Component({
@@ -32,7 +32,8 @@ import {MatButton} from "@angular/material/button";
     MatDatepickerToggle,
     MatSuffix,
     TitleCasePipe,
-    MatButton
+    MatButton,
+    NgForOf
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.css',
@@ -45,8 +46,16 @@ import {MatButton} from "@angular/material/button";
 })
 export class FormComponent implements OnInit {
   private readonly pathUrl: string = URLS.EXPENSE;
-  protected readonly categories: string[] = ['energia', 'agua', 'salario', 'manutencao', 'produtos', 'limpeza', 'impostos', 'outros'];
-  public formGroup: FormGroup;
+  protected readonly categories = [
+    { label: 'Energia', value: 'energia' },
+    { label: 'Água', value: 'agua' },
+    { label: 'Salário', value: 'salario' },
+    { label: 'Manutenção', value: 'manutencao' },
+    { label: 'Produtos', value: 'produtos' },
+    { label: 'Limpeza', value: 'limpeza' },
+    { label: 'Impostos', value: 'impostos' },
+    { label: 'Outros', value: 'outros' }
+  ];  public formGroup: FormGroup;
   public create: boolean = true;
 
   constructor(
@@ -60,7 +69,7 @@ export class FormComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       id: [""],
       tipo: [data.expense?.categoria || null, Validators.required],
-      descricao: [data.expense?.descricao || null, [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
+      descricao: [data.expense?.descricao || null, [Validators.required, Validators.maxLength(100)]],
       valor: [data.expense?.valor || null, [Validators.required, Validators.min(1)]],
       academia: [this.authService.get_gym()],
       data: [data.expense?.data || null]

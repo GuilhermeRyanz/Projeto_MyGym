@@ -43,7 +43,7 @@ export class CheckInRegistrationComponent implements OnInit {
   protected typeUser: string | null = "";
   public searchTerm: string = "";
   public currentPage: number = 0;
-  public limit: number = 10;
+  public limit: number = 12;
   public totalResults: number = 0;
 
   selectedIndex: number = 0;

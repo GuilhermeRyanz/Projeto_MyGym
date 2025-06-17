@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="p-2">
   <mat-card-header>
     <mat-card-title class="chart-title">Balanço Mensal</mat-card-title>
     <div class="selected-month-year">
@@ -11,8 +11,8 @@
       <mat-datepicker #pickerBegin startView="multi-year" (monthSelected)="onMonthSelected($event, pickerBegin)" panelClass="month-picker"></mat-datepicker>
     </mat-form-field>
   </mat-card-header>
-  <div class="flex justify-content-between p-2">
-    <div echarts [options]="mainChartOptions" (chartClick)="onChartClick($event)" style="width: 33%; height: 400px;"></div>
+  <div class="flex justify-content-between p-5">
+    <div echarts [options]="mainChartOptions" (chartClick)="onChartClick($event)" style="width: 33%; height: 25rem;"></div>
     <div class="detail-chart-container">
       <div class="balance-total" *ngIf="data['balanço mensal']" [ngClass]="{'negative': data['balanço mensal'].total < 0, 'positive': data['balanço mensal'].total >= 0}">
         Balanço Mensal: {{ data['balanço mensal'].total | currency:'BRL' }}

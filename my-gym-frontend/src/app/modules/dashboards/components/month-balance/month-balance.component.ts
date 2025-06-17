@@ -91,7 +91,10 @@ export class MonthBalanceComponent implements OnInit {
         type: 'category',
         data: ['Mensalidades', 'Vendas', 'Gastos']
       },
-      yAxis: {type: 'value'},
+      yAxis: {
+        type: 'value',
+        name: 'R$',
+      },
       series: [
         {
           name: 'Total',
@@ -143,7 +146,10 @@ export class MonthBalanceComponent implements OnInit {
       title: {text: detailData.length ? title : `${title} (Sem Dados)`},
       tooltip: {trigger: 'axis'},
       xAxis: {type: 'category', data: labels},
-      yAxis: {type: 'value'},
+      yAxis: {
+        type: 'value',
+        name: 'R$',
+      },
       series: [
         {
           name: 'Total',

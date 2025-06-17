@@ -6,12 +6,12 @@
     <form [formGroup]="formGroup" (ngSubmit)="register()" class="flex flex-column gap-3">
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Tipo</mat-label>
-        <mat-select formControlName="tipo" placeholder="tipo" required>
-          @for (cat of categories; track $index) {
-            <mat-option [value]="cat">{{ cat | titlecase }}</mat-option>
+        <mat-select formControlName="tipo" placeholder="Categoria" required>
+          @for (categoria of categories; track categoria.value) {
+            <mat-option [value]="categoria.value">{{ categoria.label }}</mat-option>
           }
         </mat-select>
-        @if (formGroup.get('categoria')?.hasError('required') && formGroup.get('categoria')?.touched) {
+        @if (formGroup.get('tipo')?.hasError('required') && formGroup.get('tipo')?.touched) {
           <mat-error>Campo Obrigatório</mat-error>
         }
       </mat-form-field>

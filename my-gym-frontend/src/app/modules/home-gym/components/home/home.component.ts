@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
       roles: ['A']
     },
     {
-      title: 'Pagamentos',
+      title: 'Pagamento',
       description: 'Registre os pagamentos dos alunos.',
       route: 'payment/paymentRegistration',
       icon: 'payment',
@@ -89,6 +89,15 @@ export class HomeComponent implements OnInit {
       tooltip: 'Visualizar desempenho',
       roles: ['D', 'G']
     },
+    {
+      title: 'Inventário',
+      description: "Gerencie o inventário de Produtos.",
+      route: 'product/productInventory',
+      icon: 'inventory_2',
+      tooltip: 'Gerenciar inventário de produtos',
+      roles: ['D', 'G', 'A']
+    }
+
   ];
 
   constructor(private router: Router) {}

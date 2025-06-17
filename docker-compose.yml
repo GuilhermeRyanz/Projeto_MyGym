@@ -37,13 +37,14 @@ services:
 
 
   backend:
+    image: ryankazz/mygym-backend:1.0
     build: ./my_gym
     container_name: mygym-backend
     env_file:
       - .env
     command: >
       sh -c "python manage.py migrate &&
-             gunicorn my_gym.wsgi:application --bind 0.0.0.0:8000 --workers=4 --threads=2"
+             python manage.py runserver"
     ports:
       - "8000:8000"
     depends_on:
@@ -57,6 +58,7 @@ services:
       - DB_PORT=5432
 
   frontend:
+    image: ryankazz/mygym-frontend:1.0
     build: ./my-gym-frontend
     container_name: mygym-frontend
     ports:

@@ -51,10 +51,11 @@
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
 
         <ng-container matColumnDef="Categoria">
-          <th mat-header-cell *matHeaderCellDef> Tipo </th>
-          <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+          <th mat-header-cell *matHeaderCellDef> Categoria </th>
+          <td mat-cell *matCellDef="let element">
+            {{ getCategoriaLabel(element.tipo) }}
+          </td>
         </ng-container>
-
         <ng-container matColumnDef="Descrição">
           <th mat-header-cell *matHeaderCellDef> Descrição </th>
           <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
@@ -92,13 +93,18 @@
 
     </div>
     <div class="pagination-controls">
-      <button (click)="prevPage()" [disabled]="currentPage === 0">
-        <mat-icon>chevron_left</mat-icon>
-      </button>
-      <span>Items {{ totalResults == 0 ? "0" : startIndex}} - {{ endIndex}} de {{ totalResults}}</span>
-      <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">
-        <mat-icon>chevron_right</mat-icon>
-      </button>
+    @if(totalResults == 0){
+      <span class="paginator-info">Nenhum registro encontrado</span>
+    } @else {
+        <button (click)="prevPage()" [disabled]="currentPage === 0">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <span>Items {{ totalResults == 0 ? "0" : startIndex}} - {{ endIndex}} de {{ totalResults}}</span>
+        <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+    }
     </div>
+
   </div>
 </main>

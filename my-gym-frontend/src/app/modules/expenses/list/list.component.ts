@@ -17,7 +17,7 @@ import {
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {URLS} from "../../../app.urls";
 import {Expense} from "../../../shared/interfaces/expense";
 import {debounceTime, elementAt, Subject} from "rxjs";
@@ -98,8 +98,24 @@ export class ListComponent implements OnInit {
   ) {
   }
 
+  protected readonly categories = [
+    { label: 'Energia', value: 'energia' },
+    { label: 'Água', value: 'agua' },
+    { label: 'Salário', value: 'salario' },
+    { label: 'Manutenção', value: 'manutencao' },
+    { label: 'Produtos', value: 'produtos' },
+    { label: 'Limpeza', value: 'limpeza' },
+    { label: 'Impostos', value: 'impostos' },
+    { label: 'Outros', value: 'outros' }
+  ];
+
   get totalPages(): number {
     return Math.ceil(this.totalResults / this.limit);
+  }
+
+  public getCategoriaLabel(value: string): string {
+    const categoria = this.categories.find(c => c.value === value);
+    return categoria ? categoria.label : value;
   }
 
   get endIndex(): number {
