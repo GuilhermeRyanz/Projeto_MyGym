@@ -17,6 +17,17 @@ class AcademiaActions:
             aluno_plano__active=True
         ).order_by('-data_vencimento').first()
 
+        last_check_in = models.Frequencia.objects.filter(
+            aluno=aluno,
+            academia=academia,
+            data__date=timezone.now().date()
+        ).order_by('-data').first()
+
+        if last_check_in:
+            tempo_decorrido = timezone.now() - last_check_in.data
+            if tempo_decorrido < timedelta(minutes=1):
+                raise serializers.ValidationError("Aguarde 1 minuto para realizar um novo check-in.")
+
         if pagamento:
             if pagamento.data_vencimento < timezone.now().date():
                 raise serializers.ValidationError("Pagamento expirado!")
