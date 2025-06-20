@@ -101,8 +101,6 @@ export class MembersListComponent implements OnInit {
     this.searchMember(this.searchTerm, offset);
   }
 
-
-
   trackById(index: number, member: MemberPlan) {
     return member.aluno.id;
   }

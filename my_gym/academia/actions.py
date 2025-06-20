@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.utils import timezone
 from rest_framework import serializers, status
 from rest_framework.response import Response
@@ -44,8 +45,6 @@ class AcademiaActions:
             raise serializers.ValidationError("Aluno não possui plano na academia ativo")
 
         today = timezone.now().weekday()
-
-        print(today)
 
         if today not in alunos_plano.plano.dias_permitidos:
             dias_permitidos = [DiasSemana(dia).label for dia in alunos_plano.plano.dias_permitidos]
