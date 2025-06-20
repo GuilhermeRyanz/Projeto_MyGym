@@ -19,11 +19,12 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     def get_data_de_contratacao(self, obj):
         request = self.context.get('request')
-        if not request:
+        academia_id = request.query_params.get('academia') if request else None
+        if not request or not academia_id:
             return None
 
         try:
-            usuario_academia = UsuarioAcademia.objects.get(usuario=obj, active=True)
+            usuario_academia = UsuarioAcademia.objects.get(usuario=obj, active=True, academia_id=academia_id)
             data = usuario_academia.data_contratacao
             return data.strftime("%d/%m/%Y")
         except UsuarioAcademia.DoesNotExist:

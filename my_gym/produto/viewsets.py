@@ -17,7 +17,7 @@ from produto.serializers import ProdutoSerializer, LoteSerializer
 
 
 class ProdutoViewSet(viewsets.ModelViewSet):
-    queryset = Produto.objects.all().filter()
+    queryset = Produto.objects.all().order_by('-id')
     serializer_class = ProdutoSerializer
     filterset_class = ProdutoFilter
     permission_classes = [IsAuthenticated]
