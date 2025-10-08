@@ -19,12 +19,12 @@ class AcademiaActions:
         ).order_by('-data_vencimento').first()
 
         if not pagamento:
-            raise serializers.ValidationError("Não há pagamentos válidos registrados para o plano atual do aluno.")
+            raise serializers.ValidationError("Acesso não autorizado.")
 
         if pagamento.data_vencimento < timezone.now().date():
             raise serializers.ValidationError("Seu pagamento está expirado!")
 
-         aluno_plano = AlunoPlano.objects.filter(
+        aluno_plano = AlunoPlano.objects.filter(
             aluno=aluno,
             active=True,
             plano__academia=academia
@@ -33,7 +33,7 @@ class AcademiaActions:
         if not aluno_plano:
             raise serializers.ValidationError("Aluno não possui um plano ativo nesta academia.")
 
-        cinco_minutos_atras = timezone.now() - timedelta(minutes=5)
+        cinco_minutos_atras = timezone.now() - timedelta(minutes=1)
         existe_frequencia_recente = models.Frequencia.objects.filter(
             aluno=aluno,
             academia=academia,
@@ -41,7 +41,7 @@ class AcademiaActions:
         ).exists()
 
         if existe_frequencia_recente:
-            raise serializers.ValidationError("Check-in já realizado nos últimos 5 minutos. Por favor, aguarde.")
+            raise serializers.ValidationError("Check-in realizado.")
 
         today = timezone.now().weekday()  # Segunda é 0 e Domingo é 6
         if today not in aluno_plano.plano.dias_permitidos:
@@ -52,21 +52,21 @@ class AcademiaActions:
 
     @staticmethod
     def disable(academia):
-            try:
-                usuario_academia = models.UsuarioAcademia.objects.filter(academia=academia, active=True)
-                usuario_academia.update(active=False)
-                planos = Plano.objects.filter(academia=academia, active=True)
-                for plano in planos:
-                    aluno_plano = AlunoPlano.objects.filter(plano=plano, active=True)
-                    aluno_plano.update(active=False)
-                    plano.active = False
-                    plano.save()
+        try:
+            usuario_academia = models.UsuarioAcademia.objects.filter(academia=academia, active=True)
+            usuario_academia.update(active=False)
+            planos = Plano.objects.filter(academia=academia, active=True)
+            for plano in planos:
+                aluno_plano = AlunoPlano.objects.filter(plano=plano, active=True)
+                aluno_plano.update(active=False)
+                plano.active = False
+                plano.save()
 
-                return Response(
-                    {
-                        'status': 'Academia desativada',
-                    },
-                    status=status.HTTP_200_OK
-                )
-            except models.Academia.DoesNotExist:
-                return Response({'erro': "Academia não existe"})
+            return Response(
+                {
+                    'status': 'Academia desativada',
+                },
+                status=status.HTTP_200_OK
+            )
+        except models.Academia.DoesNotExist:
+            return Response({'erro': "Academia não existe"})

@@ -19,7 +19,7 @@ export class TotemComponent implements OnInit, OnDestroy {
   welcomeMessage: string = '';
   foundStudent: any = null;
 
-  recognitionApiUrl = 'http://192.168.2.194:8001/api/recognize/';
+  recognitionApiUrl = 'http://localhost:8001/api/recognize/';
 
   constructor(
     private http: HttpClient,

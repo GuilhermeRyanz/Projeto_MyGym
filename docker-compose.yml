@@ -14,7 +14,7 @@ services:
       postgres -c listen_addresses='*'
 
   minio:
-    image: minio/minio
+    image: minio/minio:RELEASE.2025-04-22T22-12-26Z-cpuv1
     container_name: minio_mygym_new
     ports:
       - "9000:9000"
@@ -36,48 +36,48 @@ services:
     command: [ "redis-server", "--appendonly", "yes" ]
 
 
-  gym_face_service:
-    build: ./facial_gym
-    container_name: gym_face_service
-    ports:
-      - "8001:8001"
-    env_file:
-      - .env
-    volumes:
-      - ./facial_gym:/app
-    depends_on:
-      - minio
+#  gym_face_service:
+#    build: ./facial_gym
+#    container_name: gym_face_service
+#    ports:
+#      - "8001:8001"
+#    env_file:
+#      - .env
+#    volumes:
+#      - ./facial_gym:/app
+#    depends_on:
+#      - minio
 
 
-  backend:
-#    image: ryankazz/mygym-backend:1.0
-    build: ./my_gym
-    container_name: mygym-backend
-    env_file:
-      - .env
-    command: >
-      sh -c "python manage.py migrate &&
-             gunicorn my_gym.wsgi:application --bind 0.0.0.0:8000 --workers=1 --threads=1 --timeout=120"
-    ports:
-      - "8000:8000"
-    depends_on:
-      - postgres
-    environment:
-      - DEBUG=1
-      - DB_NAME=my_gym
-      - DB_USER=my_gym
-      - DB_PASSWORD=123
-      - DB_HOST=postgres
-      - DB_PORT=5432
-
-  frontend:
-#    image: ryankazz/mygym-frontend:1.0
-    build: ./my-gym-frontend
-    container_name: mygym-frontend
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
+#  backend:
+##    image: ryankazz/mygym-backend:1.0
+#    build: ./my_gym
+#    container_name: mygym-backend
+#    env_file:
+#      - .env
+#    command: >
+#      sh -c "python manage.py migrate &&
+#             gunicorn my_gym.wsgi:application --bind 0.0.0.0:8000 --workers=1 --threads=1 --timeout=120"
+#    ports:
+#      - "8000:8000"
+#    depends_on:
+#      - postgres
+#    environment:
+#      - DEBUG=1
+#      - DB_NAME=my_gym
+#      - DB_USER=my_gym
+#      - DB_PASSWORD=123
+#      - DB_HOST=postgres
+#      - DB_PORT=5432
+#
+#  frontend:
+##    image: ryankazz/mygym-frontend:1.0
+#    build: ./my-gym-frontend
+#    container_name: mygym-frontend
+#    ports:
+#      - "80:80"
+#    depends_on:
+#      - backend
 
 
 volumes:

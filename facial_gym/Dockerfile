@@ -1,36 +1,42 @@
-# Usa Python 3.10 como base
-FROM python:3.10-slim
+# Usa Python 3.10 baseado em Debian Bullseye (mais completo que slim)
+FROM python:3.10-bullseye
 
-# Variáveis de ambiente para melhor prática no container
+# Variáveis de ambiente
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Instala dependências de sistema necessárias para dlib e face_recognition
+# Instala todas as dependências necessárias para compilar dlib e face_recognition
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
+    gfortran \
+    python3-dev \
     libopenblas-dev \
     liblapack-dev \
     libx11-dev \
     libgtk-3-dev \
-    libboost-python-dev \
-    && rm -rf /var/lib/apt/lists/*
+    libboost-all-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Cria diretório de trabalho
+# Define o diretório de trabalho
 WORKDIR /app
 
-# Copia apenas os arquivos de dependências primeiro para usar cache
+# Copia o arquivo de dependências
 COPY requirements.txt ./
 
-# Instala as dependências Python
+# Instala pacotes Python (instala dlib e pybind11 antes)
 RUN pip install --upgrade pip && \
+    pip install pybind11==2.10.4 && \
+    pip install dlib==19.22.1 && \
     pip install -r requirements.txt
 
-# Copia o restante do código do microsserviço
+# Copia o restante da aplicação
 COPY . .
 
-# Expõe a porta do microsserviço
+# Expõe a porta do serviço facial
 EXPOSE 8001
 
-# Define o comando padrão: roda o Django na porta 8001
+# Comando padrão para rodar o serviço Django
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8001"]

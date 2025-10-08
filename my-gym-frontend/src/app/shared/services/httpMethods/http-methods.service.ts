@@ -12,7 +12,7 @@ import {AuthService} from "../../../auth/services/auth.service";
 })
 export class HttpMethodsService {
   private baseUrl: string = environment.baseUrl;
-  private facialApiUrl = 'http://192.168.2.194:8001/api';
+  private facialApiUrl = 'http://localhost:8001/api';
 
 
   constructor(private http: HttpClient,

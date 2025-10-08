@@ -104,7 +104,7 @@ DATABASES = {
         'USER': 'my_gym',
         'PASSWORD': '123',
         'HOST' : os.getenv("DB_HOST"),
-        'PORT' : '5438'
+        'PORT' : '5432'
     }
 }
 

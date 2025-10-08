@@ -66,9 +66,6 @@ export class FacialCaptureComponent implements OnInit, OnDestroy {
       this.videoElement = document.getElementById('video-capture') as HTMLVideoElement;
       this.videoStream = await navigator.mediaDevices.getUserMedia({ video: {} });
       this.videoElement.srcObject = this.videoStream;
-      this.videoElement.addEventListener('play', () => {
-        this.startAutomatedCapture();
-      });
     } catch (error: any) {
       this.errorMessage = `Erro ao acessar a câmera: ${error.message}`;
       this.isProcessing = false;
@@ -77,24 +74,124 @@ export class FacialCaptureComponent implements OnInit, OnDestroy {
 
   async startAutomatedCapture() {
     this.isProcessing = true;
-    const imagesCaptured: File[] = [];
-    for (let i = 0; i < this.captureInstructions.length; i++) {
-      this.ngZone.run(() => { this.feedbackMessage = `Passo ${i + 1}/${this.captureInstructions.length}: ${this.captureInstructions[i]}`; });
-      await sleep(2500);
+    this.feedbackMessage = "Capturando imagem única...";
+    await sleep(1500);
 
-      this.ngZone.run(() => { this.feedbackMessage = "Capturando..."; });
-      await sleep(500);
-
-      const blob = await this.captureSingleFrame();
-      if (blob) {
-        imagesCaptured.push(new File([blob], `face_${i}.jpg`, { type: 'image/jpeg' }));
-        this.ngZone.run(() => { this.feedbackMessage = `Foto ${i + 1} capturada!`; });
-        await sleep(1000);
-      }
+    const blob = await this.captureSingleFrame();
+    if (!blob) {
+      this.errorMessage = "Falha ao capturar imagem.";
+      this.isProcessing = false;
+      return;
     }
-    this.feedbackMessage = 'Todas as fotos capturadas! Enviando para o microsserviço...';
+
+    this.feedbackMessage = "Gerando variações da imagem...";
+    const baseFile = new File([blob], `face_original.jpg`, { type: 'image/jpeg' });
+
+    const imagesCaptured = await this.generateImageVariations(baseFile);
+
+    this.feedbackMessage = "Enviando imagens geradas...";
     this.uploadFacialData(imagesCaptured);
   }
+
+  private async generateImageVariations(baseFile: File): Promise<File[]> {
+    const variations: File[] = [];
+    const img = new Image();
+    img.src = URL.createObjectURL(baseFile);
+
+    await new Promise<void>((resolve) => (img.onload = () => resolve()));
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    const transformations = [
+      { rotate: 0, flip: false, brightness: 1.0 },
+      { rotate: 10, flip: false, brightness: 1.05 },
+      { rotate: -10, flip: false, brightness: 0.95 },
+      { rotate: 0, flip: true, brightness: 1.0 },
+      { rotate: 0, flip: false, brightness: 1.1 },
+      { rotate: 0, flip: false, brightness: 0.9 },
+      { rotate: 5, flip: true, brightness: 1.05 },
+      { rotate: -5, flip: true, brightness: 0.95 },
+      { rotate: 0, flip: false, brightness: 1.0, zoom: 1.1 },
+      { rotate: 0, flip: false, brightness: 1.0, zoom: 0.9 },
+      { rotate: 15, flip: false, brightness: 1.05 },
+    ];
+
+    for (let i = 0; i < transformations.length; i++) {
+      const t = transformations[i];
+      ctx.save();
+
+      // Aplicar transformações
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      if (t.rotate) ctx.rotate((t.rotate * Math.PI) / 180);
+      if (t.flip) ctx.scale(-1, 1);
+
+      const zoom = t.zoom || 1.0;
+      ctx.filter = `brightness(${t.brightness})`;
+      ctx.drawImage(
+        img,
+        -img.width * zoom / 2,
+        -img.height * zoom / 2,
+        img.width * zoom,
+        img.height * zoom
+      );
+      ctx.restore();
+
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, 'image/jpeg')
+      );
+
+      if (blob) {
+        variations.push(new File([blob], `face_${i}.jpg`, { type: 'image/jpeg' }));
+      }
+    }
+
+    return variations;
+  }
+
+  async capturePhoto() {
+    this.isProcessing = true;
+    this.feedbackMessage = "Capturando imagem...";
+
+    const blob = await this.captureSingleFrame();
+    if (!blob) {
+      this.errorMessage = "Falha ao capturar imagem.";
+      this.isProcessing = false;
+      return;
+    }
+
+    this.feedbackMessage = "Gerando variações da imagem...";
+    const baseFile = new File([blob], `face_original.jpg`, { type: 'image/jpeg' });
+    const imagesCaptured = await this.generateImageVariations(baseFile);
+
+    this.feedbackMessage = "Enviando imagens geradas...";
+    this.uploadFacialData(imagesCaptured);
+  }
+
+
+  // async startAutomatedCapture() {
+  //   this.isProcessing = true;
+  //   const imagesCaptured: File[] = [];
+  //   for (let i = 0; i < this.captureInstructions.length; i++) {
+  //     this.ngZone.run(() => { this.feedbackMessage = `Passo ${i + 1}/${this.captureInstructions.length}: ${this.captureInstructions[i]}`; });
+  //     await sleep(2500);
+  //
+  //     this.ngZone.run(() => { this.feedbackMessage = "Capturando..."; });
+  //     await sleep(500);
+  //
+  //     const blob = await this.captureSingleFrame();
+  //     if (blob) {
+  //       imagesCaptured.push(new File([blob], `face_${i}.jpg`, { type: 'image/jpeg' }));
+  //       this.ngZone.run(() => { this.feedbackMessage = `Foto ${i + 1} capturada!`; });
+  //       await sleep(1000);
+  //     }
+  //   }
+  //   this.feedbackMessage = 'Todas as fotos capturadas! Enviando para o microsserviço...';
+  //   this.uploadFacialData(imagesCaptured);
+  // }
 
   private captureSingleFrame(): Promise<Blob | null> {
     return new Promise((resolve) => {
